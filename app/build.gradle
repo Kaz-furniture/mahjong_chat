@@ -52,6 +52,11 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     implementation 'com.google.firebase:firebase-firestore:22.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -71,5 +76,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.1.0"
     //coroutineScope
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
+    //bottom navigation
+    implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:3.0.0'
 
 }
