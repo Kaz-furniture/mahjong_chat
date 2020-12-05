@@ -1,14 +1,9 @@
-package com.kaz_furniture.mahjongChat
+package com.kaz_furniture.mahjongChat.viewModel
 
 import android.util.Patterns
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 
 class CreateAccountViewModel: ViewModel() {
     val name = MutableLiveData<String>().apply {

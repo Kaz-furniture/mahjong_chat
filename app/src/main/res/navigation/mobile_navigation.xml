@@ -7,19 +7,24 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.kaz_furniture.mahjongChat.ui.home.HomeFragment"
+        android:name="com.kaz_furniture.mahjongChat.fragment.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/navigation_home_to_second"
+            app:destination="@id/navigation_home"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.kaz_furniture.mahjongChat.ui.dashboard.SecondFragment"
+        android:id="@+id/navigation_second"
+        android:name="com.kaz_furniture.mahjongChat.fragment.SecondFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_second" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.kaz_furniture.mahjongChat.ui.notifications.ThirdFragment"
+        android:id="@+id/navigation_third"
+        android:name="com.kaz_furniture.mahjongChat.fragment.ThirdFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_third" />
 </navigation>

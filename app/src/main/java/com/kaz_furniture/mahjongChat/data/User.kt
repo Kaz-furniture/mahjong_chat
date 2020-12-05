@@ -1,4 +1,4 @@
-package com.kaz_furniture.mahjongChat
+package com.kaz_furniture.mahjongChat.data
 
 import java.util.*
 
@@ -9,5 +9,5 @@ class User {
     var deletedAt: Date? = null
     var introduction: String = ""
     var imageUrl: String = ""
-    var followingUserId: List<String>? = null
+    var followingUserId: List<String> = listOf()
 }

@@ -1,4 +1,4 @@
-package com.kaz_furniture.mahjongChat.ui.notifications
+package com.kaz_furniture.mahjongChat.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kaz_furniture.mahjongChat.R
 
-class ThirdFragment : Fragment(R.layout.fragment_third) {
-
+class SecondFragment : Fragment(R.layout.fragment_second) {
 
 }

@@ -6,21 +6,18 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kaz_furniture.mahjongChat.CreateAccountViewModel
-import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.viewModel.CreateAccountViewModel
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.User
+import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityCreateAccountBinding
-import timber.log.Timber
 import java.util.*
 
 class CreateAccountActivity: BaseActivity() {
 
-    private var binding: ActivityCreateAccountBinding? = null
+    lateinit var binding: ActivityCreateAccountBinding
     private val viewModel: CreateAccountViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,16 +27,16 @@ class CreateAccountActivity: BaseActivity() {
                 R.layout.activity_create_account
         )
         binding = bindingData ?:return
-        binding?.lifecycleOwner = this
-        binding?.email = viewModel.email
-        binding?.password = viewModel.password
-        binding?.passwordConfirm = viewModel.passwordValidate
-        binding?.name = viewModel.name
-        binding?.canSubmit = viewModel.canSubmit
-        binding?.saveButton?.setOnClickListener{
+        binding.lifecycleOwner = this
+        binding.email = viewModel.email
+        binding.password = viewModel.password
+        binding.passwordConfirm = viewModel.passwordValidate
+        binding.name = viewModel.name
+        binding.canSubmit = viewModel.canSubmit
+        binding.saveButton.setOnClickListener{
             createAuthUser()
         }
-        binding?.logoutButton?.setOnClickListener {
+        binding.logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
         }
     }
@@ -87,6 +84,7 @@ class CreateAccountActivity: BaseActivity() {
     companion object {
         fun start(activity: Activity) =
                 activity.apply {
+                    finishAffinity()
                     startActivity(Intent(activity, CreateAccountActivity::class.java))
                 }
     }
