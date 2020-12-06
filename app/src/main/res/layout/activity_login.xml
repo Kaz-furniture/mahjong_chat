@@ -7,7 +7,7 @@
     <data>
         <variable
             name="canSubmit"
-            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+            type="Boolean" />
 
         <variable
             name="email"
@@ -16,6 +16,14 @@
         <variable
             name="password"
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="emailError"
+            type="String" />
+
+        <variable
+            name="passwordError"
+            type="String" />
 
     </data>
 
@@ -33,7 +41,10 @@
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
         android:text="@={email}"
-        android:hint="メールアドレス"
+        app:error="@{emailError}"
+        android:hint="@string/email"
+        android:autofillHints="@string/email"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +56,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:hint="パスワード"
+        android:hint="@string/password"
+        android:autofillHints="@string/password"
+        app:error="@{passwordError}"
         android:text="@={password}"
         android:imeOptions="actionSend"
         android:inputType="textPassword"
@@ -59,7 +72,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:enabled="@{canSubmit}"
-        android:text="ログイン"
+        android:text="@string/login"
         android:elevation="20dp"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -77,7 +90,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_gravity="center"
-        android:text="アカウントの作成"
+        android:text="@string/createAccount"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +106,7 @@
         android:layout_gravity="center"
         android:selectAllOnFocus="true"
         android:textColor="#ff5500"
-        android:text="パスワードを忘れた場合"
+        android:text="@string/forgetPassword"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

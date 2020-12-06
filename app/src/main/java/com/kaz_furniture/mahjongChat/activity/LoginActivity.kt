@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.viewModel.LoginViewModel
 import com.kaz_furniture.mahjongChat.R
@@ -29,12 +30,20 @@ class LoginActivity: BaseActivity() {
         binding.createUserTextView.setOnClickListener {
             CreateAccountActivity.start(this)
         }
-        binding.canSubmit = viewModel.canSubmit
         binding.email= viewModel.email
         binding.password = viewModel.password
         binding.login.setOnClickListener {
             viewModel.login(this,this@LoginActivity)
         }
+        viewModel.canSubmit.observe(this, Observer {
+            binding.canSubmit = it
+        })
+        viewModel.emailError.observe(this, Observer {
+            binding.emailError = it
+        })
+        viewModel.passwordError.observe(this, Observer {
+            binding.passwordError = it
+        })
     }
 
     companion object {

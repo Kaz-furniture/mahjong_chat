@@ -6,4 +6,9 @@
     <string name="title_notifications">Third</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
+    <string name="email">メールアドレス</string>
+    <string name="password">パスワード</string>
+    <string name="login">ログイン</string>
+    <string name="createAccount">アカウント作成</string>
+    <string name="forgetPassword">パスワードを忘れた場合</string>
 </resources>
