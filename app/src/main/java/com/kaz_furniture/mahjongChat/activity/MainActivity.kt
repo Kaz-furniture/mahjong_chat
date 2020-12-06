@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+        setSupportActionBar(binding.toolBar)
         navController = findNavController(R.id.nav_host_fragment)
         binding.bottomNuv.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_second, R.id.navigation_third), binding.drawerLayout)
