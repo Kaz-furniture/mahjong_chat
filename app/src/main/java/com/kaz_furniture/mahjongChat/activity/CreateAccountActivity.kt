@@ -22,69 +22,36 @@ class CreateAccountActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bindingData: ActivityCreateAccountBinding? = DataBindingUtil.setContentView(
-                this,
-                R.layout.activity_create_account
-        )
-        binding = bindingData ?:return
+        val binding: ActivityCreateAccountBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
         binding.lifecycleOwner = this
         binding.email = viewModel.email
         binding.password = viewModel.password
         binding.passwordConfirm = viewModel.passwordValidate
-        binding.name = viewModel.name
-        binding.canSubmit = viewModel.canSubmit
+        binding.name = viewModel.nameInput
+        viewModel.canSubmit.observe(this, androidx.lifecycle.Observer {
+            binding.canSubmit = it
+        })
+        viewModel.nameError.observe(this, androidx.lifecycle.Observer {
+            binding.nameError = it
+        })
+        viewModel.emailError.observe(this, androidx.lifecycle.Observer {
+            binding.emailError = it
+        })
+        viewModel.passwordError.observe(this, androidx.lifecycle.Observer{
+            binding.passwordError = it
+        })
         binding.saveButton.setOnClickListener{
-            createAuthUser()
+            viewModel.createAuthUser(this, this@CreateAccountActivity)
         }
         binding.logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
         }
     }
 
-    private fun createAuthUser() {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(viewModel.email.value ?:return, viewModel.password.value ?:"")
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        FirebaseAuth.getInstance().currentUser?.uid?.also {
-                            createUser(it)
-                            return@addOnCompleteListener
-                        }
-
-                    } else {
-                        Toast.makeText(this@CreateAccountActivity, "FAILED", Toast.LENGTH_SHORT).show()
-                    }
-                }
-    }
-
-    private fun createUser(uid: String) {
-        val user = User().apply {
-            userId = uid
-            name = viewModel.name.value ?:""
-            createdAt = Date()
-//            deletedAt = null
-//            introduction = ""
-//            imageUrl = ""
-//            followingUserId = null
-        }
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(uid)
-                .set(user)
-                .addOnCompleteListener { task->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this@CreateAccountActivity, "Success", Toast.LENGTH_SHORT).show()
-                        MainActivity.start(this)
-                    } else {
-                        Toast.makeText(this@CreateAccountActivity, "FAILED", Toast.LENGTH_SHORT).show()
-                    }
-                }
-    }
-
 
     companion object {
         fun start(activity: Activity) =
                 activity.apply {
-                    finishAffinity()
                     startActivity(Intent(activity, CreateAccountActivity::class.java))
                 }
     }

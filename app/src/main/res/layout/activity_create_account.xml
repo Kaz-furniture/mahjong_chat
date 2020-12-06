@@ -10,12 +10,24 @@
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
 
         <variable
+            name="nameError"
+            type="String" />
+
+        <variable
             name="email"
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
 
         <variable
+            name="emailError"
+            type="String" />
+
+        <variable
             name="password"
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="passwordError"
+            type="String" />
 
         <variable
             name="passwordConfirm"
@@ -23,7 +35,7 @@
 
         <variable
             name="canSubmit"
-            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+            type="Boolean" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +58,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:maxLength="20"
+                    android:inputType="text"
                     android:text="@={name}"
+                    app:error="@{nameError}"
+                    android:autofillHints="@string/app_name"
+                    android:hint="@string/app_name"
                     android:textSize="16sp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -74,6 +90,7 @@
                     android:inputType="textEmailAddress"
                     android:maxLength="128"
                     android:text="@={email}"
+                    app:error="@{emailError}"
                     android:textSize="16sp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -133,6 +150,7 @@
                     android:inputType="textPassword"
                     android:text="@={passwordConfirm}"
                     android:textSize="16sp"
+                    app:error="@{passwordError}"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     app:layout_constraintEnd_toEndOf="parent"

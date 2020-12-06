@@ -21,11 +21,7 @@ class LoginActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bindingData: ActivityLoginBinding? = DataBindingUtil.setContentView(
-            this,
-            R.layout.activity_login
-        )
-        binding = bindingData ?:return
+        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
         binding.createUserTextView.setOnClickListener {
             CreateAccountActivity.start(this)
@@ -44,6 +40,19 @@ class LoginActivity: BaseActivity() {
         viewModel.passwordError.observe(this, Observer {
             binding.passwordError = it
         })
+        binding.emailInput.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
+        }
+        binding.container.setOnClickListener{
+            hideKeyboard(it)
+        }
+        binding.passwordInput.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
+        }
     }
 
     companion object {

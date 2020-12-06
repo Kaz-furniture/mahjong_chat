@@ -7,6 +7,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
 
@@ -24,12 +26,12 @@ class LoginViewModel: ViewModel() {
     private fun submitValidation(): Boolean {
         val email = email.value
         val password = password.value
-        return if (email == null || email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailError.postValue("正しく入力してください")
+        return if (email == null || email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            emailError.postValue(MahjongChatApplication.applicationContext.getString(R.string.inputCorrectly))
             false
         }
-        else if (password == null || password.isEmpty() || password.length < 8) {
-            passwordError.postValue("正しく入力してください")
+        else if (password == null || password.isBlank() || password.length < 8) {
+            passwordError.postValue(MahjongChatApplication.applicationContext.getString(R.string.inputCorrectly))
             false
         }
         else{
