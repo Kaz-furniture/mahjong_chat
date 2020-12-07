@@ -69,22 +69,22 @@ class CreateAccountViewModel: ViewModel() {
     }
 
 
-    fun createAuthUser(context: Context, activity: CreateAccountActivity) {
+    fun createAuthUser(activity: CreateAccountActivity) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.value ?:return, password.value ?:"")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         FirebaseAuth.getInstance().currentUser?.uid?.also {
-                            createUser(it, context, activity)
+                            createUser(it, activity)
                             return@addOnCompleteListener
                         }
 
                     } else {
-                        Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
                 }
     }
 
-    private fun createUser(uid: String, context: Context, activity: CreateAccountActivity) {
+    private fun createUser(uid: String, activity: CreateAccountActivity) {
         val user = User().apply {
             userId = uid
             name = nameInput.value ?:""
@@ -96,10 +96,10 @@ class CreateAccountViewModel: ViewModel() {
                 .set(user)
                 .addOnCompleteListener { task->
                     if (task.isSuccessful) {
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                         MainActivity.start(activity)
                     } else {
-                        Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
                 }
     }

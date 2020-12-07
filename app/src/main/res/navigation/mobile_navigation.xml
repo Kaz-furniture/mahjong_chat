@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_second"
         android:name="com.kaz_furniture.mahjongChat.fragment.SecondFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_second"
         tools:layout="@layout/fragment_second" />
 
     <fragment
         android:id="@+id/navigation_third"
         android:name="com.kaz_furniture.mahjongChat.fragment.ThirdFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_third"
         tools:layout="@layout/fragment_third" />
 </navigation>

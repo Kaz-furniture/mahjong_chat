@@ -10,7 +10,7 @@
     tools:context=".activity.MainActivity">
 
     <TextView
-        android:id="@+id/postId"
+        android:id="@+id/explanation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -18,7 +18,7 @@
         android:textSize="26sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="PostId"/>
+        android:text="Explanation"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

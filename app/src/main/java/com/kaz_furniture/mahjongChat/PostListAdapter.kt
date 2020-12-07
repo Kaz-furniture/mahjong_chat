@@ -34,7 +34,7 @@ class ViewHolder(
         private val binding: ListItemBinding
 ): RecyclerView.ViewHolder(binding.root){
         fun bind(post: Post) {
-                binding.postId.text = post.postId
+                binding.explanation.text = post.explanation
         }
 }
 

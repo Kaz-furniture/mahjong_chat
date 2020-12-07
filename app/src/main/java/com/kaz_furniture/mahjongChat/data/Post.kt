@@ -4,7 +4,7 @@ import java.util.*
 
 class Post {
     var postId = "${System.currentTimeMillis()}"
-    var userId = ""
+    var userId: String? = ""
     var createdAt: Date = Date()
     var deletedAt: Date? = null
     var updatedAt: Date? = null

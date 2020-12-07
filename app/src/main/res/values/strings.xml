@@ -1,14 +1,23 @@
 <resources>
     <string name="app_name">雀チャット</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Second</string>
-    <string name="title_notifications">Third</string>
+    <string name="title_home">Home TL</string>
+    <string name="title_second">Private TL</string>
+    <string name="title_third">Notification</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
+    <string name="userName">ユーザー名（20文字以内）</string>
+    <string name="userName2">ユーザー名を入力</string>
     <string name="email">メールアドレス</string>
+    <string name="emailInput">メールアドレスを入力</string>
     <string name="password">パスワード</string>
+    <string name="passwordConfirm">パスワード（確認）</string>
+    <string name="passwordInput">パスワードを入力</string>
     <string name="login">ログイン</string>
+    <string name="logout">ログアウト</string>
+    <string name="register">登録</string>
+    <string name="explanation">説明</string>
+    <string name="postCreate">投稿</string>
     <string name="createAccount">アカウント作成</string>
     <string name="forgetPassword">パスワードを忘れた場合</string>
     <string name="inputCorrectly">正しく入力してください</string>

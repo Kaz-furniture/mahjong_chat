@@ -40,6 +40,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:id="@+id/container"
             android:layout_height="match_parent">
 
                 <TextView
@@ -48,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60dp"
                     android:layout_marginStart="24dp"
-                    android:text="ユーザー名"
+                    android:text="@string/userName"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -61,8 +62,8 @@
                     android:inputType="text"
                     android:text="@={name}"
                     app:error="@{nameError}"
-                    android:autofillHints="@string/app_name"
-                    android:hint="@string/app_name"
+                    android:autofillHints="@string/userName2"
+                    android:hint="@string/userName2"
                     android:textSize="16sp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -75,7 +76,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="メールアドレス"
+                    android:text="@string/email"
                     android:textSize="16sp"
                     android:layout_marginStart="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -91,6 +92,8 @@
                     android:maxLength="128"
                     android:text="@={email}"
                     app:error="@{emailError}"
+                    android:hint="@string/emailInput"
+                    android:autofillHints="@string/emailInput"
                     android:textSize="16sp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -106,7 +109,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="24dp"
                     android:maxLength="64"
-                    android:text="パスワード"
+                    android:text="@string/password"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +123,8 @@
                     android:ems="10"
                     android:inputType="textPassword"
                     android:text="@={password}"
+                    android:autofillHints="@string/passwordInput"
+                    android:hint="@string/passwordInput"
                     android:textSize="16sp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -134,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:maxLength="64"
-                    android:text="パスワード（確認）"
+                    android:text="@string/passwordConfirm"
                     android:textSize="16sp"
                     android:layout_marginStart="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -150,6 +155,8 @@
                     android:inputType="textPassword"
                     android:text="@={passwordConfirm}"
                     android:textSize="16sp"
+                    android:autofillHints="@string/passwordInput"
+                    android:hint="@string/passwordInput"
                     app:error="@{passwordError}"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
@@ -163,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:enabled="@{canSubmit}"
-                    android:text="登録"
+                    android:text="@string/register"
                     android:textSize="24sp"
                     android:gravity="center"
                     android:shadowDx="2.0"
@@ -176,13 +183,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/passwordConfirmEditText" />
 
-            <Button
-                android:id="@+id/logoutButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="LogOut(仮)"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

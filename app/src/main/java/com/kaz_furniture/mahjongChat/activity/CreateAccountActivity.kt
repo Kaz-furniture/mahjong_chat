@@ -1,5 +1,6 @@
 package com.kaz_furniture.mahjongChat.activity
 
+import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -41,11 +42,38 @@ class CreateAccountActivity: BaseActivity() {
             binding.passwordError = it
         })
         binding.saveButton.setOnClickListener{
-            viewModel.createAuthUser(this, this@CreateAccountActivity)
+            viewModel.createAuthUser(this@CreateAccountActivity)
         }
-        binding.logoutButton.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
+        binding.userNameEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
         }
+        binding.container.setOnClickListener{
+            hideKeyboard(it)
+        }
+        binding.emailEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
+        }
+        binding.passwordEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
+        }
+        binding.passwordConfirmEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus){
+                hideKeyboard(v)
+            }
+        }
+        title = getString(R.string.createAccount)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
 
