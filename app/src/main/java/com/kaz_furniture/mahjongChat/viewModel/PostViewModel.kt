@@ -10,15 +10,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.activity.PostActivity
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.data.User
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
-//    val postComplete = MutableLiveData<Boolean>()
+    var usersName: String? = null
+    private val uId = FirebaseAuth.getInstance().currentUser?.uid
 
     fun post(activity: PostActivity) {
         val post = Post().apply {
             this.explanation = explanationInput.value
-            this.userId = FirebaseAuth.getInstance().currentUser?.uid
+            this.userId = uId
+            this.userName = usersName ?:getUserName()
             this.imageUrl = "http://test.com"
         }
         FirebaseFirestore.getInstance()
@@ -35,5 +38,27 @@ class PostViewModel: ViewModel() {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
                 }
+    }
+
+    private fun getUserName(): String {
+        var newUserName = "ゲスト"
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .whereEqualTo("userId", uId)
+                    .limit(1)
+                    .get()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful){
+                            val myUser = it.result?.toObjects(User::class.java)
+                            if (myUser != null && myUser.isNotEmpty()) {
+                                 newUserName = myUser[0].name
+                            } else {
+                                return@addOnCompleteListener
+                            }
+                        } else {
+                            return@addOnCompleteListener
+                        }
+                    }
+        return newUserName
     }
 }

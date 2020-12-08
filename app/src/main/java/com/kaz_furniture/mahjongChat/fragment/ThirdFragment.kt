@@ -27,6 +27,5 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         val bindingData: FragmentThirdBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?:return
         binding?.textNotifications?.text = viewModel.userName
-        viewModel.getName()
     }
 }

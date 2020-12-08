@@ -55,10 +55,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             launchPostActivity()
         }
         binding.navView.setNavigationItemSelectedListener(this)
+        viewModel.getName()
     }
 
     private fun launchPostActivity() {
         val intent = PostActivity.newIntent(this)
+        intent.putExtra("KEY_NAME", viewModel.userName)
+//        intent.putExtra("KEY_ID", viewModel.uid)
         startActivityForResult(intent, REQUEST_CODE_POST)
     }
 

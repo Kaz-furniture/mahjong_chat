@@ -10,15 +10,26 @@
     tools:context=".activity.MainActivity">
 
     <TextView
-        android:id="@+id/explanation"
+        android:id="@+id/postUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:textSize="26sp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Explanation"/>
+        tools:text="@string/userName2"/>
+
+    <TextView
+        android:id="@+id/explanation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postUserName"
+        tools:text="@string/explanation"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

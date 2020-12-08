@@ -1,7 +1,9 @@
 package com.kaz_furniture.mahjongChat.data
 
+import com.google.firebase.firestore.IgnoreExtraProperties
 import java.util.*
 
+@IgnoreExtraProperties
 class User {
     var userId = ""
     var name = ""

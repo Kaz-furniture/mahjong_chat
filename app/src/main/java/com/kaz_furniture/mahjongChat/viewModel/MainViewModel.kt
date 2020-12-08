@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
@@ -19,11 +20,13 @@ class MainViewModel: ViewModel() {
         FirebaseFirestore.getInstance()
                 .collection("users")
                 .whereEqualTo("userId", uid)
-                .limit(1)
+//                .orderBy(User::createdAt.name, Query.Direction.DESCENDING)
+                .limit(10)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         val myUser = it.result?.toObjects(User::class.java)
+                        Timber.d("userList = $myUser")
                         if (myUser != null && myUser.isNotEmpty()) {
                             userName = myUser[0].name
                         } else {

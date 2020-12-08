@@ -22,6 +22,8 @@ class PostActivity: BaseActivity() {
         binding.postButton.setOnClickListener {
             viewModel.post(this)
         }
+        viewModel.usersName = intent.getStringExtra("KEY_NAME")
+//        viewModel.userId = intent.getStringExtra("KEY_ID")
     }
 
     companion object {
