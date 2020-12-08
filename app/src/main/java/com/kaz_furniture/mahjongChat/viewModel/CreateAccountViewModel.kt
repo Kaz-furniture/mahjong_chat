@@ -97,7 +97,7 @@ class CreateAccountViewModel: ViewModel() {
                 .addOnCompleteListener { task->
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                        MainActivity.start(activity)
+                        MainActivity.start(activity, uid)
                     } else {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }

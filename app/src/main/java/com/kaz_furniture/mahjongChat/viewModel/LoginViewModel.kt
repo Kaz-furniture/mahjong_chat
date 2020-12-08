@@ -43,7 +43,8 @@ class LoginViewModel: ViewModel() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value ?:"", password.value ?:"")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        MainActivity.start(activity)
+                        val id = FirebaseAuth.getInstance().currentUser?.uid ?:return@addOnCompleteListener
+                        MainActivity.start(activity, id)
                     } else {
                         Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
                     }

@@ -24,7 +24,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="709dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:shownIn="@layout/app_bar_main">
 
@@ -33,13 +33,13 @@
                 android:id="@+id/bottom_nuv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/windowBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_gravity="bottom"
                 app:menu="@menu/bottom_nav_menu" />
 
             <fragment
@@ -48,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
+                android:layout_marginTop="?actionBarSize"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_nuv"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -57,16 +58,16 @@
                 app:navGraph="@navigation/mobile_navigation" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fab"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="72dp"
                 android:backgroundTint="#e9997a"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/postCreate"
                 android:src="@drawable/ic_baseline_create_24"
-                android:contentDescription="@string/postCreate" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
