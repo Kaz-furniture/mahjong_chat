@@ -48,7 +48,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         binding.bottomNuv.setupWithNavController(navController)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_second, R.id.navigation_third), binding.drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_second, R.id.navigation_third, R.id.navigation_fourth), binding.drawerLayout)
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.fab.setOnClickListener{

@@ -4,6 +4,7 @@
     <string name="title_home">Home TL</string>
     <string name="title_second">Private TL</string>
     <string name="title_third">Notification</string>
+    <string name="title_fourth">DM</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
     <string name="userName">ユーザー名（20文字以内）</string>
@@ -21,4 +22,6 @@
     <string name="createAccount">アカウント作成</string>
     <string name="forgetPassword">パスワードを忘れた場合</string>
     <string name="inputCorrectly">正しく入力してください</string>
+    <string name="profile">プロフィール</string>
+    <string name="setting">設定</string>
 </resources>
