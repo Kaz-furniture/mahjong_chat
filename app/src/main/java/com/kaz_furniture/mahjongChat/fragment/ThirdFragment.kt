@@ -27,5 +27,11 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         val bindingData: FragmentThirdBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?:return
         binding?.textNotifications?.text = viewModel.userName
+        binding?.dmContent = viewModel.dMContent
+        binding?.dmToUserId = viewModel.dMToUserId
+        binding?.dmToUserName = viewModel.dMToUserName
+        binding?.DMSendButton?.setOnClickListener {
+            viewModel.sendDM()
+        }
     }
 }

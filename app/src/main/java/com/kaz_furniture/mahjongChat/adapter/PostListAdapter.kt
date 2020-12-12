@@ -1,9 +1,11 @@
-package com.kaz_furniture.mahjongChat
+package com.kaz_furniture.mahjongChat.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ListItemBinding
 
@@ -16,7 +18,7 @@ class PostListAdapter (
                 return postList.size
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
                 val binding = DataBindingUtil.inflate<ListItemBinding>(
                         layoutInflater,
                         R.layout.list_item,
@@ -36,6 +38,7 @@ class ViewHolder(
         fun bind(post: Post) {
                 binding.postUserName.text = post.userName
                 binding.explanation.text = post.explanation
+                binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
         }
 }
 
