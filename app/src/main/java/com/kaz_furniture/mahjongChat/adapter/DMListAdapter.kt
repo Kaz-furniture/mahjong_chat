@@ -11,7 +11,7 @@ import com.kaz_furniture.mahjongChat.databinding.ListDMBinding
 
 class DMListAdapter (
         private val layoutInflater: LayoutInflater,
-        private val dMList: ArrayList<DM>
+        private val dMList: List<String>
         ): RecyclerView.Adapter<DMListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -35,9 +35,8 @@ class DMListAdapter (
     class ViewHolder(
             private val binding: ListDMBinding
     ): RecyclerView.ViewHolder(binding.root){
-        fun bind(dm: DM) {
-            binding.DMUserName.text = dm.toUserName
-            binding.DMCreatedTime.text = android.text.format.DateFormat.format(MahjongChatApplication.applicationContext.getString(R.string.time1), dm.createdAt)
+        fun bind(name: String) {
+            binding.DMUserName.text = name
         }
     }
 

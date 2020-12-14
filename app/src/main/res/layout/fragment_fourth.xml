@@ -16,7 +16,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/recyclerView"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/list_item"/>
+                tools:listitem="@layout/list_d_m"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

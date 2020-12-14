@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -9,17 +11,17 @@
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageUrl"
-        android:hint="imageUrl（仮）"
+        android:id="@+id/selectImageButton"
+        android:hint="@string/selectImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/postImageView"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
 
@@ -27,11 +29,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/explanationInput"
-        android:hint="@string/explanation"
+        android:hint="@string/explanationInput"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@={explanation}"
-        app:layout_constraintTop_toBottomOf="@id/imageUrl"
-        android:autofillHints="@string/explanation"
+        app:layout_constraintTop_toBottomOf="@id/selectImageButton"
+        android:autofillHints="@string/explanationInput"
         android:inputType="text"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
@@ -46,6 +48,29 @@
         android:layout_marginTop="42dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/postImageView"
+        android:layout_width="match_parent"
+        android:layout_height="232dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/postImage" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/noImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp"
+        android:text="@string/noImage"
+        android:gravity="center"
+        android:textSize="32sp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

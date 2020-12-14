@@ -15,33 +15,36 @@ import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
 import com.kaz_furniture.mahjongChat.data.DM
 import com.kaz_furniture.mahjongChat.databinding.FragmentFourthBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
+import timber.log.Timber
 
 class FourthFragment : Fragment(R.layout.fragment_fourth) {
 
     private var binding: FragmentFourthBinding? = null
     private lateinit var adapter: DMListAdapter
     private lateinit var layoutManager: LinearLayoutManager
-    private val dMList = ArrayList<DM>()
     private val viewModel: MainViewModel by activityViewModels()
+    private val dMUserNameList = ArrayList<String>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = DMListAdapter(layoutInflater, dMList)
+
+        val bindingData: FragmentFourthBinding? = DataBindingUtil.bind(view)
+        binding = bindingData ?:return
+        adapter = DMListAdapter(layoutInflater, dMUserNameList)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
                 false
-        )
-        val bindingData: FragmentFourthBinding? = DataBindingUtil.bind(view)
-        binding = bindingData ?:return
-        viewModel.loadDMUsers(dMList, adapter)
+                )
         bindingData.recyclerView.also {
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
+        viewModel.dMUserNameSet(dMUserNameList, adapter)
+//        Timber.d("dMUserNameList = $dMUserNameList")
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
-            viewModel.loadDMUsers(dMList, adapter)
+            viewModel.dMUserNameSet(dMUserNameList, adapter)
             binding?.swipeRefresh?.isRefreshing = false
         }
     }

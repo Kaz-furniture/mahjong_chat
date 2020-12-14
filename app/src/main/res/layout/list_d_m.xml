@@ -15,11 +15,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textSize="16sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/userName2"/>
 
+        <!--
         <TextView
             android:id="@+id/DMCreatedTime"
             android:layout_width="0dp"
@@ -29,7 +30,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/time1"/>
+            tools:text="@string/time1"/> -->
 
 
 

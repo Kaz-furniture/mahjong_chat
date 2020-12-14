@@ -22,6 +22,7 @@ class MainViewModel: ViewModel() {
     var dMToUserId = MutableLiveData<String>()
     var dMContent = MutableLiveData<String>()
     var dMToUserName = MutableLiveData<String>()
+    val dMList = ArrayList<DM>()
 
     fun getName() {
         Timber.d("uid = $uid")
@@ -67,7 +68,7 @@ class MainViewModel: ViewModel() {
                 }
     }
 
-    fun loadDMUsers(dMList: ArrayList<DM>, adapter: DMListAdapter) {
+    fun loadDMUsers(dMList: ArrayList<DM>) {
         FirebaseFirestore.getInstance()
                 .collection("DM")
                 .orderBy(DM::createdAt.name, Query.Direction.DESCENDING)
@@ -81,7 +82,6 @@ class MainViewModel: ViewModel() {
                             return@addOnCompleteListener
                         } else {
                             dMList.addAll(fetchedList)
-                            adapter.notifyDataSetChanged()
                         }
                     } else {
                         Toast.makeText(MahjongChatApplication.applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
@@ -109,5 +109,14 @@ class MainViewModel: ViewModel() {
                     }
                 }
 
+    }
+
+    fun dMUserNameSet(dMUserNameList: ArrayList<String>, adapter: DMListAdapter) {
+        loadDMUsers(dMList)
+        val toUserNameList = dMList.map { it.toUserName }
+        val toUserNameSet = toUserNameList.toSet()
+        dMUserNameList.clear()
+        dMUserNameList.addAll(toUserNameSet.toList())
+        adapter.notifyDataSetChanged()
     }
 }

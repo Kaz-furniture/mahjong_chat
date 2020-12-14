@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 

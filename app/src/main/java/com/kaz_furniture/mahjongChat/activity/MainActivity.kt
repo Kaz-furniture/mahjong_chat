@@ -25,6 +25,7 @@ import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
 import com.kaz_furniture.mahjongChat.fragment.HomeFragment
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
+import timber.log.Timber
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,6 +57,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         binding.navView.setNavigationItemSelectedListener(this)
         viewModel.getName()
+        viewModel.loadDMUsers(viewModel.dMList)
     }
 
     private fun launchPostActivity() {

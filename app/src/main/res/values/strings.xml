@@ -17,7 +17,7 @@
     <string name="login">ログイン</string>
     <string name="logout">ログアウト</string>
     <string name="register">登録</string>
-    <string name="explanation">説明</string>
+    <string name="explanationInput">説明を入力</string>
     <string name="postCreate">投稿</string>
     <string name="createAccount">アカウント作成</string>
     <string name="forgetPassword">パスワードを忘れた場合</string>
@@ -25,4 +25,7 @@
     <string name="profile">プロフィール</string>
     <string name="setting">設定</string>
     <string name="time1">yyyy/M/d kk:mm</string>
+    <string name="selectImage">画像を選択（１枚のみ）</string>
+    <string name="postImage">画像</string>
+    <string name="noImage">NO IMAGE</string>
 </resources>
