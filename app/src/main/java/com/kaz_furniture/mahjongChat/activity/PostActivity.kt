@@ -2,10 +2,8 @@ package com.kaz_furniture.mahjongChat.activity
 
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDiskIOException
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,18 +14,11 @@ import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 class PostActivity: BaseActivity() {

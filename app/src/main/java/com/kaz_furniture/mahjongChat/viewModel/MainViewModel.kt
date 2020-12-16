@@ -17,6 +17,7 @@ import timber.log.Timber
 
 class MainViewModel: ViewModel() {
     val updateData = MutableLiveData<Boolean>()
+    val makeLogout = MutableLiveData<Boolean>()
     var userName = "ゲスト"
     var uid: String = ""
     var dMToUserId = MutableLiveData<String>()
@@ -38,6 +39,8 @@ class MainViewModel: ViewModel() {
                         if (myUser != null && myUser.isNotEmpty()) {
                             userName = myUser[0].name
                         } else {
+                            Toast.makeText(applicationContext, "認証エラーのためログアウトします", Toast.LENGTH_SHORT).show()
+                            makeLogout.postValue(true)
                             return@addOnCompleteListener
                         }
                     } else {

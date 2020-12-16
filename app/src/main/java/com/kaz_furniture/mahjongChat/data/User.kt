@@ -11,5 +11,5 @@ class User {
     var deletedAt: Date? = null
     var introduction: String = ""
     var imageUrl: String = ""
-    var followingUserId: List<String> = listOf()
+    var followingUserIds: List<String> = listOf()
 }

@@ -6,7 +6,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     tools:context=".activity.MainActivity">
 
     <TextView
@@ -31,16 +31,34 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/time1"/>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/postItemImage"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postUserName"
+        tools:src="@drawable/screenshot_20201213_235035"
+        android:contentDescription="@string/postImage" />
+
     <TextView
         android:id="@+id/explanation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postUserName"
+        app:layout_constraintTop_toBottomOf="@id/postItemImage"
         tools:text="@string/explanation"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#888888"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/explanation"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

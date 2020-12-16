@@ -31,9 +31,10 @@ class PostViewModel: ViewModel() {
             this.explanation = explanationInput.value
             this.userId = uId
             this.userName = usersName ?:getUserName()
+            this.imageUrl = "${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${postId}.jpg"
         }
 
-        val ref = FirebaseStorage.getInstance().reference.child("${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${System.currentTimeMillis()}.jpg")
+        val ref = FirebaseStorage.getInstance().reference.child("${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${post.postId}.jpg")
         val imageView = binding.postImageView
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
         val bAOS = ByteArrayOutputStream()
@@ -45,32 +46,31 @@ class PostViewModel: ViewModel() {
                 bitmap.recycle()
             }
             .addOnSuccessListener {
-                ref.downloadUrl.addOnCompleteListener {task ->
-                    if (task.isSuccessful) {
-                        post.imageUrl = task.result.toString()
-                        Timber.d("postImageUrl = ${post.imageUrl}")
-                        Toast.makeText(applicationContext, "GET_URI_SUCCESS", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-                    }
-                }
+//                ref.downloadUrl.addOnCompleteListener {task ->
+//                    if (task.isSuccessful) {
+//                        post.imageUrl = task.result.toString()
+//                        Timber.d("postImageUrl = ${post.imageUrl}")
+                        Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
                 bitmap.recycle()
-                FirebaseFirestore.getInstance()
-                    .collection("posts")
-                    .document(post.postId)
-                    .set(post)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Timber.d("postImageUrl2 = ${post.imageUrl}")
-                            Toast.makeText(applicationContext, "POST_SUCCESS", Toast.LENGTH_SHORT).show()
-                            activity.setResult(Activity.RESULT_OK)
-                            activity.finish()
+            }
+        FirebaseFirestore.getInstance()
+            .collection("posts")
+            .document(post.postId)
+            .set(post)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Timber.d("postImageUrl2 = ${post.imageUrl}")
+                    Toast.makeText(applicationContext, "POST_SUCCESS", Toast.LENGTH_SHORT).show()
+                    activity.setResult(Activity.RESULT_OK)
+                    activity.finish()
 //                        postComplete.postValue(true)
-                        } else {
-                            Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
+                } else {
+                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                }
             }
     }
 
@@ -87,9 +87,11 @@ class PostViewModel: ViewModel() {
                             if (myUser != null && myUser.isNotEmpty()) {
                                  newUserName = myUser[0].name
                             } else {
+                                Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                                 return@addOnCompleteListener
                             }
                         } else {
+                            Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                             return@addOnCompleteListener
                         }
                     }

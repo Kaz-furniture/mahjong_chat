@@ -22,5 +22,6 @@ class MahjongChatApplication: Application() {
 
     companion object {
         lateinit var applicationContext: Context
+
     }
 }

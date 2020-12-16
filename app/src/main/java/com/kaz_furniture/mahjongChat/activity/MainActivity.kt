@@ -3,27 +3,21 @@ package com.kaz_furniture.mahjongChat.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
+import android.provider.ContactsContract
 import android.view.MenuItem
-import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
-import com.kaz_furniture.mahjongChat.fragment.HomeFragment
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import timber.log.Timber
 
@@ -39,7 +33,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolBar)
-        viewModel.uid = intent.getStringExtra("KEY_ID") ?:"NO ID"
+        viewModel.uid = FirebaseAuth.getInstance().currentUser?.uid ?:launchLoginActivity()
+
 //        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
 //        binding.drawerLayout.addDrawerListener(toggle)
 //        toggle.syncState()
@@ -58,6 +53,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setNavigationItemSelectedListener(this)
         viewModel.getName()
         viewModel.loadDMUsers(viewModel.dMList)
+        viewModel.makeLogout.observe(this, Observer {
+            launchLoginActivity()
+        })
     }
 
     private fun launchPostActivity() {
@@ -65,6 +63,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         intent.putExtra("KEY_NAME", viewModel.userName)
 //        intent.putExtra("KEY_ID", viewModel.uid)
         startActivityForResult(intent, REQUEST_CODE_POST)
+    }
+
+    private fun launchProfileEditActivity() {
+        val intent = ProfileEditActivity.newIntent(this)
+        intent.putExtra("KEY_NAME", viewModel.userName)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -88,6 +92,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 LoginActivity.start(this)
                 Toast.makeText(this, "ログアウトしました", Toast.LENGTH_LONG).show()
             }
+
+            R.id.menu_profile_edit -> {
+                launchProfileEditActivity()
+            }
         }
         return true
     }
@@ -108,10 +116,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fun start(activity: Activity, id: String) =
             activity.apply {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("KEY_ID", id)
                 finishAffinity()
                 startActivity(intent)
             }
         private const val REQUEST_CODE_POST = 1000
+        private const val REQUEST_CODE_PROFILE_EDIT = 1001
     }
 }

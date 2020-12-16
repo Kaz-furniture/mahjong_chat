@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="name"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="introduction"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="canSubmit"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/container"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/userNameEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="24dp"
+            android:text="ユーザー名変更"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/presentName"
+            tools:text="EX_TITLE"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toBottomOf="@id/userNameEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/userNameInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLength="20"
+            android:inputType="text"
+            android:text="@={name}"
+            android:autofillHints="@string/userName2"
+            android:hint="新しいユーザー名を入力"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/presentName" />
+
+        <TextView
+            android:id="@+id/introductionLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="自己紹介変更"
+            android:textSize="16sp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userNameInput" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/presentIntroduction"
+            tools:text="EX_INTRODUCTION"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toBottomOf="@id/introductionLabel"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/introductionInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:maxLength="128"
+            android:text="@={introduction}"
+            android:hint="新しい自己紹介を入力"
+            android:autofillHints="@string/emailInput"
+            android:textSize="16sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/presentIntroduction" />
+
+        <TextView
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:enabled="@{canSubmit}"
+            android:text="@string/register"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:shadowDx="2.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="-2.0"
+            android:background="#0055ff"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/introductionInput" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

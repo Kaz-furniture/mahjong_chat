@@ -3,14 +3,11 @@ package com.kaz_furniture.mahjongChat.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.viewModel.LoginViewModel
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityLoginBinding
 
 class LoginActivity: BaseActivity() {

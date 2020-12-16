@@ -1,18 +1,12 @@
 package com.kaz_furniture.mahjongChat.activity
 
-import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.mahjongChat.viewModel.CreateAccountViewModel
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.data.User
-import com.kaz_furniture.mahjongChat.activity.base.BaseActivity
 import com.kaz_furniture.mahjongChat.databinding.ActivityCreateAccountBinding
 import java.util.*
 
@@ -42,7 +36,7 @@ class CreateAccountActivity: BaseActivity() {
             binding.passwordError = it
         })
         binding.saveButton.setOnClickListener{
-            viewModel.createAuthUser(this@CreateAccountActivity)
+            viewModel.createAuthUser(this)
         }
         binding.userNameEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus){
