@@ -24,10 +24,11 @@ import java.io.File
 class PostActivity: BaseActivity() {
     private val viewModel: PostViewModel by viewModels()
     private var uCropSrcUri: Uri? = null
+    lateinit var binding: ActivityPostBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: ActivityPostBinding = DataBindingUtil.setContentView(this, R.layout.activity_post)
+        binding= DataBindingUtil.setContentView(this, R.layout.activity_post)
         binding.lifecycleOwner = this
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
@@ -38,17 +39,23 @@ class PostActivity: BaseActivity() {
         binding.selectImageButton.setOnClickListener {
             selectImage()
         }
-
+        title = getString(R.string.postCreate)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
 //    fun View.visibleOrGone(isVisible: Boolean) {
 //        visibility = if (isVisible) View.VISIBLE else View.GONE
 //    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
     private fun deleteNoImage() {
         Timber.d("uCropSrcUri = $uCropSrcUri")
         if (uCropSrcUri != null) {
-            val textNoImage = findViewById<TextView>(R.id.noImage)
+            val textNoImage = binding.noImage
             textNoImage.isVisible = false
         } else {
             return
@@ -81,7 +88,7 @@ class PostActivity: BaseActivity() {
                     val cropSrc = uCropSrcUri ?:return
                     val inputStream = contentResolver.openInputStream(cropSrc)
                     val image = BitmapFactory.decodeStream(inputStream)
-                    val imageView = findViewById<ImageView>(R.id.postImageView)
+                    val imageView = binding.postImageView
                     imageView.setImageBitmap(image)
                     deleteNoImage()
                 }

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.activity.PostDetailActivity
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.FragmentSecondBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
@@ -51,5 +52,15 @@ class SecondFragment : Fragment(R.layout.fragment_second) {
             viewModel.loadPostList(postList, adapter)
             binding?.swipeRefresh?.isRefreshing = false
         })
+    }
+
+//    override fun openDetail(post: Post) {
+//        val intent = PostDetailActivity.newIntent(requireContext(), post)
+//        startActivityForResult(intent, REQUEST_CODE_DETAIL)
+//    }
+
+
+    companion object {
+        private const val REQUEST_CODE_DETAIL = 1002
     }
 }

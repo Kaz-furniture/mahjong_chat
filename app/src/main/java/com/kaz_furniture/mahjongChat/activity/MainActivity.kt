@@ -17,6 +17,8 @@ import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
+import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import timber.log.Timber
@@ -94,6 +96,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
             R.id.menu_profile_edit -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
                 launchProfileEditActivity()
             }
         }
@@ -111,6 +114,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             super.onBackPressed()
         }
     }
+
+
 
     companion object {
         fun start(activity: Activity, id: String) =

@@ -1,10 +1,11 @@
 package com.kaz_furniture.mahjongChat.data
 
 import com.google.firebase.firestore.IgnoreExtraProperties
+import java.io.Serializable
 import java.util.*
 
 @IgnoreExtraProperties
-class Post {
+class Post: Serializable {
     var postId = "${System.currentTimeMillis()}"
     var userId: String? = ""
     var userName: String = ""

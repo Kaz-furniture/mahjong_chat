@@ -26,7 +26,15 @@
     <string name="profileEdit">プロフィール編集</string>
     <string name="setting">設定</string>
     <string name="time1">yyyy/M/d kk:mm</string>
-    <string name="selectImage">画像を選択（１枚のみ）</string>
+    <string name="selectPostImage">画像を選択（１枚のみ）</string>
+    <string name="selectIconImage">画像を選択</string>
     <string name="postImage">画像</string>
     <string name="noImage">NO IMAGE</string>
+    <string name="wayCut">切り</string>
+    <string name="wayCutCall">切りリーチ</string>
+    <string name="waySilent">切りダマ</string>
+    <string name="pon">ポン</string>
+    <string name="chi">チー</string>
+    <string name="kan">カン</string>
+    <string name="through">スルー</string>
 </resources>

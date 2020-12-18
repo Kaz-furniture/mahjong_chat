@@ -1,14 +1,22 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.app.Activity
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
 import com.kaz_furniture.mahjongChat.data.User
+import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class ProfileEditViewModel: ViewModel() {
@@ -60,7 +68,7 @@ class ProfileEditViewModel: ViewModel() {
                 }
     }
 
-    fun editUpload(activity: ProfileEditActivity) {
+    fun editUpload(activity: ProfileEditActivity, binding: ActivityProfileEditBinding) {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
         val user = User().apply {
@@ -78,7 +86,24 @@ class ProfileEditViewModel: ViewModel() {
             if (introductionValue.isNullOrBlank()) {
                 this.introduction = presentIntroduction
             } else this.introduction = introductionValue
+
         }
+
+//        val ref = FirebaseStorage.getInstance().reference.child("${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${user.userId}.jpg")
+//        val imageView = binding.roundedImageView
+//        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+//        val bAOS = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bAOS)
+//        val data = bAOS.toByteArray()
+//        ref.putBytes(data)
+//                .addOnFailureListener{
+//                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+//                    bitmap.recycle()
+//                }
+//                .addOnSuccessListener {
+//                    Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
+//                    bitmap.recycle()
+//                }
 
 
         FirebaseFirestore.getInstance()
