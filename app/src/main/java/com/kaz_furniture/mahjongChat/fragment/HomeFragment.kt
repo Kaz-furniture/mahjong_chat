@@ -42,7 +42,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
+        binding?.swipeRefresh?.isRefreshing = true
         viewModel.loadPostList(postList, adapter)
+        binding?.swipeRefresh?.isRefreshing = false
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
             viewModel.loadPostList(postList, adapter)

@@ -34,5 +34,8 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         binding?.DMSendButton?.setOnClickListener {
             viewModel.sendDM()
         }
+        viewModel.updateData.observe(viewLifecycleOwner, Observer {
+            binding?.textNotifications?.text = myUser.name
+        })
     }
 }

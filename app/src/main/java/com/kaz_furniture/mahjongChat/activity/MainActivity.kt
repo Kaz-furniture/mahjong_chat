@@ -38,7 +38,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         setSupportActionBar(binding.toolBar)
-        viewModel.uid = FirebaseAuth.getInstance().currentUser?.uid ?:launchLoginActivity()
 
 //        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
 //        binding.drawerLayout.addDrawerListener(toggle)
@@ -71,20 +70,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun launchPostActivity() {
         val intent = PostActivity.newIntent(this)
-//        intent.putExtra("KEY_NAME", viewModel.userName)
-//        intent.putExtra("KEY_ID", viewModel.uid)
         startActivityForResult(intent, REQUEST_CODE_POST)
     }
 
     private fun launchProfileEditActivity() {
         val intent = ProfileEditActivity.newIntent(this)
-//        intent.putExtra("KEY_NAME", viewModel.userName)
         startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_POST) {
+            viewModel.updateData.postValue(true)
+        }
+        if (requestCode == REQUEST_CODE_PROFILE_EDIT) {
             viewModel.updateData.postValue(true)
         }
     }
@@ -113,6 +112,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        binding.navView.getHeaderView(0)?.also { headerView ->
+        headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+        }
         return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
     }
 

@@ -32,7 +32,6 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         val bindingData: FragmentSecondBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
         adapter = PostListAdapter(layoutInflater, postList, this)
-        viewModel.loadPostList(postList, adapter)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -42,6 +41,9 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
+        binding?.swipeRefresh?.isRefreshing = true
+        viewModel.loadPostList(postList, adapter)
+        binding?.swipeRefresh?.isRefreshing = false
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
             viewModel.loadPostList(postList, adapter)
