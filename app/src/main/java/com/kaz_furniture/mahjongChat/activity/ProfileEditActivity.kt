@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
 import com.kaz_furniture.mahjongChat.viewModel.ProfileEditViewModel
@@ -29,8 +30,6 @@ class ProfileEditActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.presentUserId = FirebaseAuth.getInstance().currentUser?.uid ?:launchLoginActivity()
-        viewModel.loadUserInfo()
         binding= DataBindingUtil.setContentView(this, R.layout.activity_profile_edit)
         binding.lifecycleOwner = this
         binding.name = viewModel.editedName
@@ -47,6 +46,8 @@ class ProfileEditActivity: BaseActivity() {
         binding.profileImageSelect.setOnClickListener {
             selectImage()
         }
+        binding.presentName.text = myUser.name
+        binding.presentIntroduction.text = myUser.introduction
         title = getString(R.string.profileEdit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

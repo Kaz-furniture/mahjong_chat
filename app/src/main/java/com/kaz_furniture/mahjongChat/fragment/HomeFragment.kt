@@ -20,7 +20,7 @@ import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.FragmentHomeBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback {
 
     private var binding: FragmentHomeBinding? = null
     private lateinit var adapter: PostListAdapter
@@ -32,7 +32,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentHomeBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        adapter = PostListAdapter(layoutInflater, postList)
+        adapter = PostListAdapter(layoutInflater, postList, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -55,10 +55,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
     }
 
-//    override fun openDetail(post: Post) {
-//        val intent = PostDetailActivity.newIntent(requireContext(), post)
-//        startActivityForResult(intent, REQUEST_CODE_DETAIL)
-//    }
+    override fun openDetail(post: Post) {
+        val intent = PostDetailActivity.newIntent(requireContext(), post)
+        startActivityForResult(intent, REQUEST_CODE_DETAIL)
+    }
 
 
     companion object {

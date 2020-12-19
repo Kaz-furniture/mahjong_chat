@@ -34,7 +34,6 @@ class PostActivity: BaseActivity() {
         binding.postButton.setOnClickListener {
             viewModel.post(this, binding)
         }
-        viewModel.usersName = intent.getStringExtra("KEY_NAME")
 //        viewModel.userId = intent.getStringExtra("KEY_ID")
         binding.selectImageButton.setOnClickListener {
             selectImage()

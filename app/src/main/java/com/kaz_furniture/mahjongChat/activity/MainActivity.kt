@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -16,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.Post
@@ -34,6 +36,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
         setSupportActionBar(binding.toolBar)
         viewModel.uid = FirebaseAuth.getInstance().currentUser?.uid ?:launchLoginActivity()
 
@@ -53,23 +56,29 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             launchPostActivity()
         }
         binding.navView.setNavigationItemSelectedListener(this)
-        viewModel.getName()
         viewModel.loadDMUsers(viewModel.dMList)
         viewModel.makeLogout.observe(this, Observer {
             launchLoginActivity()
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.navView.getHeaderView(0)?.also { headerView ->
+            headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+        }
+    }
+
     private fun launchPostActivity() {
         val intent = PostActivity.newIntent(this)
-        intent.putExtra("KEY_NAME", viewModel.userName)
+//        intent.putExtra("KEY_NAME", viewModel.userName)
 //        intent.putExtra("KEY_ID", viewModel.uid)
         startActivityForResult(intent, REQUEST_CODE_POST)
     }
 
     private fun launchProfileEditActivity() {
         val intent = ProfileEditActivity.newIntent(this)
-        intent.putExtra("KEY_NAME", viewModel.userName)
+//        intent.putExtra("KEY_NAME", viewModel.userName)
         startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
     }
 
@@ -115,10 +124,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-
-
     companion object {
-        fun start(activity: Activity, id: String) =
+        fun start(activity: Activity) =
             activity.apply {
                 val intent = Intent(this, MainActivity::class.java)
                 finishAffinity()

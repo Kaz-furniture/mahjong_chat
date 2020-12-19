@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.CreateAccountActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
@@ -88,7 +89,6 @@ class CreateAccountViewModel: ViewModel() {
         val user = User().apply {
             userId = uid
             name = nameInput.value ?:""
-            createdAt = Date()
         }
         FirebaseFirestore.getInstance()
                 .collection("users")
@@ -97,7 +97,8 @@ class CreateAccountViewModel: ViewModel() {
                 .addOnCompleteListener { task->
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
-                        MainActivity.start(activity, uid)
+                        myUser = user
+                        MainActivity.start(activity)
                     } else {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }

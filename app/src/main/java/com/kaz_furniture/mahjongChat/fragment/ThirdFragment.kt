@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
@@ -26,7 +27,7 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentThirdBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?:return
-        binding?.textNotifications?.text = viewModel.userName
+        binding?.textNotifications?.text = myUser.name
         binding?.dmContent = viewModel.dMContent
         binding?.dmToUserId = viewModel.dMToUserId
         binding?.dmToUserName = viewModel.dMToUserName

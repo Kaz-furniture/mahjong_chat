@@ -2,6 +2,7 @@ package com.kaz_furniture.mahjongChat
 
 import android.app.Application
 import android.content.Context
+import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
 
 class MahjongChatApplication: Application() {
@@ -23,5 +24,6 @@ class MahjongChatApplication: Application() {
     companion object {
         lateinit var applicationContext: Context
 
+        var myUser: User = User()
     }
 }

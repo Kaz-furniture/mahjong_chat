@@ -7,10 +7,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.data.User
+import timber.log.Timber
 
 class LoginViewModel: ViewModel() {
 
@@ -43,10 +46,39 @@ class LoginViewModel: ViewModel() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value ?:"", password.value ?:"")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val id = FirebaseAuth.getInstance().currentUser?.uid ?:return@addOnCompleteListener
-                        MainActivity.start(activity, id)
+                        getMyUser()
+                        MainActivity.start(activity)
                     } else {
                         Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
+                    }
+                }
+    }
+
+    private fun getMyUser() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?:return
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .whereEqualTo("userId", uid)
+//                .orderBy(User::createdAt.name, Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        val user = it.result?.toObjects(User::class.java)
+                        Timber.d("userList = $user")
+                        if (user != null && user.isNotEmpty()) {
+                            MahjongChatApplication.myUser.userId = uid
+                            MahjongChatApplication.myUser.name = user[0].name
+                            MahjongChatApplication.myUser.createdAt = user[0].createdAt
+                            MahjongChatApplication.myUser.followingUserIds = user[0].followingUserIds
+                            MahjongChatApplication.myUser.imageUrl = user[0].imageUrl
+                            MahjongChatApplication.myUser.introduction = user[0].introduction
+                            MahjongChatApplication.myUser.deletedAt = user[0].deletedAt
+                        } else {
+//                            Toast.makeText(MahjongChatApplication.applicationContext, "認証エラーのためログアウトします", Toast.LENGTH_SHORT).show()
+                            return@addOnCompleteListener
+                        }
+                    } else {
+                        return@addOnCompleteListener
                     }
                 }
     }

@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.DM
@@ -18,36 +19,35 @@ import timber.log.Timber
 class MainViewModel: ViewModel() {
     val updateData = MutableLiveData<Boolean>()
     val makeLogout = MutableLiveData<Boolean>()
-    var userName = "ゲスト"
     var uid: String = ""
     var dMToUserId = MutableLiveData<String>()
     var dMContent = MutableLiveData<String>()
     var dMToUserName = MutableLiveData<String>()
     val dMList = ArrayList<DM>()
 
-    fun getName() {
-        Timber.d("uid = $uid")
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .whereEqualTo("userId", uid)
-//                .orderBy(User::createdAt.name, Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        val myUser = it.result?.toObjects(User::class.java)
-                        Timber.d("userList = $myUser")
-                        if (myUser != null && myUser.isNotEmpty()) {
-                            userName = myUser[0].name
-                        } else {
-                            Toast.makeText(applicationContext, "認証エラーのためログアウトします", Toast.LENGTH_SHORT).show()
-                            makeLogout.postValue(true)
-                            return@addOnCompleteListener
-                        }
-                    } else {
-                        return@addOnCompleteListener
-                    }
-                }
-    }
+//    fun getName() {
+//        Timber.d("uid = $uid")
+//        FirebaseFirestore.getInstance()
+//                .collection("users")
+//                .whereEqualTo("userId", uid)
+////                .orderBy(User::createdAt.name, Query.Direction.DESCENDING)
+//                .get()
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful){
+//                        val myUser = it.result?.toObjects(User::class.java)
+//                        Timber.d("userList = $myUser")
+//                        if (myUser != null && myUser.isNotEmpty()) {
+//                            userName = myUser[0].name
+//                        } else {
+//                            Toast.makeText(applicationContext, "認証エラーのためログアウトします", Toast.LENGTH_SHORT).show()
+//                            makeLogout.postValue(true)
+//                            return@addOnCompleteListener
+//                        }
+//                    } else {
+//                        return@addOnCompleteListener
+//                    }
+//                }
+//    }
 
     fun loadPostList(postList: ArrayList<Post>, adapter: PostListAdapter) {
         FirebaseFirestore.getInstance()
@@ -98,7 +98,7 @@ class MainViewModel: ViewModel() {
             this.fromUserId = uid
             this.toUserId = dMToUserId.value ?:""
             this.toUserName = dMToUserName.value ?:""
-            this.fromUserName = userName
+            this.fromUserName = myUser.name
         }
         FirebaseFirestore.getInstance()
                 .collection("DM")

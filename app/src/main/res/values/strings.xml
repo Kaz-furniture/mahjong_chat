@@ -8,6 +8,8 @@
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
     <string name="userName">ユーザー名（20文字以内）</string>
+    <string name="userNameEdit">ユーザー名変更</string>
+    <string name="userNameInput">新しいユーザー名を入力（20文字以内）</string>
     <string name="userName2">ユーザー名を入力</string>
     <string name="email">メールアドレス</string>
     <string name="emailInput">メールアドレスを入力</string>
@@ -37,4 +39,7 @@
     <string name="chi">チー</string>
     <string name="kan">カン</string>
     <string name="through">スルー</string>
+    <string name="introductionEdit">自己紹介変更</string>
+    <string name="introductionInput">新しい自己紹介を入力</string>
+    <string name="profileImageEdit">プロフィール画像を変更</string>
 </resources>

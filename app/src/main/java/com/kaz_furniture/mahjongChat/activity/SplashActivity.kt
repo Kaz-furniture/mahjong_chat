@@ -1,36 +1,28 @@
 package com.kaz_furniture.mahjongChat.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import com.google.firebase.auth.FirebaseAuth
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.databinding.ActivitySplashBinding
+import com.kaz_furniture.mahjongChat.viewModel.SplashViewModel
 
 class SplashActivity: BaseActivity() {
 
-    private val splashTime = 1000L
+    lateinit var binding: ActivitySplashBinding
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        binding.lifecycleOwner = this
         setContentView(R.layout.activity_splash)
-        FirebaseAuth.getInstance().currentUser?.also {
-//            FirebaseAuth.getInstance().signOut()
-//            startLoginActivity()
-            startMainActivity(it.uid)
-        } ?:run {
-            startLoginActivity()
-        }
+        viewModel.checkAccount(this)
+        viewModel.makeLogout.observe(this, Observer {
+            launchLoginActivity()
+        })
+
     }
 
-    private fun startMainActivity(id: String) {
-        Handler(Looper.getMainLooper()).postDelayed({
-            MainActivity.start(this, id)
-        }, splashTime)
-    }
-
-    private fun startLoginActivity(){
-        Handler(Looper.getMainLooper()).postDelayed({
-            LoginActivity.start(this)
-        }, splashTime)
-    }
 }

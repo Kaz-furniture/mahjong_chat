@@ -6,7 +6,7 @@ import java.util.*
 @IgnoreExtraProperties
 class User {
     var userId = ""
-    var name = ""
+    var name = "ゲスト"
     var createdAt: Date = Date()
     var deletedAt: Date? = null
     var introduction: String = ""

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
@@ -23,12 +24,6 @@ class ProfileEditViewModel: ViewModel() {
     val makeLogout = MutableLiveData<Boolean>()
     val editedName = MutableLiveData<String>()
     val editedIntroduction = MutableLiveData<String>()
-    var presentUserId = ""
-    var createdAtSnapshot = Date()
-    var presentImageUrl = ""
-    var followingUserIdsSnapshot = listOf<String>()
-    var presentName = ""
-    var presentIntroduction = ""
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(editedName) { result.value = submitValidation()}
@@ -45,46 +40,23 @@ class ProfileEditViewModel: ViewModel() {
         } else !(!introductionValue.isNullOrBlank() && introductionValue.length >100)
     }
 
-    fun loadUserInfo() {
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .whereEqualTo("userId", presentUserId)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val myUser = it.result?.toObjects(User::class.java)
-                        if (myUser != null && myUser.isNotEmpty()) {
-                            followingUserIdsSnapshot = myUser[0].followingUserIds
-                            presentImageUrl = myUser[0].imageUrl
-                            createdAtSnapshot = myUser[0].createdAt
-                            presentName = myUser[0].name
-                            presentIntroduction = myUser[0].introduction
-                        } else {
-                            Toast.makeText(applicationContext, "認証エラーのため、ログアウトします", Toast.LENGTH_SHORT).show()
-                            makeLogout.postValue(true)
-                            return@addOnCompleteListener
-                        }
-                    }
-                }
-    }
-
     fun editUpload(activity: ProfileEditActivity, binding: ActivityProfileEditBinding) {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
         val user = User().apply {
-            this.createdAt = createdAtSnapshot
-            this.followingUserIds = followingUserIdsSnapshot
-            this.imageUrl = presentImageUrl
-            this.userId = presentUserId
+            this.createdAt = myUser.createdAt
+            this.followingUserIds = myUser.followingUserIds
+            this.imageUrl = myUser.imageUrl
+            this.userId = myUser.userId
             if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank()) {
                 return
             }
             if (nameValue.isNullOrBlank()) {
-                this.name = presentName
+                this.name = myUser.name
             } else this.name = nameValue
 
             if (introductionValue.isNullOrBlank()) {
-                this.introduction = presentIntroduction
+                this.introduction = myUser.introduction
             } else this.introduction = introductionValue
 
         }
@@ -108,11 +80,12 @@ class ProfileEditViewModel: ViewModel() {
 
         FirebaseFirestore.getInstance()
                 .collection("users")
-                .document(presentUserId)
+                .document(myUser.userId)
                 .set(user)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "SUCCESS", Toast.LENGTH_SHORT).show()
+                        myUser = user
                         activity.setResult(Activity.RESULT_OK)
                         activity.finish()
                     } else {
