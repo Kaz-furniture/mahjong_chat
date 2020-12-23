@@ -1,18 +1,27 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.app.Activity
+import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -21,23 +30,26 @@ class ProfileEditViewModel: ViewModel() {
     val editedName = MutableLiveData<String>()
     val editedIntroduction = MutableLiveData<String>()
     private val updatePostList = ArrayList<Post>()
+    var image: Bitmap? = null
+    val imageBoolean = MutableLiveData<Boolean>()
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(editedName) { result.value = submitValidation()}
         result.addSource(editedIntroduction) { result.value = submitValidation()}
+        result.addSource(imageBoolean) { result.value = submitValidation()}
     }
 
     private fun submitValidation(): Boolean {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
-        return if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank()) {
+        return if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && image == null) {
             false
         } else if (!nameValue.isNullOrBlank() && nameValue.length >20 ) {
             false
         } else !(!introductionValue.isNullOrBlank() && introductionValue.length >100)
     }
 
-    fun editUpload(activity: ProfileEditActivity, binding: ActivityProfileEditBinding) {
+    fun editUpload(activity: ProfileEditActivity) {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
         val user = User().apply {
@@ -45,7 +57,7 @@ class ProfileEditViewModel: ViewModel() {
             this.followingUserIds = myUser.followingUserIds
             this.imageUrl = myUser.imageUrl
             this.userId = myUser.userId
-            if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank()) {
+            if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && image == null) {
                 return
             }
             if (nameValue.isNullOrBlank()) {
@@ -55,25 +67,26 @@ class ProfileEditViewModel: ViewModel() {
             if (introductionValue.isNullOrBlank()) {
                 this.introduction = myUser.introduction
             } else this.introduction = introductionValue
-
         }
 
-//        val ref = FirebaseStorage.getInstance().reference.child("${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${user.userId}.jpg")
-//        val imageView = binding.roundedImageView
-//        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-//        val bAOS = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bAOS)
-//        val data = bAOS.toByteArray()
-//        ref.putBytes(data)
-//                .addOnFailureListener{
-//                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-//                    bitmap.recycle()
-//                }
-//                .addOnSuccessListener {
-//                    Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
-//                    bitmap.recycle()
-//                }
+        if (image != null) {
+            val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")
+            val bAOS = ByteArrayOutputStream()
+            image?.compress(Bitmap.CompressFormat.JPEG, 60, bAOS)
+            val data = bAOS.toByteArray()
+            ref.putBytes(data)
+                    .addOnFailureListener {
+                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnSuccessListener {
+                        Toast.makeText(applicationContext, "UPLOAD_ICON_SUCCESS", Toast.LENGTH_SHORT).show()
+                    }
 
+//            Glide.get(applicationContext).clearMemory()
+//            CoroutineScope(Dispatchers.IO).launch {
+//                Glide.get(applicationContext).clearDiskCache()
+//            }
+        }
 
         FirebaseFirestore.getInstance()
                 .collection("users")

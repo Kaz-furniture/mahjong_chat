@@ -7,15 +7,18 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.ItemListener
+import com.afollestad.materialdialogs.list.listItems
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
+import com.kaz_furniture.mahjongChat.databinding.DialogFragmentCreateChoiceBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
 import com.yalantis.ucrop.UCrop
 import timber.log.Timber
@@ -40,6 +43,9 @@ class PostActivity: BaseActivity() {
         }
         title = getString(R.string.postCreate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.createChoicesButton.setOnClickListener {
+            showCreateChoicesDialog()
+        }
     }
 
 //    fun View.visibleOrGone(isVisible: Boolean) {
@@ -117,6 +123,40 @@ class PostActivity: BaseActivity() {
                     })
                     .start(this@PostActivity)
         }
+    }
+
+    private fun showCreateChoicesDialog() {
+        MaterialDialog(this).show {
+            cancelable(false)
+            val dialogBinding = DialogFragmentCreateChoiceBinding.inflate(
+                    LayoutInflater.from(this@PostActivity), null, false)
+            dialogBinding.apply {
+                this.choiceData = viewModel.choiceData
+                this.doneButton.setOnClickListener {
+                    dismiss()
+                }
+                this.selectTileButton.setOnClickListener {
+                    showTileDialog()
+                }
+            }
+            setContentView(dialogBinding.root)
+        }
+    }
+
+    private fun showTileDialog() {
+        MaterialDialog(this).show {
+            val items = mutableListOf<String>()
+            for (i in 0 until 10) {
+                items.add("アイテム$i")
+            }
+            listItems(items = items, selection = object: ItemListener {
+                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
+                    viewModel.selectChoice(text.toString())
+                    dismiss()
+                }
+            })
+        }
+
     }
 
     companion object {

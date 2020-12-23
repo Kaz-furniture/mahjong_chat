@@ -41,7 +41,7 @@ class ProfileEditActivity: BaseActivity() {
             binding.canSubmit = viewModel.canSubmit.value
         })
         binding.saveButton.setOnClickListener {
-            viewModel.editUpload(this, binding)
+            viewModel.editUpload(this)
         }
         binding.profileImageSelect.setOnClickListener {
             selectImage()
@@ -75,11 +75,13 @@ class ProfileEditActivity: BaseActivity() {
                     val cropSrc = uCropSrcUri ?:return
                     val inputStream = contentResolver.openInputStream(cropSrc)
                     var image = BitmapFactory.decodeStream(inputStream)
+                    viewModel.image = image
                     image = Bitmap.createScaledBitmap(image, 200, 200, true)
                     val imageView = binding.roundedImageView
                     imageView.setImageBitmap(image)
                     if (uCropSrcUri != null) {
                         binding.noImageTextView.isVisible = false
+                        viewModel.imageBoolean.postValue(true)
                     }
                 }
 

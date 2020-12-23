@@ -15,8 +15,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
@@ -65,6 +68,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onResume()
         binding.navView.getHeaderView(0)?.also { headerView ->
             headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+            val storageRef = FirebaseStorage.getInstance().reference
+            val iconImageRef = storageRef.child("${myUser.userId}/profileImage.jpg")
+            val userIconImage = headerView.findViewById<com.makeramen.roundedimageview.RoundedImageView>(R.id.headerUserIconImage)
+            Glide.with(MahjongChatApplication.applicationContext)
+                    .load(iconImageRef)
+                    .into(userIconImage)
         }
     }
 

@@ -12,6 +12,6 @@ enum class WayType(val wayId: Int, val textId: Int) {
     THROUGH(7, R.string.through);
 
     companion object {
-        fun getWayTypeById(id:Int): WayType = values().firstOrNull{ it.wayId ==id} ?:DISCARD
+        fun getWayTypeById(id:Int): WayType = values().firstOrNull{ it.wayId ==id } ?:DISCARD
     }
 }

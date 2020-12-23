@@ -42,4 +42,7 @@
     <string name="introductionEdit">自己紹介変更</string>
     <string name="introductionInput">新しい自己紹介を入力</string>
     <string name="profileImageEdit">プロフィール画像を変更</string>
+    <string name="createNewChoices">選択肢を作成</string>
+    <string name="decide">決定</string>
+    <string name="selectTile">牌を選択</string>
 </resources>

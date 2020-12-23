@@ -1,40 +1,36 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
-import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.PostActivity
 import com.kaz_furniture.mahjongChat.data.Post
-import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
-    private val uId = FirebaseAuth.getInstance().currentUser?.uid
 
     fun post(activity: PostActivity, binding: ActivityPostBinding) {
         val post = Post().apply {
             this.explanation = explanationInput.value
-            this.userId = uId
+            this.userId = myUser.userId
             this.userName = myUser.name
-            this.imageUrl = "${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${postId}.jpg"
+            this.imageUrl = "${myUser.userId}/${postId}.jpg"
         }
 
-        val ref = FirebaseStorage.getInstance().reference.child("${FirebaseAuth.getInstance().currentUser?.uid ?:"noUser"}/${post.postId}.jpg")
+        val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/${post.postId}.jpg")
         val imageView = binding.postImageView
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
         val bAOS = ByteArrayOutputStream()
@@ -71,6 +67,20 @@ class PostViewModel: ViewModel() {
                 } else {
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
+            }
+    }
+
+    fun selectChoice(name: String) {
+        choiceData.choiceName = name
+    }
+
+    var choiceData = ChoiceData()
+    class ChoiceData: BaseObservable() {
+        @Bindable
+        var choiceName = "選択してください"
+            set(value) {
+                field = value
+                notifyPropertyChanged(BR.choiceName)
             }
     }
 }

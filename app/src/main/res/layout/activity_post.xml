@@ -25,6 +25,26 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selectImageButton"
+        android:id="@+id/choicesParentView"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createChoicesButton"
+        app:layout_constraintTop_toBottomOf="@id/choicesParentView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/createNewChoices"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +52,7 @@
         android:hint="@string/explanationInput"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@={explanation}"
-        app:layout_constraintTop_toBottomOf="@id/selectImageButton"
+        app:layout_constraintTop_toBottomOf="@id/createChoicesButton"
         android:autofillHints="@string/explanationInput"
         android:inputType="text"
         android:layout_marginTop="24dp"
