@@ -13,10 +13,16 @@ import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.ItemListener
+import com.afollestad.materialdialogs.list.customListAdapter
+import com.afollestad.materialdialogs.list.getRecyclerView
 import com.afollestad.materialdialogs.list.listItems
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
+import com.kaz_furniture.mahjongChat.adapter.TileListAdapter
+import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import com.kaz_furniture.mahjongChat.databinding.DialogFragmentCreateChoiceBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
@@ -28,11 +34,20 @@ class PostActivity: BaseActivity() {
     private val viewModel: PostViewModel by viewModels()
     private var uCropSrcUri: Uri? = null
     lateinit var binding: ActivityPostBinding
+    private lateinit var adapter: TileListAdapter
+    lateinit var layoutManager: GridLayoutManager
+    private val tileList = listOf<Tile>(
+            Tile.M1, Tile.M2, Tile.M3, Tile.M4, Tile.M5, Tile.M5R, Tile.M6, Tile.M7, Tile.M8, Tile.M9,
+            Tile.P1, Tile.P2, Tile.P3, Tile.P4, Tile.P5, Tile.P5R, Tile.P6, Tile.P7, Tile.P8, Tile.P9,
+            Tile.S1, Tile.S2, Tile.S3, Tile.S4, Tile.S5, Tile.S5R, Tile.S6, Tile.S7, Tile.S8, Tile.S9,
+            Tile.Z1, Tile.Z2, Tile.Z3, Tile.Z4, Tile.Z5, Tile.Z6, Tile.Z7)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this, R.layout.activity_post)
         binding.lifecycleOwner = this
+        adapter = TileListAdapter(layoutInflater, tileList)
+        layoutManager = GridLayoutManager(this, 4)
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
             viewModel.post(this, binding)
@@ -145,16 +160,18 @@ class PostActivity: BaseActivity() {
 
     private fun showTileDialog() {
         MaterialDialog(this).show {
-            val items = mutableListOf<String>()
-            for (i in 0 until 10) {
-                items.add("アイテム$i")
-            }
-            listItems(items = items, selection = object: ItemListener {
-                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
-                    viewModel.selectChoice(text.toString())
-                    dismiss()
-                }
-            })
+//            val items = mutableListOf<String>()
+//            for (i in 0 until 10) {
+//                items.add("アイテム$i")
+//            }
+//            getRecyclerView()
+            customListAdapter(adapter, layoutManager)
+//            listItems(items = items, selection = object: ItemListener {
+//                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
+//                    viewModel.selectChoice(text.toString())
+//                    dismiss()
+//                }
+//            })
         }
 
     }

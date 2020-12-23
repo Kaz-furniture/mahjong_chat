@@ -43,7 +43,7 @@ enum class Tile(val tileId: Int, val imageId: Int) {
 
     companion object {
         fun getTileById(id: Int): Tile {
-            return values().firstOrNull { it.tileId == id} ?:M1
+            return values().firstOrNull { it.tileId == id } ?:M1
         }
     }
 }
