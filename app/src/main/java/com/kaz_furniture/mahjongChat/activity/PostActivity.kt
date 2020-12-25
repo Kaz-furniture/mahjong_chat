@@ -36,11 +36,7 @@ class PostActivity: BaseActivity() {
     lateinit var binding: ActivityPostBinding
     private lateinit var adapter: TileListAdapter
     lateinit var layoutManager: GridLayoutManager
-    private val tileList = listOf<Tile>(
-            Tile.M1, Tile.M2, Tile.M3, Tile.M4, Tile.M5, Tile.M5R, Tile.M6, Tile.M7, Tile.M8, Tile.M9,
-            Tile.P1, Tile.P2, Tile.P3, Tile.P4, Tile.P5, Tile.P5R, Tile.P6, Tile.P7, Tile.P8, Tile.P9,
-            Tile.S1, Tile.S2, Tile.S3, Tile.S4, Tile.S5, Tile.S5R, Tile.S6, Tile.S7, Tile.S8, Tile.S9,
-            Tile.Z1, Tile.Z2, Tile.Z3, Tile.Z4, Tile.Z5, Tile.Z6, Tile.Z7)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,6 +161,10 @@ class PostActivity: BaseActivity() {
 //                items.add("アイテム$i")
 //            }
 //            getRecyclerView()
+//            getRecyclerView().also {
+//                it.adapter = adapter
+//                it.layoutManager = layoutManager
+//            }
             customListAdapter(adapter, layoutManager)
 //            listItems(items = items, selection = object: ItemListener {
 //                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
@@ -173,7 +173,6 @@ class PostActivity: BaseActivity() {
 //                }
 //            })
         }
-
     }
 
     companion object {
@@ -181,5 +180,10 @@ class PostActivity: BaseActivity() {
             return Intent(context, PostActivity::class.java)
         }
         private const val RC_CHOOSE_IMAGE = 1000
+        val tileList = listOf<Tile>(
+                Tile.M1, Tile.M2, Tile.M3, Tile.M4, Tile.M5, Tile.M5R, Tile.M6, Tile.M7, Tile.M8, Tile.M9,
+                Tile.P1, Tile.P2, Tile.P3, Tile.P4, Tile.P5, Tile.P5R, Tile.P6, Tile.P7, Tile.P8, Tile.P9,
+                Tile.S1, Tile.S2, Tile.S3, Tile.S4, Tile.S5, Tile.S5R, Tile.S6, Tile.S7, Tile.S8, Tile.S9,
+                Tile.Z1, Tile.Z2, Tile.Z3, Tile.Z4, Tile.Z5, Tile.Z6, Tile.Z7)
     }
 }

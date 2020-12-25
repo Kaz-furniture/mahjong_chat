@@ -23,6 +23,9 @@ class LoginActivity: BaseActivity() {
         binding.createUserTextView.setOnClickListener {
             CreateAccountActivity.start(this)
         }
+        binding.passwordForget.setOnClickListener {
+            PasswordForgetActivity.start(this)
+        }
         binding.email= viewModel.email
         binding.password = viewModel.password
         binding.login.setOnClickListener {

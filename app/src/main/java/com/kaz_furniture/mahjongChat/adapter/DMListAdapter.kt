@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.data.DM
+import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.databinding.ListDMBinding
 
 class DMListAdapter (

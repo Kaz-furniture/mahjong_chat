@@ -22,6 +22,7 @@ class SplashActivity: BaseActivity() {
         viewModel.makeLogout.observe(this, Observer {
             launchLoginActivity()
         })
+        viewModel.getFCMToken()
 
     }
 

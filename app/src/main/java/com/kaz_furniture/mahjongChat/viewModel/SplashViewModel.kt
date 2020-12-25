@@ -5,9 +5,12 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
@@ -17,8 +20,20 @@ import timber.log.Timber
 
 class SplashViewModel: ViewModel() {
 
-    private val splashTime = 2000L
+    private val splashTime = 5000L
     var makeLogout = MutableLiveData<Boolean>()
+    var fcmToken = ""
+
+    fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task->
+            if (!task.isSuccessful) {
+                Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                return@OnCompleteListener
+            }
+            Toast.makeText(applicationContext, "TOKEN_SUCCESS", Toast.LENGTH_SHORT).show()
+            fcmToken = task.result ?:return@OnCompleteListener
+        })
+    }
 
     fun checkAccount(activity: SplashActivity) {
         FirebaseAuth.getInstance().currentUser?.also {

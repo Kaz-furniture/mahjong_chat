@@ -1,9 +1,13 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +20,7 @@ import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
+import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -32,11 +37,33 @@ class ProfileEditViewModel: ViewModel() {
     private val updatePostList = ArrayList<Post>()
     var image: Bitmap? = null
     val imageBoolean = MutableLiveData<Boolean>()
+    var uCropSrcUriLive = MutableLiveData<Uri>()
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(editedName) { result.value = submitValidation()}
         result.addSource(editedIntroduction) { result.value = submitValidation()}
         result.addSource(imageBoolean) { result.value = submitValidation()}
+    }
+
+    fun showProfileImage(binding: ActivityProfileEditBinding) {
+        uCropSrcUriLive.postValue(myUser.imageUrl.toUri())
+        val storageRef = FirebaseStorage.getInstance().reference
+        val postImageRef = storageRef.child(myUser.imageUrl)
+        Glide.with(applicationContext)
+            .load(postImageRef)
+            .into(binding.roundedImageView)
+    }
+
+    fun uCropStart(data: Intent, binding: ActivityProfileEditBinding) {
+        val resultUri = UCrop.getOutput(data)
+        uCropSrcUriLive.value = resultUri
+        val cropSrc = uCropSrcUriLive.value ?:return
+        val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
+        image = BitmapFactory.decodeStream(inputStream)
+//        val bitmapImage = image ?:return
+//        image = Bitmap.createScaledBitmap(bitmapImage, 200, 200, true)
+        val imageView = binding.roundedImageView
+        imageView.setImageBitmap(image)
     }
 
     private fun submitValidation(): Boolean {
@@ -82,10 +109,10 @@ class ProfileEditViewModel: ViewModel() {
                         Toast.makeText(applicationContext, "UPLOAD_ICON_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
 
-//            Glide.get(applicationContext).clearMemory()
-//            CoroutineScope(Dispatchers.IO).launch {
-//                Glide.get(applicationContext).clearDiskCache()
-//            }
+            Glide.get(applicationContext).clearMemory()
+            CoroutineScope(Dispatchers.IO).launch {
+                Glide.get(applicationContext).clearDiskCache()
+            }
         }
 
         FirebaseFirestore.getInstance()

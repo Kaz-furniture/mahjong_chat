@@ -1,6 +1,8 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.util.Patterns
 import android.widget.Toast
 import androidx.lifecycle.MediatorLiveData
@@ -8,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -15,6 +18,7 @@ import com.kaz_furniture.mahjongChat.activity.CreateAccountActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
 import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class CreateAccountViewModel: ViewModel() {

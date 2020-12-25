@@ -45,4 +45,8 @@
     <string name="createNewChoices">選択肢を作成</string>
     <string name="decide">決定</string>
     <string name="selectTile">牌を選択</string>
+    <string name="passwordForget">パスワードを忘れた場合</string>
+    <string name="submit">送信</string>
+    <string name="loading">Loading…</string>
+    <string name="postNumber">投稿数</string>
 </resources>

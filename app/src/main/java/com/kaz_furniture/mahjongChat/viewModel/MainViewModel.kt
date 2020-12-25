@@ -11,7 +11,7 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicatio
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
-import com.kaz_furniture.mahjongChat.data.DM
+import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
@@ -22,7 +22,7 @@ class MainViewModel: ViewModel() {
     var dMToUserId = MutableLiveData<String>()
     var dMContent = MutableLiveData<String>()
     var dMToUserName = MutableLiveData<String>()
-    val dMList = ArrayList<DM>()
+    val dMList = ArrayList<DMRoom>()
 
     fun loadPostList(postList: ArrayList<Post>, adapter: PostListAdapter) {
         FirebaseFirestore.getInstance()
@@ -46,14 +46,14 @@ class MainViewModel: ViewModel() {
                 }
     }
 
-    fun loadDMUsers(dMList: ArrayList<DM>) {
+    fun loadDMUsers(dMList: ArrayList<DMRoom>) {
         FirebaseFirestore.getInstance()
                 .collection("DM")
-                .orderBy(DM::createdAt.name, Query.Direction.DESCENDING)
+                .orderBy(DMRoom::createdAt.name, Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val fetchedList = it.result?.toObjects(DM::class.java)
+                        val fetchedList = it.result?.toObjects(DMRoom::class.java)
                         dMList.clear()
                         if (fetchedList == null || fetchedList.isEmpty()) {
                             Toast.makeText(MahjongChatApplication.applicationContext, "NO DM", Toast.LENGTH_SHORT).show()
@@ -68,7 +68,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun sendDM() {
-        val dM = DM().apply {
+        val dM = DMRoom().apply {
             this.content = dMContent.value ?:""
             this.fromUserId = myUser.userId
             this.toUserId = dMToUserId.value ?:""
@@ -77,7 +77,7 @@ class MainViewModel: ViewModel() {
         }
         FirebaseFirestore.getInstance()
                 .collection("DM")
-                .document(dM.dMId)
+                .document(dM.roomId)
                 .set(dM)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -90,7 +90,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun dMUserNameSet(dMUserNameList: ArrayList<String>, adapter: DMListAdapter) {
-        loadDMUsers(dMList)
+//        loadDMUsers(dMList)
         val toUserNameList = dMList.map { it.toUserName }
         val toUserNameSet = toUserNameList.toSet()
         dMUserNameList.clear()

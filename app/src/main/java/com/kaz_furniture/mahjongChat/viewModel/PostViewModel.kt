@@ -13,14 +13,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.PostActivity
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
+    val selectedTile = MutableLiveData<Tile>()
+//    val textImageData = TextImageData()
 
     fun post(activity: PostActivity, binding: ActivityPostBinding) {
         val post = Post().apply {
@@ -70,9 +74,18 @@ class PostViewModel: ViewModel() {
             }
     }
 
-    fun selectChoice(name: String) {
-        choiceData.choiceName = name
-    }
+//    fun selectTile(tile: Tile) {
+//        selectedTile.postValue(tile)
+//        textImageData.imageId = tile.imageId
+//    }
+//
+//    fun setText(text: String) {
+//        textImageData.text = text
+//    }
+//
+//    fun setImageId(imageId: Int) {
+//        textImageData.imageId = imageId
+//    }
 
     var choiceData = ChoiceData()
     class ChoiceData: BaseObservable() {

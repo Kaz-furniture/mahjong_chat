@@ -21,7 +21,9 @@ class PostDetailActivity: BaseActivity() {
         binding.lifecycleOwner = this
         val post = (intent.getSerializableExtra(KEY) as? Post) ?:return
         binding.userName.text = post.userName
-
+        viewModel.setImage(post, binding)
+        binding.explanation.text = post.explanation
+        binding.createdTime.text = android.text.format.DateFormat.format(getString(R.string.time1), post.createdAt)
     }
 
     companion object {

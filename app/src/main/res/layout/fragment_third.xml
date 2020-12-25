@@ -1,65 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data>
-        <variable
-            name="DMContent"
-            type="androidx.lifecycle.MutableLiveData&lt;String>" />
-
-        <variable
-            name="DMToUserId"
-            type="androidx.lifecycle.MutableLiveData&lt;String>" />
-
-        <variable
-            name="DMToUserName"
-            type="androidx.lifecycle.MutableLiveData&lt;String>" />
-
-    </data>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ThirdFragment">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="DM送信ボタン（仮）"
-        android:id="@+id/DMSendButton"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/DMSendToUser"
-        app:layout_constraintTop_toBottomOf="@id/DMSendText"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="DMを送る相手のUserId"
-        android:text="@={DMToUserId}"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/DMSendText"
-        android:text="@={DMContent}"
-        app:layout_constraintTop_toBottomOf="@id/DMSendButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:hint="DMの中身"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/DMToUserName"
-        android:text="@={DMToUserName}"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/DMSendToUser"
-        android:hint="相手の名前"/>
 
     <TextView
         android:id="@+id/text_notifications"

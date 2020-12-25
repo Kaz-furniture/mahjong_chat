@@ -58,7 +58,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             launchPostActivity()
         }
         binding.navView.setNavigationItemSelectedListener(this)
-        viewModel.loadDMUsers(viewModel.dMList)
+//        viewModel.loadDMUsers(viewModel.dMList)
         viewModel.makeLogout.observe(this, Observer {
             launchLoginActivity()
         })
@@ -122,7 +122,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onSupportNavigateUp(): Boolean {
         binding.navView.getHeaderView(0)?.also { headerView ->
-        headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+            headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+            val storageRef = FirebaseStorage.getInstance().reference
+            val iconImageRef = storageRef.child("${myUser.userId}/profileImage.jpg")
+            val userIconImage = headerView.findViewById<com.makeramen.roundedimageview.RoundedImageView>(R.id.headerUserIconImage)
+            Glide.with(MahjongChatApplication.applicationContext)
+                .load(iconImageRef)
+                .into(userIconImage)
         }
         return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
     }

@@ -20,6 +20,7 @@ import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
 import com.kaz_furniture.mahjongChat.viewModel.ProfileEditViewModel
 import com.yalantis.ucrop.UCrop
+import timber.log.Timber
 import java.io.File
 
 class ProfileEditActivity: BaseActivity() {
@@ -40,6 +41,10 @@ class ProfileEditActivity: BaseActivity() {
         viewModel.canSubmit.observe(this, Observer {
             binding.canSubmit = viewModel.canSubmit.value
         })
+        viewModel.uCropSrcUriLive.observe(this, Observer {
+            uCropSrcUri = it
+            binding.noImageTextView.isVisible = false
+        })
         binding.saveButton.setOnClickListener {
             viewModel.editUpload(this)
         }
@@ -50,6 +55,7 @@ class ProfileEditActivity: BaseActivity() {
         binding.presentIntroduction.text = myUser.introduction
         title = getString(R.string.profileEdit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        viewModel.showProfileImage(binding)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -70,23 +76,12 @@ class ProfileEditActivity: BaseActivity() {
                     }
                 }
                 UCrop.REQUEST_CROP -> {
-                    val resultUri = UCrop.getOutput(data)
-                    uCropSrcUri = resultUri
-                    val cropSrc = uCropSrcUri ?:return
-                    val inputStream = contentResolver.openInputStream(cropSrc)
-                    var image = BitmapFactory.decodeStream(inputStream)
-                    viewModel.image = image
-                    image = Bitmap.createScaledBitmap(image, 200, 200, true)
-                    val imageView = binding.roundedImageView
-                    imageView.setImageBitmap(image)
-                    if (uCropSrcUri != null) {
-                        binding.noImageTextView.isVisible = false
-                        viewModel.imageBoolean.postValue(true)
-                    }
+                    viewModel.uCropStart(data, binding)
+                    viewModel.imageBoolean.postValue(true)
                 }
 
                 UCrop.RESULT_ERROR -> {
-                    uCropSrcUri = null
+                    viewModel.showProfileImage(binding)
                     Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -116,6 +111,7 @@ class ProfileEditActivity: BaseActivity() {
                     })
                     .start(this@ProfileEditActivity)
         }
+        viewModel.uCropSrcUriLive.postValue(uCropSrcUri)
 
     }
 

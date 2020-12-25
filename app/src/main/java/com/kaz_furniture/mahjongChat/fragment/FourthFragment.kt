@@ -12,7 +12,7 @@ import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
-import com.kaz_furniture.mahjongChat.data.DM
+import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.databinding.FragmentFourthBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import timber.log.Timber
@@ -40,7 +40,7 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
-        viewModel.dMUserNameSet(dMUserNameList, adapter)
+//        viewModel.dMUserNameSet(dMUserNameList, adapter)
 //        Timber.d("dMUserNameList = $dMUserNameList")
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true

@@ -4,8 +4,8 @@ import com.google.firebase.firestore.IgnoreExtraProperties
 import java.util.*
 
 @IgnoreExtraProperties
-class DM {
-    var dMId  = "${System.currentTimeMillis()}"
+class DMRoom {
+    var roomId  = "${System.currentTimeMillis()}"
     var content = ""
     var createdAt = Date()
     var deletedAt: Date? = null

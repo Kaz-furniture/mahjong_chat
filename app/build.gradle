@@ -105,5 +105,9 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation 'com.afollestad.material-dialogs:files:3.3.0'
+    //firebase fcmToken
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    //lottie
+    implementation "com.airbnb.android:lottie:2.8.0"
 
 }

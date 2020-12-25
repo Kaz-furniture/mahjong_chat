@@ -12,4 +12,5 @@ class User {
     var introduction: String = ""
     var imageUrl: String = ""
     var followingUserIds: List<String> = listOf()
+    var fcmToken: String = ""
 }
