@@ -23,6 +23,7 @@ class PostListAdapter (
 
         interface Callback {
                 fun openDetail(post: Post)
+                fun openProfile(id: String?)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,6 +49,9 @@ class ViewHolder(
                 binding.explanation.text = post.explanation
                 binding.postItemImage.setOnClickListener {
                         callback?.openDetail(post)
+                }
+                binding.userIconImage.setOnClickListener {
+                        callback?.openProfile(post.userId)
                 }
                 binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
                 val storageRef = FirebaseStorage.getInstance().reference

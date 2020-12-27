@@ -29,7 +29,8 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".activity.ProfileActivity"/>
+        <activity android:name=".activity.ProfileActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.PostDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.PasswordForgetActivity"/>

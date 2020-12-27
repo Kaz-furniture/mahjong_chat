@@ -16,6 +16,7 @@ import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.MainActivity
 import com.kaz_furniture.mahjongChat.activity.PostDetailActivity
+import com.kaz_furniture.mahjongChat.activity.ProfileActivity
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.FragmentHomeBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
@@ -62,8 +63,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         startActivityForResult(intent, REQUEST_CODE_DETAIL)
     }
 
+    override fun openProfile(id: String?) {
+        val intent = ProfileActivity.newIntent(requireContext(), id)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE)
+    }
+
 
     companion object {
         private const val REQUEST_CODE_DETAIL = 1002
+        private const val REQUEST_CODE_PROFILE = 1003
     }
 }

@@ -20,7 +20,7 @@ import timber.log.Timber
 
 class SplashViewModel: ViewModel() {
 
-    private val splashTime = 5000L
+    private val splashTime = 6000L
     var makeLogout = MutableLiveData<Boolean>()
     var fcmToken = ""
 
