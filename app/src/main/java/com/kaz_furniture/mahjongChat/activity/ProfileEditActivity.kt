@@ -77,7 +77,6 @@ class ProfileEditActivity: BaseActivity() {
                 }
                 UCrop.REQUEST_CROP -> {
                     viewModel.uCropStart(data, binding)
-                    viewModel.imageBoolean.postValue(true)
                 }
 
                 UCrop.RESULT_ERROR -> {

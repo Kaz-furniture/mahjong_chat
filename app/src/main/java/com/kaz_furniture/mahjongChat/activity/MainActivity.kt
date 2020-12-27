@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -68,12 +70,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onResume()
         binding.navView.getHeaderView(0)?.also { headerView ->
             headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
-            val storageRef = FirebaseStorage.getInstance().reference
-            val iconImageRef = storageRef.child("${myUser.userId}/profileImage.jpg")
-            val userIconImage = headerView.findViewById<com.makeramen.roundedimageview.RoundedImageView>(R.id.headerUserIconImage)
-            Glide.with(MahjongChatApplication.applicationContext)
-                    .load(iconImageRef)
-                    .into(userIconImage)
+            val userIconImage = headerView.findViewById<ImageView>(R.id.headerUserIconImage)
+            GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")).circleCrop().into(userIconImage)
         }
     }
 
@@ -121,15 +119,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        binding.navView.getHeaderView(0)?.also { headerView ->
-            headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
-            val storageRef = FirebaseStorage.getInstance().reference
-            val iconImageRef = storageRef.child("${myUser.userId}/profileImage.jpg")
-            val userIconImage = headerView.findViewById<com.makeramen.roundedimageview.RoundedImageView>(R.id.headerUserIconImage)
-            Glide.with(MahjongChatApplication.applicationContext)
-                .load(iconImageRef)
-                .into(userIconImage)
-        }
         return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
     }
 

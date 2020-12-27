@@ -53,6 +53,9 @@ class ViewHolder(
                 binding.userIconImage.setOnClickListener {
                         callback?.openProfile(post.userId)
                 }
+                binding.postUserName.setOnClickListener {
+                        callback?.openProfile(post.userId)
+                }
                 binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
                 val storageRef = FirebaseStorage.getInstance().reference
                 val postImageRef = storageRef.child("${post.userId}/${post.postId}.jpg")

@@ -19,6 +19,7 @@ class ProfileActivity: BaseActivity() {
     lateinit var binding:ActivityProfileBinding
     private lateinit var adapter: PostListAdapter
     lateinit var layoutManager: LinearLayoutManager
+    lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,8 @@ class ProfileActivity: BaseActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.getPostList()
         }
+        userId = intent.getStringExtra(KEY) ?:""
+        binding.userId = userId
         viewModel.getPostList()
         viewModel.item.observe(this, Observer {
             binding.postView.customAdapter.refresh(it)
@@ -36,7 +39,7 @@ class ProfileActivity: BaseActivity() {
     }
 
     companion object {
-        private const val KEY = "KEY_NAME"
+        private const val KEY = "KEY_ID"
         fun newIntent(context: Context, id: String?): Intent {
             return Intent(context, ProfileActivity::class.java).apply {
                 putExtra(KEY, id)

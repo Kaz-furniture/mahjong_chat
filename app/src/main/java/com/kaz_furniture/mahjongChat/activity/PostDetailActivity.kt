@@ -19,7 +19,7 @@ class PostDetailActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail)
         binding.lifecycleOwner = this
-        val post = (intent.getSerializableExtra(KEY) as? Post) ?:return
+        val post = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
         binding.userName.text = post.userName
         viewModel.setImage(post, binding)
         binding.explanation.text = post.explanation

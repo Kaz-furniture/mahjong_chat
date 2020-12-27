@@ -51,7 +51,7 @@ class PostView: RecyclerView {
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
             holder.binding.post = data
-
+            holder.binding.userId = data.userId
         }
 
         class ItemViewHolder(val binding: ListItemProfileBinding): RecyclerView.ViewHolder(binding.root)

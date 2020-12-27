@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
@@ -36,7 +37,7 @@ class ProfileEditViewModel: ViewModel() {
     val editedIntroduction = MutableLiveData<String>()
     private val updatePostList = ArrayList<Post>()
     var image: Bitmap? = null
-    val imageBoolean = MutableLiveData<Boolean>()
+    private val imageBoolean = MutableLiveData<Boolean>()
     var uCropSrcUriLive = MutableLiveData<Uri>()
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
@@ -47,29 +48,28 @@ class ProfileEditViewModel: ViewModel() {
 
     fun showProfileImage(binding: ActivityProfileEditBinding) {
         uCropSrcUriLive.postValue(myUser.imageUrl.toUri())
-        val storageRef = FirebaseStorage.getInstance().reference
-        val postImageRef = storageRef.child(myUser.imageUrl)
-        Glide.with(applicationContext)
-            .load(postImageRef)
-            .into(binding.roundedImageView)
+        GlideApp.with(applicationContext).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg"))
+            .circleCrop().into(binding.roundedImageView)
     }
 
     fun uCropStart(data: Intent, binding: ActivityProfileEditBinding) {
         val resultUri = UCrop.getOutput(data)
-        uCropSrcUriLive.value = resultUri
-        val cropSrc = uCropSrcUriLive.value ?:return
-        val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
-        image = BitmapFactory.decodeStream(inputStream)
-//        val bitmapImage = image ?:return
-//        image = Bitmap.createScaledBitmap(bitmapImage, 200, 200, true)
-        val imageView = binding.roundedImageView
-        imageView.setImageBitmap(image)
+        uCropSrcUriLive.postValue(resultUri)
+//        val cropSrc = uCropSrcUriLive.value ?:return
+//        val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
+//        image = BitmapFactory.decodeStream(inputStream)
+////        val bitmapImage = image ?:return
+////        image = Bitmap.createScaledBitmap(bitmapImage, 200, 200, true)
+//        val imageView = binding.roundedImageView
+//        imageView.setImageBitmap(image)
+        GlideApp.with(applicationContext).load(resultUri).circleCrop().into(binding.roundedImageView)
+        imageBoolean.postValue(true)
     }
 
     private fun submitValidation(): Boolean {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
-        return if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && image == null) {
+        return if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && imageBoolean.value == null) {
             false
         } else if (!nameValue.isNullOrBlank() && nameValue.length >20 ) {
             false
@@ -84,7 +84,7 @@ class ProfileEditViewModel: ViewModel() {
             this.followingUserIds = myUser.followingUserIds
             this.imageUrl = myUser.imageUrl
             this.userId = myUser.userId
-            if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && image == null) {
+            if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && imageBoolean.value == null) {
                 return
             }
             if (nameValue.isNullOrBlank()) {
@@ -96,9 +96,12 @@ class ProfileEditViewModel: ViewModel() {
             } else this.introduction = introductionValue
         }
 
-        if (image != null) {
+        if (imageBoolean.value != null) {
             val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")
             val bAOS = ByteArrayOutputStream()
+            val cropSrc = uCropSrcUriLive.value ?:return
+            val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
+            image = BitmapFactory.decodeStream(inputStream)
             image?.compress(Bitmap.CompressFormat.JPEG, 60, bAOS)
             val data = bAOS.toByteArray()
             ref.putBytes(data)
