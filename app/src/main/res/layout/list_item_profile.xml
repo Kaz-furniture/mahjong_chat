@@ -18,6 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         tools:context=".activity.MainActivity">
 
         <ImageView
@@ -26,7 +27,7 @@
             android:id="@+id/userIconImage"
             android:layout_marginTop="2dp"
             android:layout_marginStart="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="1dp"
             app:userIcon="@{userId}"
             tools:src="@drawable/ic_baseline_email_24"
             app:layout_constraintTop_toTopOf="parent"

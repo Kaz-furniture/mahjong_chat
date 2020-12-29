@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -23,8 +24,6 @@ import java.io.ByteArrayOutputStream
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
-    val selectedTile = MutableLiveData<Tile>()
-//    val textImageData = TextImageData()
 
     fun post(activity: PostActivity, binding: ActivityPostBinding) {
         val post = Post().apply {
@@ -46,46 +45,24 @@ class PostViewModel: ViewModel() {
                 bitmap.recycle()
             }
             .addOnSuccessListener {
-//                ref.downloadUrl.addOnCompleteListener {task ->
-//                    if (task.isSuccessful) {
-//                        post.imageUrl = task.result.toString()
-//                        Timber.d("postImageUrl = ${post.imageUrl}")
                         Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
                 bitmap.recycle()
             }
+
         FirebaseFirestore.getInstance()
             .collection("posts")
             .document(post.postId)
             .set(post)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Timber.d("postImageUrl2 = ${post.imageUrl}")
                     Toast.makeText(applicationContext, "POST_SUCCESS", Toast.LENGTH_SHORT).show()
                     activity.setResult(Activity.RESULT_OK)
                     activity.finish()
-//                        postComplete.postValue(true)
                 } else {
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
     }
-
-//    fun selectTile(tile: Tile) {
-//        selectedTile.postValue(tile)
-//        textImageData.imageId = tile.imageId
-//    }
-//
-//    fun setText(text: String) {
-//        textImageData.text = text
-//    }
-//
-//    fun setImageId(imageId: Int) {
-//        textImageData.imageId = imageId
-//    }
 
     var choiceData = ChoiceData()
     class ChoiceData: BaseObservable() {

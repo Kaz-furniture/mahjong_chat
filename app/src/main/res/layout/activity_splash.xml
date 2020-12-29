@@ -17,7 +17,7 @@
         android:gravity="center_horizontal"
         android:text="@string/app_name"
         android:textColor="@android:color/black"
-        android:textSize="32sp"
+        android:textSize="36sp"
         android:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +25,8 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
         android:id="@+id/lottieView"
         app:layout_constraintTop_toBottomOf="@id/appTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,12 +39,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loadingText"
-        app:layout_constraintTop_toBottomOf="@id/lottieView"
+        app:layout_constraintBottom_toBottomOf="@id/lottieView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/loading"
         android:textColor="#000000"
-        android:textSize="24sp"/>
+        android:textSize="28sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

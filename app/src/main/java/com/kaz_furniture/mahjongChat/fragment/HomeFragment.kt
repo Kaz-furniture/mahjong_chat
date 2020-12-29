@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.MainActivity
@@ -25,7 +26,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
 
     private var binding: FragmentHomeBinding? = null
     private lateinit var adapter: PostListAdapter
-    private val postList = ArrayList<Post>()
     lateinit var layoutManager: LinearLayoutManager
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -33,7 +33,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentHomeBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        adapter = PostListAdapter(layoutInflater, postList, this)
+        adapter = PostListAdapter(layoutInflater, allPostList, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -43,18 +43,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
-        binding?.swipeRefresh?.isRefreshing = true
-        viewModel.loadPostList(postList, adapter)
-        binding?.swipeRefresh?.isRefreshing = false
+        viewModel.loadPostList(adapter)
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
-            viewModel.loadPostList(postList, adapter)
+            viewModel.loadPostList(adapter)
             binding?.swipeRefresh?.isRefreshing = false
         }
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
-            binding?.swipeRefresh?.isRefreshing = true
-            viewModel.loadPostList(postList, adapter)
-            binding?.swipeRefresh?.isRefreshing = false
+            viewModel.loadPostList(adapter)
         })
     }
 

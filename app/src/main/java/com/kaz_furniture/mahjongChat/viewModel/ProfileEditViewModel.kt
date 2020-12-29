@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
@@ -24,7 +24,6 @@ import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -32,13 +31,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ProfileEditViewModel: ViewModel() {
-    val makeLogout = MutableLiveData<Boolean>()
     val editedName = MutableLiveData<String>()
     val editedIntroduction = MutableLiveData<String>()
-    private val updatePostList = ArrayList<Post>()
+    private val myPostList = ArrayList<Post>()
     var image: Bitmap? = null
     private val imageBoolean = MutableLiveData<Boolean>()
     var uCropSrcUriLive = MutableLiveData<Uri>()
+    val updateOK = MutableLiveData<Boolean>()
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(editedName) { result.value = submitValidation()}
@@ -76,7 +75,7 @@ class ProfileEditViewModel: ViewModel() {
         } else !(!introductionValue.isNullOrBlank() && introductionValue.length >100)
     }
 
-    fun editUpload(activity: ProfileEditActivity) {
+    fun editUpload() {
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
         val user = User().apply {
@@ -126,7 +125,7 @@ class ProfileEditViewModel: ViewModel() {
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "SUCCESS", Toast.LENGTH_SHORT).show()
                         myUser = user
-                        postFetch(activity)
+                        postFetch()
                     } else {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
@@ -134,26 +133,15 @@ class ProfileEditViewModel: ViewModel() {
                 }
     }
 
-    private fun postFetch(activity: ProfileEditActivity) {
-
-        FirebaseFirestore.getInstance()
-                .collection("posts")
-                .whereEqualTo("userId", myUser.userId)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val fetchedPosts = task.result?.toObjects(Post::class.java) ?:return@addOnCompleteListener
-                        updatePostList.clear()
-                        Timber.d("InPostUpdate ${fetchedPosts.size}")
-                        updatePostList.addAll(fetchedPosts)
-                        postUpdate(activity)
-                    }
-                }
+    private fun postFetch() {
+        val filteredList = allPostList.filter { it.userId == myUser.userId }
+        myPostList.addAll(filteredList)
+        postUpdate()
     }
 
-    private fun postUpdate(activity: ProfileEditActivity) {
+    private fun postUpdate() {
 
-        for (value in updatePostList) {
+        for (value in myPostList) {
             val nameValue = editedName.value
 
             if (nameValue.isNullOrBlank()) {
@@ -165,9 +153,7 @@ class ProfileEditViewModel: ViewModel() {
                     .document(value.postId)
                     .set(value)
         }
-        Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
-        activity.setResult(Activity.RESULT_OK)
-        activity.finish()
+        updateOK.postValue(true)
     }
 
 }

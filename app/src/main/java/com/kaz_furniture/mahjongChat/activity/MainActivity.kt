@@ -3,7 +3,6 @@ package com.kaz_furniture.mahjongChat.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,19 +15,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
-import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
-import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
-import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
-import timber.log.Timber
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,18 +54,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             launchPostActivity()
         }
         binding.navView.setNavigationItemSelectedListener(this)
-//        viewModel.loadDMUsers(viewModel.dMList)
-        viewModel.makeLogout.observe(this, Observer {
-            launchLoginActivity()
-        })
     }
 
     override fun onResume() {
         super.onResume()
         binding.navView.getHeaderView(0)?.also { headerView ->
-            headerView.findViewById<TextView>(R.id.headerUserName)?.text = myUser.name
+            headerView.findViewById<TextView>(R.id.headerUserName)?.also {
+                it.text = myUser.name
+                it.setOnClickListener {
+                    val intent = ProfileActivity.newIntent(this, myUser.userId)
+                    startActivityForResult(intent, REQUEST_CODE_PROFILE)
+                }
+            }
             val userIconImage = headerView.findViewById<ImageView>(R.id.headerUserIconImage)
             GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")).circleCrop().into(userIconImage)
+            headerView.findViewById<ImageView>(R.id.headerUserIconImage)?.setOnClickListener {
+                val intent = ProfileActivity.newIntent(this, myUser.userId)
+                startActivityForResult(intent, REQUEST_CODE_PROFILE)
+            }
         }
     }
 
@@ -139,5 +139,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         private const val REQUEST_CODE_POST = 1000
         private const val REQUEST_CODE_PROFILE_EDIT = 1001
+        private const val REQUEST_CODE_PROFILE = 1003
     }
 }

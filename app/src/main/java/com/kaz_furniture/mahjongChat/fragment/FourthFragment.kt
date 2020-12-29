@@ -40,12 +40,5 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
-//        viewModel.dMUserNameSet(dMUserNameList, adapter)
-//        Timber.d("dMUserNameList = $dMUserNameList")
-        bindingData.swipeRefresh.setOnRefreshListener {
-            binding?.swipeRefresh?.isRefreshing = true
-            viewModel.dMUserNameSet(dMUserNameList, adapter)
-            binding?.swipeRefresh?.isRefreshing = false
-        }
     }
 }

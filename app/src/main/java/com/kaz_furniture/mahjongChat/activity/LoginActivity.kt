@@ -40,6 +40,18 @@ class LoginActivity: BaseActivity() {
         viewModel.passwordError.observe(this, Observer {
             binding.passwordError = it
         })
+        viewModel.tokenGetOK.observe(this, Observer {
+            viewModel.checkUserAndTokenGet()
+        })
+        viewModel.myUserOK.observe(this, Observer {
+            viewModel.checkUserAndTokenGet()
+        })
+        viewModel.userAndTokenOK.observe(this, Observer {
+            viewModel.fCMTokenCheck()
+        })
+        viewModel.makeLogout.observe(this, Observer {
+            launchLoginActivity()
+        })
         binding.emailInput.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus){
                 hideKeyboard(v)

@@ -26,17 +26,29 @@ class ProfileActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
         binding.lifecycleOwner = this
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.getPostList()
-        }
         userId = intent.getStringExtra(KEY) ?:""
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getPostList(userId)
+        }
         binding.userId = userId
-        viewModel.getPostList()
+        viewModel.getUserInfo(userId)
+        viewModel.getPostList(userId)
         viewModel.item.observe(this, Observer {
             binding.postView.customAdapter.refresh(it)
             binding.swipeRefresh.isRefreshing = false
         })
+        viewModel.user.observe(this, Observer {
+            binding.explanation.text = it.introduction
+            title = it.name
+        })
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
 
     companion object {
         private const val KEY = "KEY_ID"

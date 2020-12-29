@@ -17,12 +17,9 @@ open class BaseActivity: AppCompatActivity() {
         )
     }
 
-
-    fun launchLoginActivity(): String {
+    fun launchLoginActivity() {
         FirebaseAuth.getInstance().signOut()
         finishAffinity()
         LoginActivity.start(this)
-        Toast.makeText(this, "認証エラーのためログアウトしました", Toast.LENGTH_SHORT ).show()
-        return ""
     }
 }
