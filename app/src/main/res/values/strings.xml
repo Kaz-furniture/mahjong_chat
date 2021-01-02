@@ -49,4 +49,14 @@
     <string name="submit">送信</string>
     <string name="loading">Loading…</string>
     <string name="postNumber">投稿数</string>
+    <string name="action_0">切り</string>
+    <string name="action_1">切りリーチ</string>
+    <string name="action_2">切りダマ</string>
+    <string name="action_3">ポン</string>
+    <string name="action_4">チー</string>
+    <string name="action_5">カン</string>
+    <string name="action_6">スルー</string>
+    <string name="space">  </string>
+    <string name="cancel">キャンセル</string>
+    <string name="next">次へ</string>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="actions">
+        <item>@string/action_0</item>
+        <item>@string/action_1</item>
+        <item>@string/action_2</item>
+        <item>@string/action_3</item>
+        <item>@string/action_4</item>
+        <item>@string/action_5</item>
+        <item>@string/action_6</item>
+        <item>@string/space</item>
+        <item>@string/cancel</item>
+    </string-array>
+</resources>

@@ -17,5 +17,9 @@ class Choice {
         get() = WayType.getWayTypeById(way)
     @Exclude
     var tileType: Tile = Tile.M1
-        get() = Tile.getTileById(way)
+        get() = Tile.getTileById(tile)
+        set(value) {
+            field = value
+            tile = value.tileId
+        }
 }

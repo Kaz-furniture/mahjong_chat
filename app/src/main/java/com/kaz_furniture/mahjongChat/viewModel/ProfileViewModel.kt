@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
@@ -18,25 +19,9 @@ class ProfileViewModel: ViewModel() {
     var user = MutableLiveData<User>()
 
     fun getPostList(id: String) {
-        FirebaseFirestore.getInstance()
-                .collection("posts")
-//                .orderBy(Post::createdAt.name, Query.Direction.DESCENDING)
-                .whereEqualTo("userId", id)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val fetchedList = task.result?.toObjects(Post::class.java)
-                        if (fetchedList == null || fetchedList.isEmpty()) {
-                            Toast.makeText(MahjongChatApplication.applicationContext, "NO POST", Toast.LENGTH_SHORT).show()
-                            return@addOnCompleteListener
-                        } else {
-                            fetchedList.sortByDescending { it.createdAt }
-                            item.postValue(fetchedList)
-                        }
-                    } else {
-                        Toast.makeText(MahjongChatApplication.applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        val userPostList = ArrayList<Post>()
+        userPostList.addAll(allPostList.filter { it.userId == id })
+        item.postValue(userPostList)
     }
 
     fun getUserInfo(userId: String) {

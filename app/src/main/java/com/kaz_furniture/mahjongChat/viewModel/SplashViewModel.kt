@@ -83,6 +83,7 @@ class SplashViewModel: ViewModel() {
         } else {
             tokenCheckOK.postValue(true)
             Toast.makeText(applicationContext, "TOKEN_KEEP", Toast.LENGTH_SHORT).show()
+            Timber.d("TokenKeep")
         }
     }
 

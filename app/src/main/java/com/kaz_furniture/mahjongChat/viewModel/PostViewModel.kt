@@ -16,7 +16,9 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicatio
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.PostActivity
+import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.data.TextImageData
 import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import timber.log.Timber
@@ -24,6 +26,10 @@ import java.io.ByteArrayOutputStream
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
+    val selectedTile = MutableLiveData<Tile>()
+    val textImageData = TextImageData()
+    val selectedOK = MutableLiveData<Boolean>()
+    var choice = Choice()
 
     fun post(activity: PostActivity, binding: ActivityPostBinding) {
         val post = Post().apply {
@@ -62,6 +68,15 @@ class PostViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    fun selectTile(tile: Tile) {
+        selectedTile.postValue(tile)
+        textImageData.imageId = tile.imageId
+    }
+
+    fun setText(text: String) {
+        textImageData.text = text
     }
 
     var choiceData = ChoiceData()

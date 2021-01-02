@@ -8,23 +8,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.ItemListener
-import com.afollestad.materialdialogs.list.customListAdapter
-import com.afollestad.materialdialogs.list.getRecyclerView
 import com.afollestad.materialdialogs.list.listItems
+import com.google.api.Distribution
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.adapter.DMListAdapter
 import com.kaz_furniture.mahjongChat.adapter.TileListAdapter
 import com.kaz_furniture.mahjongChat.data.Tile
-import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
-import com.kaz_furniture.mahjongChat.databinding.DialogFragmentCreateChoiceBinding
+import com.kaz_furniture.mahjongChat.databinding.*
+import com.kaz_furniture.mahjongChat.view.TilesView
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
 import com.yalantis.ucrop.UCrop
 import timber.log.Timber
@@ -34,7 +37,6 @@ class PostActivity: BaseActivity() {
     private val viewModel: PostViewModel by viewModels()
     private var uCropSrcUri: Uri? = null
     lateinit var binding: ActivityPostBinding
-    private lateinit var adapter: TileListAdapter
     lateinit var layoutManager: GridLayoutManager
 
 
@@ -42,26 +44,28 @@ class PostActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this, R.layout.activity_post)
         binding.lifecycleOwner = this
-        adapter = TileListAdapter(layoutInflater, tileList)
+        val linearLayout = LinearLayout(this)
         layoutManager = GridLayoutManager(this, 4)
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
             viewModel.post(this, binding)
         }
-//        viewModel.userId = intent.getStringExtra("KEY_ID")
         binding.selectImageButton.setOnClickListener {
             selectImage()
         }
         title = getString(R.string.postCreate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.createChoicesButton.setOnClickListener {
-            showCreateChoicesDialog()
+            showTileSelectDialog()
         }
+        viewModel.selectedOK.observe(this, Observer {
+            val childBinding = ListChoiceBinding.inflate(
+                    LayoutInflater.from(this), null, false)
+            childBinding.choice = viewModel.choice
+            val childView = this.layoutInflater.inflate(R.layout.list_choice, null)
+            linearLayout.addView(childView)
+        })
     }
-
-//    fun View.visibleOrGone(isVisible: Boolean) {
-//        visibility = if (isVisible) View.VISIBLE else View.GONE
-//    }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
@@ -136,6 +140,14 @@ class PostActivity: BaseActivity() {
         }
     }
 
+    private fun getChildView() {
+        val childBinding = ListChoiceBinding.inflate(
+                LayoutInflater.from(this), null, false)
+        childBinding.choice = viewModel.choice
+        Timber.d("selectedChoice = ${viewModel.choice.tileType.imageId}, ${Tile.M3.imageId}")
+        setContentView(childBinding.root)
+    }
+
     private fun showCreateChoicesDialog() {
         MaterialDialog(this).show {
             cancelable(false)
@@ -147,31 +159,44 @@ class PostActivity: BaseActivity() {
                     dismiss()
                 }
                 this.selectTileButton.setOnClickListener {
-                    showTileDialog()
+                    showTileSelectDialog()
                 }
             }
             setContentView(dialogBinding.root)
         }
     }
 
-    private fun showTileDialog() {
+    private fun showTileSelectDialog() {
         MaterialDialog(this).show {
-//            val items = mutableListOf<String>()
-//            for (i in 0 until 10) {
-//                items.add("アイテム$i")
-//            }
-//            getRecyclerView()
-//            getRecyclerView().also {
-//                it.adapter = adapter
-//                it.layoutManager = layoutManager
-//            }
-            customListAdapter(adapter, layoutManager)
-//            listItems(items = items, selection = object: ItemListener {
-//                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
-//                    viewModel.selectChoice(text.toString())
-//                    dismiss()
-//                }
-//            })
+            cancelable(false)
+            title(R.string.selectTile)
+            val binding = DialogSelectTileBinding.inflate(LayoutInflater.from(this@PostActivity), null, false)
+            binding.apply {
+                tilesView.customAdapter.refresh(tileList)
+                closeButton.setOnClickListener {
+                    dismiss()
+                }
+                nextButton.setOnClickListener {
+                    showWaySelectDialog()
+                    dismiss()
+                }
+            }
+            setContentView(binding.root)
+        }
+    }
+
+    private fun showWaySelectDialog() {
+        MaterialDialog(this).show {
+            cancelable(false)
+            title(R.string.selectTile)
+            listItems(R.array.actions, selection = object: ItemListener {
+                override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
+                    viewModel.setText("$text")
+                    viewModel.choice.way = index
+                    viewModel.selectedOK.postValue(true)
+                    dismiss()
+                }
+            })
         }
     }
 
@@ -181,9 +206,9 @@ class PostActivity: BaseActivity() {
         }
         private const val RC_CHOOSE_IMAGE = 1000
         val tileList = listOf<Tile>(
-                Tile.M1, Tile.M2, Tile.M3, Tile.M4, Tile.M5, Tile.M5R, Tile.M6, Tile.M7, Tile.M8, Tile.M9,
-                Tile.P1, Tile.P2, Tile.P3, Tile.P4, Tile.P5, Tile.P5R, Tile.P6, Tile.P7, Tile.P8, Tile.P9,
-                Tile.S1, Tile.S2, Tile.S3, Tile.S4, Tile.S5, Tile.S5R, Tile.S6, Tile.S7, Tile.S8, Tile.S9,
-                Tile.Z1, Tile.Z2, Tile.Z3, Tile.Z4, Tile.Z5, Tile.Z6, Tile.Z7)
+                Tile.MSection, Tile.M1, Tile.M2, Tile.M3, Tile.M4, Tile.M5, Tile.M5R, Tile.M6, Tile.M7, Tile.M8, Tile.M9,
+                Tile.PSection, Tile.P1, Tile.P2, Tile.P3, Tile.P4, Tile.P5, Tile.P5R, Tile.P6, Tile.P7, Tile.P8, Tile.P9,
+                Tile. SSection, Tile.S1, Tile.S2, Tile.S3, Tile.S4, Tile.S5, Tile.S5R, Tile.S6, Tile.S7, Tile.S8, Tile.S9,
+                Tile.ZSection, Tile.Z1, Tile.Z2, Tile.Z3, Tile.Z4, Tile.Z5, Tile.Z6, Tile.Z7)
     }
 }

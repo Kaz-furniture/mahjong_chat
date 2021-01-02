@@ -17,7 +17,6 @@ import com.kaz_furniture.mahjongChat.viewModel.ProfileViewModel
 class ProfileActivity: BaseActivity() {
     private val viewModel: ProfileViewModel by viewModels()
     lateinit var binding:ActivityProfileBinding
-    private lateinit var adapter: PostListAdapter
     lateinit var layoutManager: LinearLayoutManager
     lateinit var userId: String
 
