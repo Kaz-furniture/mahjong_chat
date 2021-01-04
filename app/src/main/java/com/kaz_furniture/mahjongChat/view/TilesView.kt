@@ -65,7 +65,7 @@ class TilesView: RecyclerView {
             viewModel.apply {
                 selectedTile.observe(context as ComponentActivity, Observer {
                     this@Adapter.selectedTile = it
-                    viewModel.choice.tileType = it
+//                    viewModel.choice.tileType = it
                 })
             }
         }

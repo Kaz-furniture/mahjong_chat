@@ -27,9 +27,10 @@ import java.io.ByteArrayOutputStream
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>()
     val selectedTile = MutableLiveData<Tile>()
-    val textImageData = TextImageData()
     val selectedOK = MutableLiveData<Boolean>()
-    var choice = Choice()
+
+    var selectedChoices = MutableLiveData<List<Choice>>()
+    var tempChoice = Choice()
 
     fun post(activity: PostActivity, binding: ActivityPostBinding) {
         val post = Post().apply {
@@ -72,11 +73,38 @@ class PostViewModel: ViewModel() {
 
     fun selectTile(tile: Tile) {
         selectedTile.postValue(tile)
-        textImageData.imageId = tile.imageId
+        tempChoice.tileType = tile
     }
 
-    fun setText(text: String) {
-        textImageData.text = text
+    fun setWay(index: Int) {
+        tempChoice.way = index
+        setChoice()
+    }
+
+    fun deleteChoice(deleteChoice: Choice) {
+        val list = mutableListOf<Choice>().apply {
+            selectedChoices.value?.also {
+                if (it.isNotEmpty())
+                    addAll(it)
+            }
+        }
+        list.remove(deleteChoice)
+        selectedChoices.postValue(list)
+    }
+
+    private fun setChoice() {
+        val list = mutableListOf<Choice>().apply {
+            selectedChoices.value?.also {
+                if (it.isNotEmpty())
+                    addAll(it)
+            }
+        }
+        list.add(Choice().apply {
+            way = tempChoice.way
+            tileType = tempChoice.tileType
+        })
+        tempChoice = Choice()
+        selectedChoices.postValue(list)
     }
 
     var choiceData = ChoiceData()

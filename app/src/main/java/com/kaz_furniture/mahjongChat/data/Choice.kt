@@ -15,6 +15,7 @@ class Choice {
     @Exclude
     var wayType: WayType = WayType.DISCARD
         get() = WayType.getWayTypeById(way)
+
     @Exclude
     var tileType: Tile = Tile.M1
         get() = Tile.getTileById(tile)
