@@ -39,6 +39,23 @@ class PostViewModel: ViewModel() {
             this.userName = myUser.name
             this.imageUrl = "${myUser.userId}/${postId}.jpg"
         }
+        val choicesList = selectedChoices.value
+
+        if (choicesList != null && choicesList.isNotEmpty()) {
+            for ((index, value) in choicesList.withIndex()) {
+                value.postId = post.postId
+                FirebaseFirestore.getInstance()
+                        .collection("choices")
+                        .document(value.choiceId)
+                        .set(value)
+                        .addOnCompleteListener {
+                            Toast.makeText(applicationContext, "CHOICE_UPLOAD_$index", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
+                        }
+            }
+        } else return
 
         val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/${post.postId}.jpg")
         val imageView = binding.postImageView
@@ -69,6 +86,10 @@ class PostViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
+
+        FirebaseFirestore.getInstance()
+                .collection("choices")
+                .document()
     }
 
     fun selectTile(tile: Tile) {
@@ -105,6 +126,7 @@ class PostViewModel: ViewModel() {
         })
         tempChoice = Choice()
         selectedChoices.postValue(list)
+        Timber.d("imageId = ${list[0].tileType.imageId}")
     }
 
     var choiceData = ChoiceData()
