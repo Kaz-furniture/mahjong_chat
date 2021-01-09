@@ -17,6 +17,7 @@ class ProfileViewModel: ViewModel() {
 
     val item =MutableLiveData<MutableList<Post>>()
     var user = MutableLiveData<User>()
+    val postSelected = MutableLiveData<Post>()
 
     fun getPostList(id: String) {
         val userPostList = ArrayList<Post>()

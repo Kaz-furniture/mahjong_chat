@@ -9,90 +9,97 @@
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
 
     </data>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
+    android:scrollbars="vertical"
     android:layout_height="match_parent">
 
-    <Button
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/selectImageButton"
-        android:hint="@string/selectPostImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postImageView"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectImageButton"
-        android:id="@+id/choicesParentView"
-        android:orientation="vertical"
-        android:visibility="gone"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectImageButton"
+            android:hint="@string/selectPostImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/postImageView"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/createChoicesButton"
-        app:layout_constraintTop_toBottomOf="@id/choicesParentView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/createNewChoices"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/choice_divider"
+            android:showDividers="middle"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectImageButton"
+            android:id="@+id/choicesParentView"
+            android:orientation="vertical"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/explanationInput"
-        android:hint="@string/explanationInput"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@={explanation}"
-        app:layout_constraintTop_toBottomOf="@id/createChoicesButton"
-        android:autofillHints="@string/explanationInput"
-        android:inputType="text"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/createChoicesButton"
+            app:layout_constraintTop_toBottomOf="@id/choicesParentView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/createNewChoices"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/explanationInput"
-        android:id="@+id/postButton"
-        android:text="@string/postCreate"
-        android:layout_marginTop="42dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/explanationInput"
+            android:hint="@string/explanationInput"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@={explanation}"
+            app:layout_constraintTop_toBottomOf="@id/createChoicesButton"
+            android:autofillHints="@string/explanationInput"
+            android:inputType="text"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
 
-    <ImageView
-        android:id="@+id/postImageView"
-        android:layout_width="match_parent"
-        android:layout_height="232dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitCenter"
-        tools:src="@drawable/screenshot_20201213_235035"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/postImage" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/explanationInput"
+            android:id="@+id/postButton"
+            android:text="@string/postCreate"
+            android:layout_marginTop="42dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/noImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="100dp"
-        android:text="@string/noImage"
-        android:gravity="center"
-        android:textSize="32sp"/>
+        <ImageView
+            android:id="@+id/postImageView"
+            android:layout_width="match_parent"
+            android:layout_height="232dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/screenshot_20201213_235035"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/postImage" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/noImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="100dp"
+            android:text="@string/noImage"
+            android:gravity="center"
+            android:textSize="32sp"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
 </layout>

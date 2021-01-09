@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.list.listItems
 import com.google.api.Distribution
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.adapter.TileListAdapter
+import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.*
 import com.kaz_furniture.mahjongChat.view.TilesView
@@ -58,13 +59,32 @@ class PostActivity: BaseActivity() {
         binding.createChoicesButton.setOnClickListener {
             showTileSelectDialog()
         }
-        viewModel.selectedOK.observe(this, Observer {
-            val childBinding = ListChoiceBinding.inflate(
-                    LayoutInflater.from(this), null, false)
-            childBinding.choice = viewModel.choice
-            val childView = this.layoutInflater.inflate(R.layout.list_choice, null)
-            linearLayout.addView(childView)
+        viewModel.selectedChoices.observe(this, Observer {
+            addAllChoiceLayout(it)
         })
+//        viewModel.selectedOK.observe(this, Observer {
+//            val childBinding = ListChoiceBinding.inflate(
+//                    LayoutInflater.from(this), null, false)
+//            childBinding.choice = viewModel.choice
+//            val childView = this.layoutInflater.inflate(R.layout.list_choice, null)
+//            linearLayout.addView(childView)
+//        })
+    }
+
+    private fun addAllChoiceLayout(list: List<Choice>) {
+        Timber.d("addAllChoiceLayout listSize:${list.size}")
+        binding.choicesParentView.apply {
+            removeAllViews()
+            visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
+        }
+        list.forEach { targetChoice ->
+            binding.choicesParentView.addView(ListChoiceBinding.inflate(LayoutInflater.from(this), null, false).apply {
+                choice = targetChoice
+                deleteButton.setOnClickListener {
+                    viewModel.deleteChoice(targetChoice)
+                }
+            }.root)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -141,11 +161,11 @@ class PostActivity: BaseActivity() {
     }
 
     private fun getChildView() {
-        val childBinding = ListChoiceBinding.inflate(
-                LayoutInflater.from(this), null, false)
-        childBinding.choice = viewModel.choice
-        Timber.d("selectedChoice = ${viewModel.choice.tileType.imageId}, ${Tile.M3.imageId}")
-        setContentView(childBinding.root)
+//        val childBinding = ListChoiceBinding.inflate(
+//                LayoutInflater.from(this), null, false)
+//        childBinding.choice = viewModel.choice
+//        Timber.d("selectedChoice = ${viewModel.choice.tileType.imageId}, ${Tile.M3.imageId}")
+//        setContentView(childBinding.root)
     }
 
     private fun showCreateChoicesDialog() {
@@ -191,9 +211,7 @@ class PostActivity: BaseActivity() {
             title(R.string.selectTile)
             listItems(R.array.actions, selection = object: ItemListener {
                 override fun invoke(dialog: MaterialDialog, index: Int, text: CharSequence) {
-                    viewModel.setText("$text")
-                    viewModel.choice.way = index
-                    viewModel.selectedOK.postValue(true)
+                    viewModel.setWay(index)
                     dismiss()
                 }
             })

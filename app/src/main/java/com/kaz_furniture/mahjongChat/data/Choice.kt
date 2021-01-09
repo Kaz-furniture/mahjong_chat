@@ -5,7 +5,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 class Choice {
-    var choiceId: String = ""
+    var choiceId: String = "${System.currentTimeMillis()}"
     var postId: String = ""
     var number: Int = 0
     var userIds: List<String> = listOf()
@@ -15,6 +15,11 @@ class Choice {
     @Exclude
     var wayType: WayType = WayType.DISCARD
         get() = WayType.getWayTypeById(way)
+        set(value) {
+            field = value
+            way = value.wayId
+        }
+
     @Exclude
     var tileType: Tile = Tile.M1
         get() = Tile.getTileById(tile)
