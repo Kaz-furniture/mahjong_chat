@@ -16,6 +16,7 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostLis
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.activity.PostActivity
 import com.kaz_furniture.mahjongChat.activity.PostDetailActivity
 import com.kaz_furniture.mahjongChat.activity.ProfileActivity
 import com.kaz_furniture.mahjongChat.data.Post
@@ -49,9 +50,17 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
             viewModel.loadPostList(adapter)
             binding?.swipeRefresh?.isRefreshing = false
         }
+        binding?.fab?.setOnClickListener{
+            launchPostActivity()
+        }
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
             viewModel.loadPostList(adapter)
         })
+    }
+
+    private fun launchPostActivity() {
+        val intent = PostActivity.newIntent(requireContext())
+        startActivityForResult(intent, REQUEST_CODE_POST)
     }
 
     override fun openDetail(post: Post) {
@@ -66,6 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
 
 
     companion object {
+        private const val REQUEST_CODE_POST = 1000
         private const val REQUEST_CODE_DETAIL = 1002
         private const val REQUEST_CODE_PROFILE = 1003
     }

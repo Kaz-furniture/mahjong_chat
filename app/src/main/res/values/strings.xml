@@ -59,4 +59,6 @@
     <string name="space">  </string>
     <string name="cancel">キャンセル</string>
     <string name="next">次へ</string>
+    <string name="follow">フォローする</string>
+    <string name="following">フォロー中</string>
 </resources>

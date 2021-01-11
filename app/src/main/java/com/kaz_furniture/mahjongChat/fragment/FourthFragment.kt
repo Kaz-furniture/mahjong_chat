@@ -40,5 +40,8 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
+        binding?.fab?.setOnClickListener {
+
+        }
     }
 }

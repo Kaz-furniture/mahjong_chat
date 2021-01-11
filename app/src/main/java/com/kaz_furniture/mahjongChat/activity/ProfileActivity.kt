@@ -4,16 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileBinding
-import com.kaz_furniture.mahjongChat.fragment.HomeFragment
-import com.kaz_furniture.mahjongChat.view.PostView
 import com.kaz_furniture.mahjongChat.viewModel.ProfileViewModel
 
 class ProfileActivity: BaseActivity() {
@@ -28,10 +25,14 @@ class ProfileActivity: BaseActivity() {
         binding.lifecycleOwner = this
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         userId = intent.getStringExtra(KEY) ?:""
+        buttonTypeCheck()
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.getPostList(userId)
         }
         binding.userId = userId
+        binding.userButton.setOnClickListener {
+            buttonClick()
+        }
         viewModel.getUserInfo(userId)
         viewModel.getPostList(userId)
         viewModel.item.observe(this, Observer {
@@ -45,7 +46,31 @@ class ProfileActivity: BaseActivity() {
         viewModel.postSelected.observe(this, Observer {
             openDetail(it)
         })
+        viewModel.followChanged.observe(this, Observer {
+            buttonTypeCheck()
+        })
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun buttonTypeCheck() {
+        when {
+            userId == myUser.userId -> binding.buttonText = getString(R.string.profileEdit)
+            myUser.followingUserIds.contains(userId) -> binding.buttonText = getString(R.string.following)
+            else -> binding.buttonText = getString(R.string.follow)
+        }
+    }
+
+    private fun buttonClick() {
+        when {
+            userId == myUser.userId -> launchProfileEditActivity()
+            myUser.followingUserIds.contains(userId) -> viewModel.followCancel(userId)
+            else -> viewModel.follow(userId)
+        }
+    }
+
+    private fun launchProfileEditActivity() {
+        val intent = ProfileEditActivity.newIntent(this)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -61,6 +86,7 @@ class ProfileActivity: BaseActivity() {
 
     companion object {
         private const val REQUEST_CODE_DETAIL = 3001
+        private const val REQUEST_CODE_PROFILE_EDIT = 1050
         private const val KEY = "KEY_ID"
         fun newIntent(context: Context, id: String?): Intent {
             return Intent(context, ProfileActivity::class.java).apply {

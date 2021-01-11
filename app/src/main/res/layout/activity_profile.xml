@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="userId"
+            type="String" />
+
+        <variable
+            name="buttonText"
             type="String" />
     </data>
 
@@ -45,21 +50,32 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginStart="4dp"/>
 
-                <TextView
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/userIcon"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:text="@string/postNumber"-->
+<!--                    android:id="@+id/postNumber"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:layout_marginStart="12dp"/>-->
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/userIcon"
+                    android:id="@+id/userButton"
+                    android:text="@{buttonText}"
+                    tools:text="@string/profileEdit"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/postNumber"
-                    android:id="@+id/postNumber"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginStart="12dp"/>
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/userIcon"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/explanation"
-                    app:layout_constraintTop_toBottomOf="@id/postNumber"
+                    app:layout_constraintTop_toBottomOf="@id/userButton"
                     app:layout_constraintStart_toEndOf="@id/userIcon"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_gravity="start"

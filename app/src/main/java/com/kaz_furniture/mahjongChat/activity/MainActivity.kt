@@ -50,9 +50,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_second, R.id.navigation_third, R.id.navigation_fourth), binding.drawerLayout)
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        binding.fab.setOnClickListener{
-            launchPostActivity()
-        }
+//        binding.fab.setOnClickListener{
+//            launchPostActivity()
+//        }
         binding.navView.setNavigationItemSelectedListener(this)
     }
 

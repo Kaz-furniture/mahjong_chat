@@ -55,17 +55,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navGraph="@navigation/mobile_navigation" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="72dp"
-                android:backgroundTint="#e9997a"
-                android:contentDescription="@string/postCreate"
-                android:src="@drawable/ic_baseline_create_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:id="@+id/fab"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:layout_marginBottom="72dp"-->
+<!--                android:backgroundTint="#e9997a"-->
+<!--                android:contentDescription="@string/postCreate"-->
+<!--                android:src="@drawable/ic_baseline_create_24"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

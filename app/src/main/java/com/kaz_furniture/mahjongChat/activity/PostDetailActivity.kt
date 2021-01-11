@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
@@ -19,11 +20,18 @@ class PostDetailActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail)
         binding.lifecycleOwner = this
-        val post = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
+        val postGet = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
+        val post = postGet.also {
+            viewModel.getChoices(it.postId)
+        }
         binding.userName.text = post.userName
-        viewModel.setImage(post, binding)
+        binding.userId = post.userId
+        binding.post = post
         binding.explanation.text = post.explanation
         binding.createdTime.text = android.text.format.DateFormat.format(getString(R.string.time1), post.createdAt)
+        viewModel.choicesList.observe(this, Observer {
+            binding.choicesView.customAdapter.refresh(it)
+        })
     }
 
     companion object {

@@ -4,6 +4,7 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,6 +16,9 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicatio
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.logging.Handler
 
@@ -154,6 +158,13 @@ class SplashViewModel: ViewModel() {
                         Toast.makeText(applicationContext, "ALL_POST_FAILED", Toast.LENGTH_SHORT).show()
                     }
                 }
+    }
+
+    fun clearCache() {
+        Glide.get(applicationContext).clearMemory()
+        CoroutineScope(Dispatchers.IO).launch {
+            Glide.get(applicationContext).clearDiskCache()
+        }
     }
 
 }

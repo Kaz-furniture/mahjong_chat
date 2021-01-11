@@ -8,7 +8,7 @@ class Choice {
     var choiceId: String = "${System.currentTimeMillis()}"
     var postId: String = ""
     var number: Int = 0
-    var userIds: List<String> = listOf()
+    var userIds = ArrayList<String>()
     var tile: Int = 0
     var way: Int = 0
 
