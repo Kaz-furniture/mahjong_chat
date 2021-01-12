@@ -43,9 +43,8 @@ class PostActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_post)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_post)
         binding.lifecycleOwner = this
-        val linearLayout = LinearLayout(this)
         layoutManager = GridLayoutManager(this, 4)
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
@@ -62,13 +61,6 @@ class PostActivity: BaseActivity() {
         viewModel.selectedChoices.observe(this, Observer {
             addAllChoiceLayout(it)
         })
-//        viewModel.selectedOK.observe(this, Observer {
-//            val childBinding = ListChoiceBinding.inflate(
-//                    LayoutInflater.from(this), null, false)
-//            childBinding.choice = viewModel.choice
-//            val childView = this.layoutInflater.inflate(R.layout.list_choice, null)
-//            linearLayout.addView(childView)
-//        })
     }
 
     private fun addAllChoiceLayout(list: List<Choice>) {

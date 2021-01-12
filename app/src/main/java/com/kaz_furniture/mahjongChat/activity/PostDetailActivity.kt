@@ -23,14 +23,22 @@ class PostDetailActivity: BaseActivity() {
         val postGet = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
         val post = postGet.also {
             viewModel.getChoices(it.postId)
+            viewModel.getComments(it.postId)
         }
         binding.userName.text = post.userName
         binding.userId = post.userId
         binding.post = post
         binding.explanation.text = post.explanation
         binding.createdTime.text = android.text.format.DateFormat.format(getString(R.string.time1), post.createdAt)
+        binding.commentContent = viewModel.contentInput
+        binding.submitButton.setOnClickListener {
+            viewModel.submitComment(post.postId)
+        }
         viewModel.choicesList.observe(this, Observer {
             binding.choicesView.customAdapter.refresh(it)
+        })
+        viewModel.commentsList.observe(this, Observer {
+            binding.commentsView.customAdapterComment.refresh(it)
         })
     }
 

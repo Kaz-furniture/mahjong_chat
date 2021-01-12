@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="userId"
+            type="String" />
+        <variable
+            name="content"
+            type="String" />
+        <variable
+            name="userName"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        tools:context=".activity.MainActivity">
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/userIcon"
+            app:userIcon="@{userId}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/userNameView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{userName}"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@id/userIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/userIcon"
+            tools:text="@string/userName2"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/contentTextView"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            tools:text="@string/profileEdit"
+            android:text="@{content}"
+            android:background="#393939"
+            app:layout_constraintTop_toBottomOf="@id/userNameView"
+            app:layout_constraintStart_toEndOf="@id/userIcon"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

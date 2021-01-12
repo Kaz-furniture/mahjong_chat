@@ -30,6 +30,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.ProfileActivity"/>
+        <activity android:name=".activity.DMDetailActivity"/>
         <activity android:name=".activity.PostDetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.PasswordForgetActivity"/>

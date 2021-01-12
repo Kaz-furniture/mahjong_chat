@@ -11,12 +11,10 @@
             android:layout_height="match_parent"
             android:id="@+id/swipe_refresh">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.kaz_furniture.mahjongChat.view.DMRoomView
+                android:id="@+id/dMRoomView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recyclerView"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/list_d_m"/>
+                android:layout_height="match_parent"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
