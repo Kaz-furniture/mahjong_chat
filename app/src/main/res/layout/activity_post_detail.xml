@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="post"
             type="com.kaz_furniture.mahjongChat.data.Post" />
@@ -18,118 +19,135 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/commentEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
+                    <ImageView
+                        android:id="@+id/userIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:userIcon="@{userId}"
+                        tools:src="@drawable/m1" />
+
+                    <TextView
+                        android:id="@+id/userName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/noImage"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@id/explanation"
+                        app:layout_constraintStart_toEndOf="@id/userIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_scrollFlags="enterAlwaysCollapsed" />
+
+                    <TextView
+                        android:id="@+id/explanation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/explanation"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/userIcon" />
+
+                    <TextView
+                        android:id="@+id/createdTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/explanation" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/postImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="4dp"
+                    android:contentDescription="@string/postImage"
+                    android:scaleType="centerCrop"
+                    app:postImage="@{post}"
+                    tools:src="@drawable/screenshot_20201213_235035" />
+            </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    tools:src="@drawable/m1"
-                    android:layout_marginTop="4dp"
-                    app:userIcon="@{userId}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:id="@+id/userIcon"/>
+                <!--            <com.kaz_furniture.mahjongChat.view.ChoicesView-->
+                <!--                android:id="@+id/choicesView"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                app:layout_constraintStart_toStartOf="parent"-->
+                <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/userName"
-                    android:text="@string/noImage"
-                    android:textSize="18sp"
-                    android:layout_marginStart="12dp"
-                    app:layout_constraintStart_toEndOf="@id/userIcon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/explanation"
-                    app:layout_scrollFlags="enterAlwaysCollapsed"/>
+                <!--            <com.kaz_furniture.mahjongChat.view.CommentsView-->
+                <!--                android:id="@+id/commentsView"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                app:layout_constraintStart_toStartOf="parent"-->
+                <!--                app:layout_constraintTop_toBottomOf="@id/choicesView" />-->
 
-                <TextView
+                <com.kaz_furniture.mahjongChat.view.ChoicesCommentsView
+                    android:id="@+id/choicesCommentsView"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/explanation"
-                    android:id="@+id/explanation"
-                    app:layout_constraintTop_toBottomOf="@id/userIcon"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/createdTime"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/explanation"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:id="@+id/postImageView"
-                app:postImage="@{post}"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="4dp"
-                android:contentDescription="@string/postImage"
-                tools:src="@drawable/screenshot_20201213_235035"/>
-        </com.google.android.material.appbar.AppBarLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/commentEditText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:hint="@string/commentInput"
+            android:text="@={commentContent}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/submitButton"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <com.kaz_furniture.mahjongChat.view.ChoicesView
-                android:id="@+id/choicesView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <com.kaz_furniture.mahjongChat.view.CommentsView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/commentsView"
-                app:layout_constraintTop_toBottomOf="@id/choicesView"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/commentEditText"
-                android:hint="@string/commentInput"
-                android:text="@={commentContent}"
-                app:layout_constraintTop_toBottomOf="@id/commentsView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/submitButton"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/submitButton"
-                app:layout_constraintStart_toEndOf="@id/commentEditText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/commentsView"
-                android:text="@string/submit"/>
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            app:layout_constraintBottom_toBottomOf="@id/commentEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/commentEditText"
+            app:layout_constraintTop_toTopOf="@id/commentEditText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
