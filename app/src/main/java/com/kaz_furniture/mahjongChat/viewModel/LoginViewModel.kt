@@ -88,7 +88,7 @@ class LoginViewModel: ViewModel() {
                             myUser = user[0]
                             myUserOK.postValue(true)
                         } else {
-                            Toast.makeText(applicationContext, "認証エラーです", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "認証エラー", Toast.LENGTH_LONG).show()
                             makeLogout.postValue(true)
                             return@addOnCompleteListener
                         }

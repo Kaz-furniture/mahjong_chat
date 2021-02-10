@@ -34,11 +34,8 @@ class PostDetailActivity: BaseActivity() {
         binding.submitButton.setOnClickListener {
             viewModel.submitComment(post.postId)
         }
-        viewModel.choicesList.observe(this, Observer {
-            binding.choicesView.customAdapter.refresh(it)
-        })
-        viewModel.commentsList.observe(this, Observer {
-            binding.commentsView.customAdapterComment.refresh(it)
+        viewModel.items.observe(this, Observer {
+            binding.choiceCommentView.customAdapter.refresh(it)
         })
     }
 

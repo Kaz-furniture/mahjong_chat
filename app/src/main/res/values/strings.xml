@@ -27,7 +27,6 @@
     <string name="inputCorrectly">正しく入力してください</string>
     <string name="profileEdit">プロフィール編集</string>
     <string name="setting">設定</string>
-    <string name="time1">yyyy/M/d kk:mm</string>
     <string name="selectPostImage">画像を選択（１枚のみ）</string>
     <string name="selectIconImage">画像を選択</string>
     <string name="postImage">画像</string>
@@ -56,10 +55,15 @@
     <string name="action_4">チー</string>
     <string name="action_5">カン</string>
     <string name="action_6">スルー</string>
+    <string name="action_7">和了</string>
     <string name="space">  </string>
     <string name="cancel">キャンセル</string>
     <string name="next">次へ</string>
     <string name="follow">フォローする</string>
     <string name="following">フォロー中</string>
     <string name="commentInput">コメントを入力</string>
+    <string name="messageInput">メッセージを入力</string>
+    <string name="selectUser">ユーザーを選択</string>
+    <string name="time1">yyyy/M/d kk:mm</string>
+    <string name="time2">M/d kk:mm</string>
 </resources>

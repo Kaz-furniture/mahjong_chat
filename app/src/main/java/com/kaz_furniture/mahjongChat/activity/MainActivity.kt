@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -67,7 +68,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
             }
             val userIconImage = headerView.findViewById<ImageView>(R.id.headerUserIconImage)
-            GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")).circleCrop().into(userIconImage)
+            GlideApp.with(this)
+                    .load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")).circleCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(userIconImage)
             headerView.findViewById<ImageView>(R.id.headerUserIconImage)?.setOnClickListener {
                 val intent = ProfileActivity.newIntent(this, myUser.userId)
                 startActivityForResult(intent, REQUEST_CODE_PROFILE)

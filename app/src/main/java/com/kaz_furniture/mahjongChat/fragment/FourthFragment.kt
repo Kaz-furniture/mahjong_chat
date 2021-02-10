@@ -1,14 +1,19 @@
 package com.kaz_furniture.mahjongChat.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.DMDetailActivity
+import com.kaz_furniture.mahjongChat.data.DMRoom
+import com.kaz_furniture.mahjongChat.databinding.DialogRoomCreateBinding
 import com.kaz_furniture.mahjongChat.databinding.FragmentFourthBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 
@@ -29,7 +34,7 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
                 false
                 )
         binding?.fab?.setOnClickListener {
-
+            showCreateRoomDialog()
         }
         binding?.swipeRefresh?.setOnRefreshListener {
             viewModel.getDMRooms()
@@ -39,12 +44,32 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
             binding?.dMRoomView?.customAdapter?.refresh(it)
         })
         viewModel.selectedDMRoom.observe(viewLifecycleOwner, Observer {
-            launchDMRoomDetailActivity()
+            launchDMDetailActivity(it)
+        })
+        viewModel.userSelected.observe(viewLifecycleOwner, Observer {
+            viewModel.createDMRoom(it)
         })
     }
 
-    private fun launchDMRoomDetailActivity() {
-        val intent = DMDetailActivity.newIntent(requireContext())
+    private fun showCreateRoomDialog() {
+        MaterialDialog(requireContext()).show {
+            cancelable(false)
+            val binding = DialogRoomCreateBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+            binding.apply {
+                followingUsersView.customAdapter.refresh(myUser.followingUserIds)
+                closeButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            viewModel.userSelected.observe(viewLifecycleOwner, Observer {
+                dismiss()
+            })
+            setContentView(binding.root)
+        }
+    }
+
+    private fun launchDMDetailActivity(data: DMRoom) {
+        val intent = DMDetailActivity.newIntent(requireContext(), data.roomId)
         startActivityForResult(intent, REQUEST_CODE_DM_DETAIL)
     }
 

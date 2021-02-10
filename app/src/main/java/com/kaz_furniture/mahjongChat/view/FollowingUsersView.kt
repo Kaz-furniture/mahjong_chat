@@ -8,14 +8,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Choice
-import com.kaz_furniture.mahjongChat.data.Post
-import com.kaz_furniture.mahjongChat.databinding.ListChoicePostDetailBinding
-import com.kaz_furniture.mahjongChat.databinding.ListItemProfileBinding
+import com.kaz_furniture.mahjongChat.data.Comment
+import com.kaz_furniture.mahjongChat.data.User
+import com.kaz_furniture.mahjongChat.databinding.ListCommentBinding
+import com.kaz_furniture.mahjongChat.databinding.ListFollowingUsersBinding
+import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
-import com.kaz_furniture.mahjongChat.viewModel.ProfileViewModel
 
-class ChoicesView: RecyclerView {
+class FollowingUsersView: RecyclerView {
 
     constructor(ctx: Context) : super(ctx)
     constructor(ctx: Context, attrs: AttributeSet?) : super(ctx, attrs)
@@ -31,11 +34,10 @@ class ChoicesView: RecyclerView {
 
     class Adapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        private val viewModel: PostDetailViewModel by(context as ComponentActivity).viewModels()
-        private val items = mutableListOf<Choice>()
+        private val viewModel: MainViewModel by(context as ComponentActivity).viewModels()
+        private val items = mutableListOf<String>()
 
-        fun refresh(list: List<Choice>) {
-
+        fun refresh(list: List<String>) {
             items.apply {
                 clear()
                 addAll(list)
@@ -47,7 +49,7 @@ class ChoicesView: RecyclerView {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
 //            ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.article_cell, null, false))
-                ItemViewHolder(ListChoicePostDetailBinding.inflate(LayoutInflater.from(context), parent, false))
+                ItemViewHolder(ListFollowingUsersBinding.inflate(LayoutInflater.from(context), parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             if (holder is ItemViewHolder)
@@ -56,18 +58,13 @@ class ChoicesView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.choice = data
-//            holder.binding.tileImageView.setOnClickListener {
-//                viewModel.choiceSelect(data)
-//            }
-//            holder.binding.wayText.setOnClickListener {
-//                viewModel.choiceSelect(data)
-//            }
-            holder.binding.childView.setOnClickListener {
-                viewModel.choiceSelect(data)
+            holder.binding.userId = data
+            holder.binding.userName = allUserList.filter { it.userId == data }[0].name
+            holder.binding.userNameView.setOnClickListener {
+                viewModel.userSelected.postValue(data)
             }
         }
 
-        class ItemViewHolder(val binding: ListChoicePostDetailBinding): RecyclerView.ViewHolder(binding.root)
+        class ItemViewHolder(val binding: ListFollowingUsersBinding): RecyclerView.ViewHolder(binding.root)
     }
 }

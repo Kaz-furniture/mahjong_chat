@@ -9,14 +9,44 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicatio
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
+import com.kaz_furniture.mahjongChat.view.ChoicesCommentsView
 import timber.log.Timber
 
 class PostDetailViewModel: ViewModel() {
     val contentInput = MutableLiveData<String>()
-    val choicesList = MutableLiveData<List<Choice>>()
-    val commentsList = MutableLiveData<List<Comment>>()
+//    val choicesList = MutableLiveData<List<Choice>>()
+//    val commentsList = MutableLiveData<List<Comment>>()
+    val items = MutableLiveData<List<ChoicesCommentsView.Adapter.ChoiceCommentData>>()
     private val saveList = ArrayList<Choice>()
-    private var isSelected: Boolean? = null
+    val isSelectedLiveData = MutableLiveData<Boolean>()
+    private val isSelected: Boolean
+        get() = choices.any { it.userIds.contains(myUser.userId) }
+    private var choices = listOf<Choice>()
+        set(value) {
+            field = value
+            updateItems()
+        }
+    private var comments = listOf<Comment>()
+        set(value) {
+            field = value
+            updateItems()
+        }
+
+    private fun updateItems() {
+        val list = mutableListOf<ChoicesCommentsView.Adapter.ChoiceCommentData>()
+        list.addAll(choices.map {
+            ChoicesCommentsView.Adapter.ChoiceCommentData().apply {
+                choice = it
+            }
+        })
+        list.addAll(comments.map {
+            ChoicesCommentsView.Adapter.ChoiceCommentData().apply {
+                comment = it
+            }
+        })
+        items.postValue(list)
+        isSelectedLiveData.postValue(isSelected)
+    }
 
     fun submitComment(postId: String) {
         val newComment = Comment().apply {
@@ -36,9 +66,9 @@ class PostDetailViewModel: ViewModel() {
                 }
         val newCommentsList = ArrayList<Comment>().apply {
             this.add(newComment)
-            this.addAll(commentsList.value ?: listOf())
+            this.addAll(comments)
         }
-        commentsList.postValue(newCommentsList)
+        comments = newCommentsList
     }
 
     fun getComments(postId: String) {
@@ -51,7 +81,7 @@ class PostDetailViewModel: ViewModel() {
                         Toast.makeText(applicationContext, "NO_COMMENT", Toast.LENGTH_SHORT).show()
                         return@addOnCompleteListener
                     }
-                    commentsList.postValue(result)
+                    comments = result
                 }
     }
 
@@ -66,8 +96,7 @@ class PostDetailViewModel: ViewModel() {
                         return@addOnCompleteListener
                     }
                     if (task.isSuccessful) {
-                        saveList.addAll(result)
-                        choicesCheck(result)
+                        choices = result
                         Toast.makeText(applicationContext, "Choices Get Success", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
@@ -75,55 +104,46 @@ class PostDetailViewModel: ViewModel() {
                 }
     }
 
-    private fun choicesCheck(list: List<Choice>) {
-        for (value in list) {
-            if (value.userIds.contains(myUser.userId)) {
-                val sendList = listOf<Choice>(value)
-                isSelected = true
-                choicesList.postValue(sendList)
-                Timber.d("choicesCheck")
-                return
-            }
-        }
-        Timber.d("choicesCheckOK = ${list.size}")
-        isSelected = false
-        choicesList.postValue(list)
-    }
+//    private fun choicesCheck(list: List<Choice>) {
+//        for (value in list) {
+//            if (value.userIds.contains(myUser.userId)) {
+//                val sendList = listOf<Choice>(value)
+//                isSelected = true
+//                choicesList.postValue(sendList)
+//                Timber.d("choicesCheck")
+//                return
+//            }
+//        }
+//        Timber.d("choicesCheckOK = ${list.size}")
+//        isSelected = false
+//        choicesList.postValue(list)
+//    }
 
     fun choiceSelect(choice: Choice) {
-        if (isSelected == false) {
-            val newChoice = choice.apply {
+
+        val newChoice = choice.apply {
+            if (isSelected) {
+                this.userIds.remove(myUser.userId)
+            } else {
                 this.userIds.add(myUser.userId)
             }
-            FirebaseFirestore.getInstance()
-                    .collection("choices")
-                    .document(choice.choiceId)
-                    .set(newChoice)
-                    .addOnCompleteListener {
-                        isSelected = true
-                        val sendList = listOf<Choice>(newChoice)
-                        choicesList.postValue(sendList)
-                        Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
-                    }
-        } else {
-            val newChoice = choice.apply {
-                this.userIds.remove(myUser.userId)
-            }
-            FirebaseFirestore.getInstance()
-                    .collection("choices")
-                    .document(choice.choiceId)
-                    .set(newChoice)
-                    .addOnCompleteListener {
-                        isSelected = false
-                        choicesList.postValue(saveList)
-                        Toast.makeText(applicationContext, "CHOICE_UPDATED", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
-                    }
         }
+
+        FirebaseFirestore.getInstance()
+                .collection("choices")
+                .document(choice.choiceId)
+                .set(newChoice)
+                .addOnCompleteListener {
+                    choices = choices.map {
+                        if (choice.choiceId == it.choiceId) {
+                            newChoice
+                        } else it
+                    }
+                    Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+                }
+
     }
 }

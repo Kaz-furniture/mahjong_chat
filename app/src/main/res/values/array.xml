@@ -8,6 +8,7 @@
         <item>@string/action_4</item>
         <item>@string/action_5</item>
         <item>@string/action_6</item>
+        <item>@string/action_7</item>
         <item>@string/space</item>
         <item>@string/cancel</item>
     </string-array>

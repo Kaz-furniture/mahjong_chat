@@ -17,6 +17,24 @@ class MainViewModel: ViewModel() {
     val updateData = MutableLiveData<Boolean>()
     val dMRoomList = MutableLiveData<List<DMRoom>>()
     val selectedDMRoom = MutableLiveData<DMRoom>()
+    val userSelected = MutableLiveData<String>()
+
+    fun createDMRoom(userId: String) {
+        val newRoom = DMRoom().apply {
+            userIds = listOf(myUser.userId, userId)
+        }
+        FirebaseFirestore.getInstance()
+                .collection("DMRoom")
+                .document(newRoom.roomId)
+                .set(newRoom)
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "ROOM_FAILED", Toast.LENGTH_SHORT).show()
+                }
+                .addOnCompleteListener {
+                    getDMRooms()
+                    Toast.makeText(applicationContext, "ROOM_CREATED", Toast.LENGTH_SHORT).show()
+                }
+    }
 
     fun loadPostList(adapter: PostListAdapter) {
 
@@ -48,7 +66,9 @@ class MainViewModel: ViewModel() {
                             Toast.makeText(applicationContext, "NO_DM", Toast.LENGTH_SHORT).show()
                             return@addOnCompleteListener
                         }
-                        dMRoomList.postValue(result)
+                        val myDMList = ArrayList<DMRoom>()
+                        myDMList.addAll(result.filter { it.userIds.contains(myUser.userId) })
+                        dMRoomList.postValue(myDMList)
                         Toast.makeText(applicationContext, "DM_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
                 }

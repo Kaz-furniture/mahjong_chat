@@ -9,7 +9,8 @@ enum class WayType(val wayId: Int, val textId: Int) {
     PON(3, R.string.pon),
     CHI(4, R.string.chi),
     KAN(5, R.string.kan),
-    THROUGH(6, R.string.through);
+    THROUGH(6, R.string.through),
+    WINNING(7, R.string.action_7);
 
     companion object {
         fun getWayTypeById(id:Int): WayType = values().firstOrNull{ it.wayId ==id } ?:DISCARD

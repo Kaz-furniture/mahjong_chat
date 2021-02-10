@@ -1,10 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+        <variable
+            name="message"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+        <variable
+            name="canSubmit"
+            type="Boolean" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/userName"
-        android:gravity="center"/>
+        android:layout_height="match_parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/swipeRefresh"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/messageEditText">
+
+            <com.kaz_furniture.mahjongChat.view.DMMessageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:id="@+id/messagesView"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageEditText"
+            android:hint="@string/messageInput"
+            android:text="@={message}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/submitButton"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/submitButton"
+            android:enabled="@{canSubmit}"
+            app:layout_constraintStart_toEndOf="@id/messageEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/messageEditText"
+            android:text="@string/submit"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

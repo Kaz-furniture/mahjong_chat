@@ -152,32 +152,6 @@ class PostActivity: BaseActivity() {
         }
     }
 
-    private fun getChildView() {
-//        val childBinding = ListChoiceBinding.inflate(
-//                LayoutInflater.from(this), null, false)
-//        childBinding.choice = viewModel.choice
-//        Timber.d("selectedChoice = ${viewModel.choice.tileType.imageId}, ${Tile.M3.imageId}")
-//        setContentView(childBinding.root)
-    }
-
-    private fun showCreateChoicesDialog() {
-        MaterialDialog(this).show {
-            cancelable(false)
-            val dialogBinding = DialogFragmentCreateChoiceBinding.inflate(
-                    LayoutInflater.from(this@PostActivity), null, false)
-            dialogBinding.apply {
-                this.choiceData = viewModel.choiceData
-                this.doneButton.setOnClickListener {
-                    dismiss()
-                }
-                this.selectTileButton.setOnClickListener {
-                    showTileSelectDialog()
-                }
-            }
-            setContentView(dialogBinding.root)
-        }
-    }
-
     private fun showTileSelectDialog() {
         MaterialDialog(this).show {
             cancelable(false)
