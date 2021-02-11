@@ -16,41 +16,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/swipeRefresh"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/messageEditText">
 
-            <com.kaz_furniture.mahjongChat.view.DMMessageView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/viewContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/EditContainer">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:id="@+id/messagesView"/>
+                android:id="@+id/swipeRefresh"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <com.kaz_furniture.mahjongChat.view.DMMessageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:id="@+id/messagesView"/>
 
-        <EditText
-            android:layout_width="0dp"
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/messageEditText"
-            android:hint="@string/messageInput"
-            android:text="@={message}"
+            android:id="@+id/EditContainer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/submitButton"/>
+            app:layout_constraintTop_toBottomOf="@id/viewContainer"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/submitButton"
-            android:enabled="@{canSubmit}"
-            app:layout_constraintStart_toEndOf="@id/messageEditText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/messageEditText"
-            android:text="@string/submit"/>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageEditText"
+                android:hint="@string/messageInput"
+                android:text="@={message}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/submitButton"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/submitButton"
+                android:enabled="@{canSubmit}"
+                app:layout_constraintStart_toEndOf="@id/messageEditText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/messageEditText"
+                android:text="@string/submit"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -1,5 +1,6 @@
 package com.kaz_furniture.mahjongChat.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -68,8 +69,15 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_DM_DETAIL) {
+            viewModel.getDMRooms()
+        }
+    }
+
     private fun launchDMDetailActivity(data: DMRoom) {
-        val intent = DMDetailActivity.newIntent(requireContext(), data.roomId)
+        val intent = DMDetailActivity.newIntent(requireContext(), data)
         startActivityForResult(intent, REQUEST_CODE_DM_DETAIL)
     }
 

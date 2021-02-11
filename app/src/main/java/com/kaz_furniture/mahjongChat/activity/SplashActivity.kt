@@ -23,7 +23,6 @@ class SplashActivity: BaseActivity() {
         timeCount()
         setContentView(R.layout.activity_splash)
         viewModel.checkAccount()
-        viewModel.clearCache()
         viewModel.makeLogout.observe(this, Observer {
             Handler(Looper.getMainLooper()).postDelayed({
                 launchLoginActivity()

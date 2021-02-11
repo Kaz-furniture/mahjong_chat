@@ -160,11 +160,4 @@ class SplashViewModel: ViewModel() {
                 }
     }
 
-    fun clearCache() {
-        Glide.get(applicationContext).clearMemory()
-        CoroutineScope(Dispatchers.IO).launch {
-            Glide.get(applicationContext).clearDiskCache()
-        }
-    }
-
 }

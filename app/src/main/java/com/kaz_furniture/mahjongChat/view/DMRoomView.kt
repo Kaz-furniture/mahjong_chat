@@ -9,7 +9,9 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Comment
 import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.databinding.ListCommentBinding
@@ -57,11 +59,12 @@ class DMRoomView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.userId = DMRoom.getOpponentUserId(data, myUser.userId)
-            holder.binding.userName = MahjongChatApplication.allUserList.filter { it.userId == DMRoom.getOpponentUserId(data, myUser.userId) }[0].name
+            holder.binding.userId = DMRoom.getOpponentUserId(data)
+            holder.binding.userName = MahjongChatApplication.allUserList.filter { it.userId == DMRoom.getOpponentUserId(data) }[0].name
             holder.binding.roomView.setOnClickListener {
                 viewModel.selectedDMRoom.postValue(data)
             }
+            holder.binding.updatedTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.updatedTime), data.updatedAt)
         }
 
         class ItemViewHolder(val binding: ListDmRoomBinding): RecyclerView.ViewHolder(binding.root)

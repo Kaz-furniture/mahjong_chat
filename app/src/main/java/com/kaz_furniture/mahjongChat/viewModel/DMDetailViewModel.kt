@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.DMMessage
+import com.kaz_furniture.mahjongChat.data.DMRoom
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
@@ -15,7 +16,7 @@ import kotlin.collections.ArrayList
 class DMDetailViewModel: ViewModel() {
     val messagesList = MutableLiveData<List<DMMessage>>()
     private var messageListener: ListenerRegistration? = null
-    var roomIdNow = ""
+    var roomNow = DMRoom()
     val messageInput = MutableLiveData<String>()
     val canSend = MediatorLiveData<Boolean>().also { result ->
         result.addSource(messageInput) { result.value = submitValidation()}
@@ -30,17 +31,19 @@ class DMDetailViewModel: ViewModel() {
         val newMessage = DMMessage().apply {
             this.content = messageInput.value ?:""
             this.fromUserId = myUser.userId
-            this.roomId = roomIdNow
+            this.roomId = roomNow.roomId
         }
         FirebaseFirestore.getInstance()
                 .collection("DMMessage")
                 .add(newMessage)
+        updateRoom()
     }
 
-    fun initData(roomId: String) {
+    fun initData(room: DMRoom) {
+        Timber.d("dmroom = ${room.roomId}")
         FirebaseFirestore.getInstance()
                 .collection("DMMessage")
-                .whereEqualTo("roomId", roomId)
+                .whereEqualTo("roomId", room.roomId)
                 .orderBy("createdAt")
                 .get()
                 .addOnCompleteListener {
@@ -57,7 +60,7 @@ class DMDetailViewModel: ViewModel() {
     private fun initSubscribe(lastCreatedAt: Date) {
         messageListener = FirebaseFirestore.getInstance()
                 .collection("DMMessage")
-                .whereEqualTo("roomId", roomIdNow)
+                .whereEqualTo("roomId", roomNow.roomId)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .whereGreaterThan("createdAt", lastCreatedAt)
                 .limit(1L)
@@ -75,6 +78,16 @@ class DMDetailViewModel: ViewModel() {
                         messagesList.postValue(messages)
                     }
                 }
+    }
+
+    private fun updateRoom() {
+        val newRoom = roomNow.apply {
+            this.updatedAt = Date()
+        }
+        FirebaseFirestore.getInstance()
+                .collection("DMRoom")
+                .document(roomNow.roomId)
+                .set(newRoom)
     }
 
     override fun onCleared() {

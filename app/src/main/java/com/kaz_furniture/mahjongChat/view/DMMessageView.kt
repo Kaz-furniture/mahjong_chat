@@ -76,6 +76,7 @@ class DMMessageView: RecyclerView {
             holder.binding.apply {
                 this.dateTextView.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.createdAt)
                 this.messageTextView.text = data.content
+                this.userId = data.fromUserId
             }
         }
 

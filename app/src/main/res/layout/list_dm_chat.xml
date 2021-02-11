@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="userId"
+            type="String" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
+        android:paddingStart="8dp"
         android:paddingTop="4dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="4dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/userIcon"
+            app:userIcon="@{userId}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/messageTextView"/>
 
         <TextView
             android:id="@+id/messageTextView"
@@ -22,8 +38,9 @@
             android:paddingTop="5dp"
             android:paddingEnd="12dp"
             android:paddingBottom="5dp"
+            android:layout_marginStart="8dp"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/userIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/selectUser" />
 
@@ -32,9 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="@id/messageTextView"
-            app:layout_constraintTop_toBottomOf="@id/messageTextView"
-            tools:text="@string/selectIconImage" />
+            app:layout_constraintBottom_toBottomOf="@id/messageTextView"
+            app:layout_constraintStart_toEndOf="@id/messageTextView"
+            tools:text="@string/time2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
