@@ -16,6 +16,10 @@
             name="commentContent"
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
 
+        <variable
+            name="canSubmit"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,6 +135,7 @@
         android:id="@+id/submitButton"
         app:layout_constraintStart_toEndOf="@id/commentEditText"
         app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="@{canSubmit}"
         app:layout_constraintTop_toTopOf="@id/commentEditText"
         android:text="@string/submit"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

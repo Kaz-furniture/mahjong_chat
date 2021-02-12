@@ -9,11 +9,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -22,13 +19,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.ItemListener
 import com.afollestad.materialdialogs.list.listItems
-import com.google.api.Distribution
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.adapter.TileListAdapter
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.*
-import com.kaz_furniture.mahjongChat.view.TilesView
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
 import com.yalantis.ucrop.UCrop
 import timber.log.Timber

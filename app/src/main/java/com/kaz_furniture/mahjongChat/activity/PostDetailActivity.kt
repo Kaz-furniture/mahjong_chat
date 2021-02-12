@@ -33,9 +33,14 @@ class PostDetailActivity: BaseActivity() {
         binding.commentContent = viewModel.contentInput
         binding.submitButton.setOnClickListener {
             viewModel.submitComment(post.postId)
+            binding.choiceCommentView.scrollToPosition(binding.choiceCommentView.customAdapter.itemCount - 1)
+            binding.commentEditText.editableText.clear()
         }
         viewModel.items.observe(this, Observer {
             binding.choiceCommentView.customAdapter.refresh(it)
+        })
+        viewModel.canSubmit.observe(this, Observer {
+            binding.canSubmit = it
         })
     }
 

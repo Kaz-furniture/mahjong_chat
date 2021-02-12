@@ -44,17 +44,17 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
-        viewModel.loadPostList(adapter)
+        viewModel.loadPostList()
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
-            viewModel.loadPostList(adapter)
+            viewModel.loadPostList()
             binding?.swipeRefresh?.isRefreshing = false
         }
         binding?.fab?.setOnClickListener{
             launchPostActivity()
         }
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
-            viewModel.loadPostList(adapter)
+            viewModel.loadPostList()
         })
     }
 

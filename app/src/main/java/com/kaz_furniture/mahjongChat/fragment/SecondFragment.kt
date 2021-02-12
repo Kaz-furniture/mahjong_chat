@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.PostActivity
@@ -33,7 +34,10 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentSecondBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        adapter = PostListAdapter(layoutInflater, allPostList, this)
+        val filteredList = ArrayList<Post>().apply {
+            this.addAll(allPostList.filter { myUser.followingUserIds.contains(it.userId) })
+        }
+        adapter = PostListAdapter(layoutInflater, filteredList, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -43,17 +47,18 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
-        viewModel.loadPostList(adapter)
+        viewModel.loadPostList()
         bindingData.swipeRefresh.setOnRefreshListener {
             binding?.swipeRefresh?.isRefreshing = true
-            viewModel.loadPostList(adapter)
+            viewModel.loadPostList()
+            adapter.notifyDataSetChanged()
             binding?.swipeRefresh?.isRefreshing = false
         }
         binding?.fab?.setOnClickListener {
             launchPostActivity()
         }
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
-            viewModel.loadPostList(adapter)
+            viewModel.loadPostList()
         })
     }
 

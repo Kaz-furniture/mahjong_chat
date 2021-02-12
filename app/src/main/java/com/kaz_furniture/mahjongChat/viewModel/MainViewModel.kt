@@ -36,7 +36,7 @@ class MainViewModel: ViewModel() {
                 }
     }
 
-    fun loadPostList(adapter: PostListAdapter) {
+    fun loadPostList() {
 
         allPostList.map { it.userId == myUser.userId }
         FirebaseFirestore.getInstance()
@@ -48,7 +48,6 @@ class MainViewModel: ViewModel() {
                         val fetchedList = it.result?.toObjects(Post::class.java) ?: listOf()
                         allPostList.clear()
                         allPostList.addAll(fetchedList)
-                        adapter.notifyDataSetChanged()
                     } else {
                         Toast.makeText(MahjongChatApplication.applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }

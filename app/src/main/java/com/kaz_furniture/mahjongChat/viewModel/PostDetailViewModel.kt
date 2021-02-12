@@ -1,6 +1,7 @@
 package com.kaz_furniture.mahjongChat.viewModel
 
 import android.widget.Toast
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,11 +15,11 @@ import timber.log.Timber
 
 class PostDetailViewModel: ViewModel() {
     val contentInput = MutableLiveData<String>()
-//    val choicesList = MutableLiveData<List<Choice>>()
-//    val commentsList = MutableLiveData<List<Comment>>()
     val items = MutableLiveData<List<ChoicesCommentsView.Adapter.ChoiceCommentData>>()
-    private val saveList = ArrayList<Choice>()
     val isSelectedLiveData = MutableLiveData<Boolean>()
+    val canSubmit = MediatorLiveData<Boolean>().also { result ->
+        result.addSource(contentInput) { result.value = submitValidation()}
+    }
     private val isSelected: Boolean
         get() = choices.any { it.userIds.contains(myUser.userId) }
     private var choices = listOf<Choice>()
@@ -31,6 +32,11 @@ class PostDetailViewModel: ViewModel() {
             field = value
             updateItems()
         }
+
+    private fun submitValidation(): Boolean {
+        val messageValue = contentInput.value
+        return !messageValue.isNullOrBlank()
+    }
 
     private fun updateItems() {
         val list = mutableListOf<ChoicesCommentsView.Adapter.ChoiceCommentData>()
@@ -65,8 +71,8 @@ class PostDetailViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "COMMENT_FAILED", Toast.LENGTH_SHORT).show()
                 }
         val newCommentsList = ArrayList<Comment>().apply {
-            this.add(newComment)
             this.addAll(comments)
+            this.add(newComment)
         }
         comments = newCommentsList
     }
