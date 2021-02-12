@@ -67,4 +67,6 @@
     <string name="time1">yyyy/M/d kk:mm</string>
     <string name="time2">M/d kk:mm</string>
     <string name="updatedTime">更新日時 yyyy/M/d kk:mm</string>
+    <string name="follower">followers</string>
+    <string name="followNow">follow</string>
 </resources>

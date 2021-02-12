@@ -11,7 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
 import com.kaz_furniture.mahjongChat.databinding.ListBlankBinding
@@ -97,6 +99,7 @@ class ChoicesCommentsView: RecyclerView {
             holder.binding.userId = data.userId
             holder.binding.content = data.content
             holder.binding.userName = MahjongChatApplication.allUserList.filter { it.userId == data.userId }[0].name
+            holder.binding.commentTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.createdAt)
         }
 
         private fun onBindViewHolder(holder: ChoiceViewHolder, position: Int) {

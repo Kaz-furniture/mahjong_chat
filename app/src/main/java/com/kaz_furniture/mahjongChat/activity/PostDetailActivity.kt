@@ -15,13 +15,14 @@ import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
 class PostDetailActivity: BaseActivity() {
     lateinit var binding: ActivityPostDetailBinding
     private val viewModel: PostDetailViewModel by viewModels()
+    lateinit var post: Post
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail)
         binding.lifecycleOwner = this
         val postGet = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
-        val post = postGet.also {
+        post = postGet.also {
             viewModel.getChoices(it.postId)
             viewModel.getComments(it.postId)
         }
@@ -36,6 +37,12 @@ class PostDetailActivity: BaseActivity() {
             binding.choiceCommentView.scrollToPosition(binding.choiceCommentView.customAdapter.itemCount - 1)
             binding.commentEditText.editableText.clear()
         }
+        binding.userIcon.setOnClickListener {
+            launchProfileActivity()
+        }
+        binding.userName.setOnClickListener {
+            launchProfileActivity()
+        }
         viewModel.items.observe(this, Observer {
             binding.choiceCommentView.customAdapter.refresh(it)
         })
@@ -44,8 +51,14 @@ class PostDetailActivity: BaseActivity() {
         })
     }
 
+    private fun launchProfileActivity() {
+        val intent = ProfileActivity.newIntent(this, post.userId)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE)
+    }
+
     companion object {
         private const val KEY = "KEY_POST"
+        private const val REQUEST_CODE_PROFILE = 5000
         fun newIntent(context: Context, post: Post): Intent {
             return Intent(context, PostDetailActivity::class.java).apply {
                 putExtra(KEY, post)

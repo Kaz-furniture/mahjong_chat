@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Post
@@ -33,6 +34,8 @@ class ProfileActivity: BaseActivity() {
         binding.userButton.setOnClickListener {
             buttonClick()
         }
+        binding.followingNumber.text = myUser.followingUserIds.size.toString()
+        binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(myUser.userId) }.size.toString()
         viewModel.getUserInfo(userId)
         viewModel.getPostList(userId)
         viewModel.item.observe(this, Observer {
