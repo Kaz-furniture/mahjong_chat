@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,6 +66,17 @@ class DMRoomView: RecyclerView {
                 viewModel.selectedDMRoom.postValue(data)
             }
             holder.binding.updatedTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.updatedTime), data.updatedAt)
+            holder.binding.more.setOnClickListener {
+                PopupMenu(it.context, it).also { popupMenu ->
+                    popupMenu.menuInflater.inflate(R.menu.menu_dm_room, popupMenu.menu)
+                    popupMenu.setOnMenuItemClickListener { menuItem ->
+                        when(menuItem.itemId) {
+                            R.id.delete -> viewModel.deleteRoom(data)
+                        }
+                        return@setOnMenuItemClickListener true
+                    }
+                }.show()
+            }
         }
 
         class ItemViewHolder(val binding: ListDmRoomBinding): RecyclerView.ViewHolder(binding.root)

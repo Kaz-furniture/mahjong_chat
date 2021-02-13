@@ -69,4 +69,8 @@
     <string name="updatedTime">更新日時 yyyy/M/d kk:mm</string>
     <string name="follower">followers</string>
     <string name="followNow">follow</string>
+    <string name="delete">削除</string>
+    <string name="edit">編集</string>
+    <string name="starNumber">★ ×</string>
+    <string name="favorite">お気に入り</string>
 </resources>

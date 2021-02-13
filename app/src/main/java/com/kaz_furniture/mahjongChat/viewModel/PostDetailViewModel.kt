@@ -6,17 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
+import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.view.ChoicesCommentsView
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PostDetailViewModel: ViewModel() {
     val contentInput = MutableLiveData<String>()
     val items = MutableLiveData<List<ChoicesCommentsView.Adapter.ChoiceCommentData>>()
     val isSelectedLiveData = MutableLiveData<Boolean>()
+    val updatedPost = MutableLiveData<Post>()
+    val starNumber = MutableLiveData<String>()
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(contentInput) { result.value = submitValidation()}
     }
@@ -36,6 +43,33 @@ class PostDetailViewModel: ViewModel() {
     private fun submitValidation(): Boolean {
         val messageValue = contentInput.value
         return !messageValue.isNullOrBlank()
+    }
+
+    fun starClick(post: Post) {
+        val newUsers = ArrayList<String>().apply {
+            this.addAll(post.favoriteUserIds)
+        }
+        if (post.favoriteUserIds.contains(myUser.userId)) {
+            newUsers.remove(myUser.userId)
+        } else {
+            newUsers.add(myUser.userId)
+        }
+        val newPost = post.apply {
+            this.favoriteUserIds = newUsers
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("posts")
+                .document(newPost.postId)
+                .set(newPost)
+                .addOnCompleteListener {
+                    Toast.makeText(applicationContext, "STAR!", Toast.LENGTH_SHORT).show()
+                }
+        allPostList.apply {
+            this.remove(post)
+            this.add(newPost)
+        }
+        starNumber.postValue(newPost.favoriteUserIds.size.toString())
     }
 
     private fun updateItems() {
@@ -77,6 +111,19 @@ class PostDetailViewModel: ViewModel() {
         comments = newCommentsList
     }
 
+    fun getPost(postId: String) {
+        FirebaseFirestore.getInstance()
+                .collection("posts")
+                .document(postId)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val newPost = it.result?.toObject(Post::class.java)
+                        updatedPost.postValue(newPost)
+                    }
+                }
+    }
+
     fun getComments(postId: String) {
         FirebaseFirestore.getInstance()
                 .collection("comment")
@@ -109,21 +156,6 @@ class PostDetailViewModel: ViewModel() {
                     }
                 }
     }
-
-//    private fun choicesCheck(list: List<Choice>) {
-//        for (value in list) {
-//            if (value.userIds.contains(myUser.userId)) {
-//                val sendList = listOf<Choice>(value)
-//                isSelected = true
-//                choicesList.postValue(sendList)
-//                Timber.d("choicesCheck")
-//                return
-//            }
-//        }
-//        Timber.d("choicesCheckOK = ${list.size}")
-//        isSelected = false
-//        choicesList.postValue(list)
-//    }
 
     fun choiceSelect(choice: Choice) {
 

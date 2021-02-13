@@ -35,7 +35,7 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         val bindingData: FragmentSecondBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
         val filteredList = ArrayList<Post>().apply {
-            this.addAll(allPostList.filter { myUser.followingUserIds.contains(it.userId) })
+            this.addAll(allPostList.filter { myUser.followingUserIds.contains(it.userId) || it.userId == myUser.userId })
         }
         adapter = PostListAdapter(layoutInflater, filteredList, this)
         layoutManager = LinearLayoutManager(

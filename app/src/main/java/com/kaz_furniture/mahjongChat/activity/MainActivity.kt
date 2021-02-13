@@ -80,9 +80,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    private fun launchPostActivity() {
-        val intent = PostActivity.newIntent(this)
-        startActivityForResult(intent, REQUEST_CODE_POST)
+    private fun launchFavoritePostsActivity() {
+
     }
 
     private fun launchProfileEditActivity() {
@@ -113,6 +112,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 finishAffinity()
                 LoginActivity.start(this)
                 Toast.makeText(this, "ログアウトしました", Toast.LENGTH_LONG).show()
+            }
+
+            R.id.menu_favorite -> {
+                launchFavoritePostsActivity()
             }
 
             R.id.menu_profile_edit -> {

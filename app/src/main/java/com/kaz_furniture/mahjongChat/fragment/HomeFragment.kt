@@ -1,6 +1,7 @@
 package com.kaz_furniture.mahjongChat.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -72,6 +73,13 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         val intent = ProfileActivity.newIntent(requireContext(), id)
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == REQUEST_CODE_DETAIL) {
+//            adapter.notifyDataSetChanged()
+//        }
+//    }
 
 
     companion object {

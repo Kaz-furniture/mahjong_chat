@@ -12,6 +12,8 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.data.Post
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel: ViewModel() {
     val updateData = MutableLiveData<Boolean>()
@@ -31,8 +33,12 @@ class MainViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "ROOM_FAILED", Toast.LENGTH_SHORT).show()
                 }
                 .addOnCompleteListener {
-                    getDMRooms()
                     Toast.makeText(applicationContext, "ROOM_CREATED", Toast.LENGTH_SHORT).show()
+                    val newRoomList = ArrayList<DMRoom>().apply {
+                        this.add(newRoom)
+                        this.addAll(dMRoomList.value ?: listOf())
+                    }
+                    dMRoomList.postValue(newRoomList)
                 }
     }
 
@@ -66,13 +72,31 @@ class MainViewModel: ViewModel() {
                             return@addOnCompleteListener
                         }
                         val myDMList = ArrayList<DMRoom>()
-                        myDMList.addAll(result.filter { it.userIds.contains(myUser.userId) })
+                        myDMList.addAll(result.filter { it.userIds.contains(myUser.userId) && it.deletedAt == null})
                         dMRoomList.postValue(myDMList)
                         Toast.makeText(applicationContext, "DM_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "DM_FAILED", Toast.LENGTH_SHORT).show()
+                }
+    }
+
+    fun deleteRoom(room: DMRoom) {
+        val newRoom = room.apply {
+            this.deletedAt = Date()
+        }
+        FirebaseFirestore.getInstance()
+                .collection("DMRoom")
+                .document(newRoom.roomId)
+                .set(newRoom)
+                .addOnCompleteListener {
+                    Toast.makeText(applicationContext, "DELETE_SUCCESS", Toast.LENGTH_SHORT).show()
+                    val newRoomList = ArrayList<DMRoom>().apply {
+                        this.addAll(dMRoomList.value ?: listOf())
+                        this.remove(room)
+                    }
+                    dMRoomList.postValue(newRoomList)
                 }
     }
 }
