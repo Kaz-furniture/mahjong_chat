@@ -29,7 +29,7 @@ class PostDetailViewModel: ViewModel() {
     }
     private val isSelected: Boolean
         get() = choices.any { it.userIds.contains(myUser.userId) }
-    private var choices = listOf<Choice>()
+    var choices = listOf<Choice>()
         set(value) {
             field = value
             updateItems()
@@ -64,12 +64,14 @@ class PostDetailViewModel: ViewModel() {
                 .set(newPost)
                 .addOnCompleteListener {
                     Toast.makeText(applicationContext, "STAR!", Toast.LENGTH_SHORT).show()
+                    allPostList.apply {
+                        this.remove(post)
+                        this.add(newPost)
+                        this.sortBy { value -> value.createdAt }
+                    }
+                    starNumber.postValue(newPost.favoriteUserIds.size.toString())
                 }
-        allPostList.apply {
-            this.remove(post)
-            this.add(newPost)
-        }
-        starNumber.postValue(newPost.favoriteUserIds.size.toString())
+
     }
 
     private fun updateItems() {
@@ -183,5 +185,25 @@ class PostDetailViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
                 }
 
+    }
+
+    fun deletePost(post: Post) {
+        val newPost = post.apply {
+            deletedAt = Date()
+        }
+        FirebaseFirestore.getInstance()
+                .collection("posts")
+                .document(newPost.postId)
+                .set(newPost)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(applicationContext, "DELETE_SUCCESS", Toast.LENGTH_SHORT).show()
+                        allPostList.apply {
+                            this.remove(post)
+                            this.add(newPost)
+                            this.sortBy { value -> value.createdAt }
+                        }
+                    }
+                }
     }
 }

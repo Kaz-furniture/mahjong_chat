@@ -17,7 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.kaz_furniture.mahjongChat.view.TilesView
+        <com.kaz_furniture.mahjongChat.view.TilesViewInPostEdit
             android:id="@+id/tilesView"
             android:layout_width="0dp"
             android:layout_height="0dp"

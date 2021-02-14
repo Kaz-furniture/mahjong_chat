@@ -2,9 +2,10 @@ package com.kaz_furniture.mahjongChat.data
 
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
+import java.io.Serializable
 
 @IgnoreExtraProperties
-class Choice {
+class Choice: Serializable {
     var choiceId: String = "${System.currentTimeMillis()}"
     var postId: String = ""
     var number: Int = 0

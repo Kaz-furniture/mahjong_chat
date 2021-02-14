@@ -4,17 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostDetailBinding
+import com.kaz_furniture.mahjongChat.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
 
 class PostDetailActivity: BaseActivity() {
@@ -26,7 +30,11 @@ class PostDetailActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail)
         binding.lifecycleOwner = this
-        val postGet = (intent.getSerializableExtra(KEY) as? Post) ?:Post()
+        val postGet = (intent.getSerializableExtra(KEY) as? Post) ?: kotlin.run {
+            finish()
+            Toast.makeText(this, "情報取得できませんでした", Toast.LENGTH_SHORT).show()
+            return@run Post()
+        }
         post = postGet.also {
             viewModel.getChoices(it.postId)
             viewModel.getComments(it.postId)
@@ -51,15 +59,7 @@ class PostDetailActivity: BaseActivity() {
             launchProfileActivity()
         }
         binding.more.setOnClickListener {
-            PopupMenu(this, it).also { popupMenu ->
-                popupMenu.menuInflater.inflate(R.menu.menu_post_detail_more, popupMenu.menu)
-                popupMenu.setOnMenuItemClickListener { menuItem ->
-                    when(menuItem.itemId) {
-                        R.id.postEdit -> launchPostEditActivity()
-                    }
-                    return@setOnMenuItemClickListener true
-                }
-            }.show()
+            showPopup(it)
         }
         binding.starNumberNumber.text = post.favoriteUserIds.size.toString()
         binding.starNumber = viewModel.starNumber.value
@@ -89,6 +89,37 @@ class PostDetailActivity: BaseActivity() {
         })
     }
 
+    private fun showPopup(view: View) {
+        PopupMenu(this, view).also { popupMenu ->
+            popupMenu.menuInflater.inflate(R.menu.menu_post_detail_more, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId) {
+                    R.id.postEdit -> launchPostEditActivity()
+                    R.id.postDelete -> showDeleteDialog()
+                }
+                return@setOnMenuItemClickListener true
+            }
+        }.show()
+    }
+
+    private fun showDeleteDialog() {
+        MaterialDialog(this).show {
+            title = getString(R.string.deleteConfirm)
+            val binding = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(this@PostDetailActivity), null, false)
+            binding.apply {
+                yesButton.setOnClickListener {
+                    dismiss()
+                    viewModel.deletePost(post)
+                    finish()
+                }
+                cancelButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            setContentView(binding.root)
+        }
+    }
+
     private fun myUserCheck(post: Post) {
         when {
             post.userId == myUser.userId -> binding.more.visibility = View.VISIBLE
@@ -104,7 +135,8 @@ class PostDetailActivity: BaseActivity() {
     }
 
     private fun launchPostEditActivity() {
-        Toast.makeText(this, "ACTIVITY", Toast.LENGTH_SHORT).show()
+        val intent = PostEditActivity.newIntent(this, post, viewModel.choices as ArrayList<Choice>)
+        startActivityForResult(intent, REQUEST_CODE_POST_EDIT)
     }
 
     private fun launchProfileActivity() {
@@ -115,6 +147,7 @@ class PostDetailActivity: BaseActivity() {
     companion object {
         private const val KEY = "KEY_POST"
         private const val REQUEST_CODE_PROFILE = 5000
+        private const val REQUEST_CODE_POST_EDIT = 5500
         fun newIntent(context: Context, post: Post): Intent {
             return Intent(context, PostDetailActivity::class.java).apply {
                 putExtra(KEY, post)

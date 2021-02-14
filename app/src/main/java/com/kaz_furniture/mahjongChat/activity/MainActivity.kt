@@ -39,11 +39,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.lifecycleOwner = this
         setSupportActionBar(binding.toolBar)
 
-//        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
-//        binding.drawerLayout.addDrawerListener(toggle)
-//        toggle.syncState()
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -51,19 +46,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_second, R.id.navigation_third, R.id.navigation_fourth), binding.drawerLayout)
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
-//        binding.fab.setOnClickListener{
-//            launchPostActivity()
-//        }
         binding.navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onResume() {
         super.onResume()
         binding.navView.getHeaderView(0)?.also { headerView ->
-            headerView.findViewById<TextView>(R.id.headerUserName)?.also {
-                it.text = myUser.name
-                it.setOnClickListener {
-                    val intent = ProfileActivity.newIntent(this, myUser.userId)
+            headerView.findViewById<TextView>(R.id.headerUserName)?.apply {
+                text = myUser.name
+                setOnClickListener {
+                    val intent = ProfileActivity.newIntent(this@MainActivity, myUser.userId)
                     startActivityForResult(intent, REQUEST_CODE_PROFILE)
                 }
             }
@@ -81,7 +73,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun launchFavoritePostsActivity() {
-
+        val intent = FavoritePostsActivity.newIntent(this)
+        startActivityForResult(intent, REQUEST_CODE_FAVORITE_POSTS)
     }
 
     private fun launchProfileEditActivity() {
@@ -91,10 +84,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_POST) {
-            viewModel.updateData.postValue(true)
-        }
         if (requestCode == REQUEST_CODE_PROFILE_EDIT) {
+            Toast.makeText(this, "UPDATE!!!!", Toast.LENGTH_SHORT).show()
             viewModel.updateData.postValue(true)
         }
     }
@@ -115,6 +106,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
             R.id.menu_favorite -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
                 launchFavoritePostsActivity()
             }
 
@@ -147,6 +139,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         private const val REQUEST_CODE_POST = 1000
         private const val REQUEST_CODE_PROFILE_EDIT = 1001
+        private const val REQUEST_CODE_DETAIL = 1002
         private const val REQUEST_CODE_PROFILE = 1003
+        private const val REQUEST_CODE_FAVORITE_POSTS = 1004
     }
 }

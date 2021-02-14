@@ -129,13 +129,13 @@ class PostViewModel: ViewModel() {
         Timber.d("imageId = ${list[0].tileType.imageId}")
     }
 
-    var choiceData = ChoiceData()
-    class ChoiceData: BaseObservable() {
-        @Bindable
-        var choiceName = "選択してください"
-            set(value) {
-                field = value
-                notifyPropertyChanged(BR.choiceName)
-            }
-    }
+//    var choiceData = ChoiceData()
+//    class ChoiceData: BaseObservable() {
+//        @Bindable
+//        var choiceName = "選択してください"
+//            set(value) {
+//                field = value
+//                notifyPropertyChanged(BR.choiceName)
+//            }
+//    }
 }

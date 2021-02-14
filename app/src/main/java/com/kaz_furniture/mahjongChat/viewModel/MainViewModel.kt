@@ -20,6 +20,7 @@ class MainViewModel: ViewModel() {
     val dMRoomList = MutableLiveData<List<DMRoom>>()
     val selectedDMRoom = MutableLiveData<DMRoom>()
     val userSelected = MutableLiveData<String>()
+    val updatedList = MutableLiveData<List<Post>>()
 
     fun createDMRoom(userId: String) {
         val newRoom = DMRoom().apply {
@@ -54,6 +55,7 @@ class MainViewModel: ViewModel() {
                         val fetchedList = it.result?.toObjects(Post::class.java) ?: listOf()
                         allPostList.clear()
                         allPostList.addAll(fetchedList)
+                        updatedList.postValue(fetchedList.filter { value -> value.deletedAt == null })
                     } else {
                         Toast.makeText(MahjongChatApplication.applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }

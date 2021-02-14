@@ -1,5 +1,6 @@
 package com.kaz_furniture.mahjongChat.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -34,10 +35,7 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentSecondBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        val filteredList = ArrayList<Post>().apply {
-            this.addAll(allPostList.filter { myUser.followingUserIds.contains(it.userId) || it.userId == myUser.userId })
-        }
-        adapter = PostListAdapter(layoutInflater, filteredList, this)
+        adapter = PostListAdapter(layoutInflater, allPostList.filter { it.deletedAt == null } as ArrayList<Post>, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -60,6 +58,9 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
             viewModel.loadPostList()
         })
+        viewModel.updatedList.observe(viewLifecycleOwner, Observer {
+            adapter.refresh(it)
+        })
     }
 
     private fun launchPostActivity() {
@@ -77,6 +78,21 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_POST) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode == REQUEST_CODE_PROFILE) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode == REQUEST_CODE_DETAIL) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     companion object {
         private const val REQUEST_CODE_POST = 1000

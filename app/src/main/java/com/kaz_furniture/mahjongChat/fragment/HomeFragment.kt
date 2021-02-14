@@ -35,7 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentHomeBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        adapter = PostListAdapter(layoutInflater, allPostList, this)
+        adapter = PostListAdapter(layoutInflater, allPostList.filter { it.deletedAt == null } as ArrayList<Post>, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -57,6 +57,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         viewModel.updateData.observe(viewLifecycleOwner, Observer {
             viewModel.loadPostList()
         })
+        viewModel.updatedList.observe(viewLifecycleOwner, Observer {
+            adapter.refresh(it)
+        })
     }
 
     private fun launchPostActivity() {
@@ -74,12 +77,21 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQUEST_CODE_DETAIL) {
-//            adapter.notifyDataSetChanged()
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_POST) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode == REQUEST_CODE_PROFILE) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode == REQUEST_CODE_DETAIL) {
+            viewModel.updateData.postValue(true)
+            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     companion object {

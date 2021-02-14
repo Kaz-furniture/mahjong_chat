@@ -26,7 +26,7 @@ class LoginActivity: BaseActivity() {
         binding.passwordForget.setOnClickListener {
             PasswordForgetActivity.start(this)
         }
-        binding.email= viewModel.email
+        binding.email = viewModel.email
         binding.password = viewModel.password
         binding.login.setOnClickListener {
             viewModel.login(this,this@LoginActivity)

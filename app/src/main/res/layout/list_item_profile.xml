@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:paddingBottom="4dp"
         tools:context=".activity.MainActivity">
 
         <ImageView
@@ -84,7 +85,7 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="#888888"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/explanation"/>
 

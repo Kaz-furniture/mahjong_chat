@@ -1,5 +1,6 @@
 package com.kaz_furniture.mahjongChat.adapter
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -24,6 +25,14 @@ class PostListAdapter (
         interface Callback {
                 fun openDetail(post: Post)
                 fun openProfile(id: String?)
+        }
+
+        fun refresh(list: List<Post>) {
+                postList.apply {
+                        this.clear()
+                        this.addAll(list)
+                }
+                notifyDataSetChanged()
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
