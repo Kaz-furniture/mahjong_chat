@@ -161,29 +161,92 @@ class PostDetailViewModel: ViewModel() {
 
     fun choiceSelect(choice: Choice) {
 
-        val newChoice = choice.apply {
-            if (isSelected) {
-                this.userIds.remove(myUser.userId)
-            } else {
+        if (!isSelected) {
+            val newChoice = choice.apply {
                 this.userIds.add(myUser.userId)
             }
-        }
 
-        FirebaseFirestore.getInstance()
-                .collection("choices")
-                .document(choice.choiceId)
-                .set(newChoice)
-                .addOnCompleteListener {
-                    choices = choices.map {
-                        if (choice.choiceId == it.choiceId) {
-                            newChoice
-                        } else it
+            FirebaseFirestore.getInstance()
+                    .collection("choices")
+                    .document(choice.choiceId)
+                    .set(newChoice)
+                    .addOnCompleteListener {
+                        choices = choices.map {
+                            if (choice.choiceId == it.choiceId) {
+                                newChoice
+                            } else it
+                        }
+                        Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                     }
-                    Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
+                    .addOnFailureListener {
+                        Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+                    }
+        } else {
+            if (choices.firstOrNull { it.userIds.contains(myUser.userId) }?.choiceId == choice.choiceId) {
+                val newChoice = choice.apply {
+                    this.userIds.remove(myUser.userId)
                 }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+
+                FirebaseFirestore.getInstance()
+                        .collection("choices")
+                        .document(choice.choiceId)
+                        .set(newChoice)
+                        .addOnCompleteListener {
+                            choices = choices.map {
+                                if (choice.choiceId == it.choiceId) {
+                                    newChoice
+                                } else it
+                            }
+                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+                        }
+            } else {
+
+                val oldChoice = choices.firstOrNull { it.userIds.contains(myUser.userId) } ?:return
+                oldChoice.apply {
+                    this.userIds.remove(myUser.userId)
                 }
+
+                FirebaseFirestore.getInstance()
+                        .collection("choices")
+                        .document(oldChoice.choiceId)
+                        .set(oldChoice)
+                        .addOnCompleteListener {
+                            choices = choices.map {
+                                if (oldChoice.choiceId == it.choiceId) {
+                                    oldChoice
+                                } else it
+                            }
+                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+                        }
+
+
+
+                val newChoice = choice.apply {
+                    this.userIds.add(myUser.userId)
+                }
+                FirebaseFirestore.getInstance()
+                        .collection("choices")
+                        .document(choice.choiceId)
+                        .set(newChoice)
+                        .addOnCompleteListener {
+                            choices = choices.map {
+                                if (choice.choiceId == it.choiceId) {
+                                    newChoice
+                                } else it
+                            }
+                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
+                        }
+            }
+        }
 
     }
 

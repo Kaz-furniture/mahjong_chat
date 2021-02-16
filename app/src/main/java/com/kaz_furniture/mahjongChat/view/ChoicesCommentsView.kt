@@ -18,6 +18,7 @@ import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
 import com.kaz_furniture.mahjongChat.databinding.ListBlankBinding
 import com.kaz_furniture.mahjongChat.databinding.ListChoicePostDetailBinding
+import com.kaz_furniture.mahjongChat.databinding.ListChoiceSelectedBinding
 import com.kaz_furniture.mahjongChat.databinding.ListCommentBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
 
@@ -70,13 +71,11 @@ class ChoicesCommentsView: RecyclerView {
         override fun getItemCount(): Int = items.size
 
         override fun getItemViewType(position: Int): Int {
-            return if (items[position].comment != null)
-                VIEW_TYPE_COMMENT
-            else if (isSelected) {
-                if (items[position].choice?.userIds?.contains(myUser.userId) == true)
-                    VIEW_TYPE_CHOICE
-                else VIEW_TYPE_BLANK
-            } else VIEW_TYPE_CHOICE
+            return when {
+                items[position].comment != null -> VIEW_TYPE_COMMENT
+                items[position].choice?.userIds?.contains(myUser.userId) == true -> VIEW_TYPE_SELECTED
+                else -> VIEW_TYPE_CHOICE
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -84,13 +83,24 @@ class ChoicesCommentsView: RecyclerView {
                 when (viewType) {
                     VIEW_TYPE_CHOICE -> ChoiceViewHolder(ListChoicePostDetailBinding.inflate(LayoutInflater.from(context), parent, false))
                     VIEW_TYPE_COMMENT -> CommentViewHolder(ListCommentBinding.inflate(LayoutInflater.from(context), parent, false))
-                    else -> BlankViewHolder(ListBlankBinding.inflate(LayoutInflater.from(context), parent, false))
+                    else -> SelectedViewHolder(ListChoiceSelectedBinding.inflate(LayoutInflater.from(context), parent, false))
                 }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when (holder) {
                 is ChoiceViewHolder -> onBindViewHolder(holder, position)
                 is CommentViewHolder -> onBindViewHolder(holder, position)
+                is SelectedViewHolder -> onBindViewHolder(holder, position)
+            }
+        }
+
+        private fun onBindViewHolder(holder: SelectedViewHolder, position: Int) {
+            val data = items[position].choice ?:return
+            holder.binding.apply {
+                choice = data
+                childView.setOnClickListener {
+                    viewModel.choiceSelect(data)
+                }
             }
         }
 
@@ -119,12 +129,12 @@ class ChoicesCommentsView: RecyclerView {
 
         class ChoiceViewHolder(val binding: ListChoicePostDetailBinding): RecyclerView.ViewHolder(binding.root)
         class CommentViewHolder(val binding: ListCommentBinding): RecyclerView.ViewHolder(binding.root)
-        class BlankViewHolder(val binding: ListBlankBinding): RecyclerView.ViewHolder(binding.root)
+        class SelectedViewHolder(val binding: ListChoiceSelectedBinding): RecyclerView.ViewHolder(binding.root)
 
         companion object {
             private const val VIEW_TYPE_CHOICE = 0
             private const val VIEW_TYPE_COMMENT = 1
-            private const val VIEW_TYPE_BLANK = 2
+            private const val VIEW_TYPE_SELECTED = 2
         }
     }
 }
