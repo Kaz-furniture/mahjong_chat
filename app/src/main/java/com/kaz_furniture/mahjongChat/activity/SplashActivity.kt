@@ -6,9 +6,13 @@ import android.os.Looper
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivitySplashBinding
 import com.kaz_furniture.mahjongChat.viewModel.SplashViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SplashActivity: BaseActivity() {
 
@@ -52,6 +56,10 @@ class SplashActivity: BaseActivity() {
         viewModel.allOK.observe(this, Observer {
             MainActivity.start(this)
         })
+        Glide.get(applicationContext).clearMemory()
+        CoroutineScope(Dispatchers.IO).launch {
+            Glide.get(applicationContext).clearDiskCache()
+        }
     }
 
     private fun timeCount() {

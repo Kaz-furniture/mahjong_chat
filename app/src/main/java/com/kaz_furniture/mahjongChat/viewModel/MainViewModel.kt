@@ -44,8 +44,6 @@ class MainViewModel: ViewModel() {
     }
 
     fun loadPostList() {
-
-        allPostList.map { it.userId == myUser.userId }
         FirebaseFirestore.getInstance()
                 .collection("posts")
                 .orderBy("createdAt", Query.Direction.DESCENDING)

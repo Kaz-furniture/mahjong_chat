@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,7 +22,6 @@ import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostEditBinding
-import com.kaz_furniture.mahjongChat.databinding.DialogSelectTileBinding
 import com.kaz_furniture.mahjongChat.databinding.DialogSelectTilePostEditBinding
 import com.kaz_furniture.mahjongChat.databinding.ListChoiceBinding
 import com.kaz_furniture.mahjongChat.viewModel.PostEditViewModel
@@ -51,6 +51,7 @@ class PostEditActivity: BaseActivity() {
         val choicesGet = mutableListOf<Choice>().apply {
             addAll(intent.getSerializableExtra(KEY2) as? ArrayList<Choice> ?: listOf())
             viewModel.selectedChoices.postValue(this)
+            viewModel.savedChoices = this
         }
         viewModel.selectedChoices.postValue(choicesGet)
         binding.selectImageButton.setOnClickListener {
@@ -60,12 +61,10 @@ class PostEditActivity: BaseActivity() {
             showTileSelectDialog()
         }
         binding.postButton.setOnClickListener {
+            viewModel.choicesUpdate(post.postId)
             viewModel.postUpdate(post)
-            val addList = ArrayList<Choice>().apply {
-                addAll(viewModel.selectedChoices.value ?: listOf())
-                removeAll(choicesGet)
-            }
-            viewModel.choicesUpdate(post.postId, addList)
+            newImageCheck()
+            finish()
         }
         binding.explanation = viewModel.explanationInput
         title = getString(R.string.edit)
@@ -73,6 +72,14 @@ class PostEditActivity: BaseActivity() {
         viewModel.selectedChoices.observe(this, Observer {
             addAllChoiceLayout(it)
         })
+    }
+
+    private fun newImageCheck() {
+        if (uCropSrcUri != null) {
+            val imageView = binding.postImageView
+            val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            viewModel.postImageUpload(post, bitmap)
+        } else return
     }
 
     private fun addAllChoiceLayout(list: List<Choice>) {

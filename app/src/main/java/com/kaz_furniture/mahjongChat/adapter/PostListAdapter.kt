@@ -10,16 +10,18 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.databinding.ListEmptyFavoritesBinding
 import com.kaz_furniture.mahjongChat.databinding.ListItemBinding
+import com.kaz_furniture.mahjongChat.view.PostsViewInFavorites
 
 class PostListAdapter (
         private val layoutInflater: LayoutInflater,
         private val postList: ArrayList<Post>,
         private val callback: Callback?
-): RecyclerView.Adapter<PostListAdapter.ViewHolder>() {
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun getItemCount(): Int {
-                return postList.size
+                return if (postList.isNotEmpty()) postList.size else 1
         }
 
         interface Callback {
@@ -35,48 +37,58 @@ class PostListAdapter (
                 notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                val binding = DataBindingUtil.inflate<ListItemBinding>(
-                        layoutInflater,
-                        R.layout.list_item,
-                        parent,
-                        false
-                )
-                return ViewHolder(binding, callback)
+        override fun getItemViewType(position: Int): Int {
+                return if (postList.isNotEmpty()) VIEW_TYPE_ITEM else VIEW_TYPE_EMPTY
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+                return when (viewType) {
+                        VIEW_TYPE_EMPTY -> EmptyViewHolder(ListEmptyFavoritesBinding.inflate(layoutInflater, parent, false))
+                        else -> ItemViewHolder(ListItemBinding.inflate(layoutInflater, parent, false), callback)
+                }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                when (holder) {
+                        is EmptyViewHolder -> onBindViewHolder(holder)
+                        is ItemViewHolder -> onBindViewHolder(holder, position)
+                }
+        }
+
+        private fun onBindViewHolder(holder: EmptyViewHolder) {
+                holder.binding.emptyText.text = applicationContext.getString(R.string.noFollower)
+        }
+
+        private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
                 holder.bind(postList[position])
         }
 
-class ViewHolder(
-        private val binding: ListItemBinding,
-        private val callback: Callback?
-): RecyclerView.ViewHolder(binding.root){
-        fun bind(post: Post) {
-                binding.postUserName.text = post.userName
-                binding.explanation.text = post.explanation
-                binding.postItemImage.setOnClickListener {
-                        callback?.openDetail(post)
+        class ItemViewHolder(
+                private val binding: ListItemBinding,
+                private val callback: Callback?
+        ): RecyclerView.ViewHolder(binding.root){
+                fun bind(post: Post) {
+                        binding.postUserName.text = post.userName
+                        binding.explanation.text = post.explanation
+                        binding.postItemImage.setOnClickListener {
+                                callback?.openDetail(post)
+                        }
+                        binding.userIconImage.setOnClickListener {
+                                callback?.openProfile(post.userId)
+                        }
+                        binding.postUserName.setOnClickListener {
+                                callback?.openProfile(post.userId)
+                        }
+                        binding.starNumberNumber.text = post.favoriteUserIds.size.toString()
+                        binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
+                        binding.post = post
+                        binding.userId = post.userId
                 }
-                binding.userIconImage.setOnClickListener {
-                        callback?.openProfile(post.userId)
-                }
-                binding.postUserName.setOnClickListener {
-                        callback?.openProfile(post.userId)
-                }
-                binding.starNumberNumber.text = post.favoriteUserIds.size.toString()
-                binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
-                val storageRef = FirebaseStorage.getInstance().reference
-                val postImageRef = storageRef.child("${post.userId}/${post.postId}.jpg")
-                Glide.with(applicationContext)
-                        .load(postImageRef)
-                        .into(binding.postItemImage)
-                val iconImageRef = storageRef.child("${post.userId}/profileImage.jpg")
-                Glide.with(applicationContext)
-                        .load(iconImageRef)
-                        .into(binding.userIconImage)
         }
-}
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
 
+        companion object {
+                private const val VIEW_TYPE_ITEM = 0
+                private const val VIEW_TYPE_EMPTY = 1
+        }
 }

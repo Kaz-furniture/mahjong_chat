@@ -35,7 +35,12 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentSecondBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?: return
-        adapter = PostListAdapter(layoutInflater, allPostList.filter { it.deletedAt == null } as ArrayList<Post>, this)
+        val displayList = ArrayList<Post>().apply {
+            addAll(allPostList.filter { it.deletedAt == null && myUser.followingUserIds.contains(it.userId) })
+            addAll(allPostList.filter { it.userId == myUser.userId })
+            sortByDescending { it.createdAt }
+        }
+        adapter = PostListAdapter(layoutInflater, displayList, this)
         layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -59,7 +64,12 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
             viewModel.loadPostList()
         })
         viewModel.updatedList.observe(viewLifecycleOwner, Observer {
-            adapter.refresh(it)
+            val list = ArrayList<Post>().apply {
+                addAll(it.filter { value ->  myUser.followingUserIds.contains(value.userId) })
+                addAll(it.filter { value -> value.userId == myUser.userId })
+                sortByDescending { value -> value.createdAt }
+            }
+            adapter.refresh(list)
         })
     }
 

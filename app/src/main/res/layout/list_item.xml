@@ -4,25 +4,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="post"
+            type="com.kaz_furniture.mahjongChat.data.Post" />
+
+        <variable
+            name="userId"
+            type="String" />
+
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="4dp"
     tools:context=".activity.MainActivity">
 
-    <com.makeramen.roundedimageview.RoundedImageView
+    <ImageView
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:id="@+id/userIconImage"
         android:layout_marginTop="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginBottom="1dp"
+        app:userIcon="@{userId}"
         tools:src="@drawable/ic_baseline_email_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/postItemImage"
         app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="centerCrop"
-        app:riv_corner_radius="20dp"/>
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/postUserName"
@@ -68,6 +79,7 @@
         android:layout_height="220dp"
         android:id="@+id/postItemImage"
         android:scaleType="fitCenter"
+        app:postImage="@{post}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createdTime"
         tools:src="@drawable/screenshot_20201213_235035"

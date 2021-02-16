@@ -13,10 +13,10 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.Comment
 import com.kaz_furniture.mahjongChat.data.DMRoom
-import com.kaz_furniture.mahjongChat.databinding.ListCommentBinding
-import com.kaz_furniture.mahjongChat.databinding.ListDmRoomBinding
+import com.kaz_furniture.mahjongChat.databinding.*
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
 
@@ -47,15 +47,29 @@ class DMRoomView: RecyclerView {
             notifyDataSetChanged()
         }
 
-        override fun getItemCount(): Int = items.size
+        override fun getItemCount(): Int =
+                if (items.isNotEmpty()) items.size else 1
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-//            ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.article_cell, null, false))
-                ItemViewHolder(ListDmRoomBinding.inflate(LayoutInflater.from(context), parent, false))
+        override fun getItemViewType(position: Int): Int {
+            return if (items.isNotEmpty()) VIEW_TYPE_ITEM else VIEW_TYPE_EMPTY
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return when (viewType) {
+                VIEW_TYPE_EMPTY -> EmptyViewHolder(ListEmptyFavoritesBinding.inflate(LayoutInflater.from(context), parent, false))
+                else -> ItemViewHolder(ListDmRoomBinding.inflate(LayoutInflater.from(context), parent, false))
+            }
+        }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            if (holder is ItemViewHolder)
-                onBindViewHolder(holder, position)
+            when(holder) {
+                is EmptyViewHolder -> onBindViewHolder(holder)
+                is ItemViewHolder -> onBindViewHolder(holder, position)
+            }
+        }
+
+        private fun onBindViewHolder(holder: EmptyViewHolder) {
+            holder.binding.emptyText.text = applicationContext.getString(R.string.noDMRoom)
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -80,5 +94,11 @@ class DMRoomView: RecyclerView {
         }
 
         class ItemViewHolder(val binding: ListDmRoomBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
+    }
+
+    companion object {
+        private const val VIEW_TYPE_EMPTY = 0
+        private const val VIEW_TYPE_ITEM = 1
     }
 }

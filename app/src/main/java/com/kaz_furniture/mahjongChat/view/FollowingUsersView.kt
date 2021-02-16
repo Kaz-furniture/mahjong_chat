@@ -8,12 +8,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.protobuf.Empty
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ListCommentBinding
+import com.kaz_furniture.mahjongChat.databinding.ListDmRoomBinding
+import com.kaz_furniture.mahjongChat.databinding.ListEmptyFavoritesBinding
 import com.kaz_furniture.mahjongChat.databinding.ListFollowingUsersBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
@@ -45,26 +50,45 @@ class FollowingUsersView: RecyclerView {
             notifyDataSetChanged()
         }
 
-        override fun getItemCount(): Int = items.size
+        override fun getItemCount(): Int = if (items.isNotEmpty()) items.size else 1
+
+        override fun getItemViewType(position: Int): Int {
+            return if (items.isNotEmpty()) VIEW_TYPE_ITEM else VIEW_TYPE_EMPTY
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-//            ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.article_cell, null, false))
-                ItemViewHolder(ListFollowingUsersBinding.inflate(LayoutInflater.from(context), parent, false))
+                when (viewType) {
+                    VIEW_TYPE_EMPTY -> EmptyViewHolder(ListEmptyFavoritesBinding.inflate(LayoutInflater.from(context), parent, false))
+                    else -> ItemViewHolder(ListFollowingUsersBinding.inflate(LayoutInflater.from(context), parent, false))
+                }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            if (holder is ItemViewHolder)
-                onBindViewHolder(holder, position)
+            when(holder) {
+                is EmptyViewHolder -> onBindViewHolder(holder)
+                is ItemViewHolder -> onBindViewHolder(holder, position)
+            }
+        }
+
+        private fun onBindViewHolder(holder: EmptyViewHolder) {
+            holder.binding.emptyText.text = applicationContext.getString(R.string.noFollowUser)
+            holder.binding.emptyText.textSize = 14F
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
             holder.binding.userId = data
             holder.binding.userName = allUserList.filter { it.userId == data }[0].name
-            holder.binding.userNameView.setOnClickListener {
+            holder.binding.roomView.setOnClickListener {
                 viewModel.userSelected.postValue(data)
             }
         }
 
         class ItemViewHolder(val binding: ListFollowingUsersBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
+    }
+
+    companion object {
+        private const val VIEW_TYPE_EMPTY = 0
+        private const val VIEW_TYPE_ITEM = 1
     }
 }

@@ -77,7 +77,10 @@
     <string name="yes">はい</string>
     <string name="deleteConfirm">本当に削除しますか？</string>
     <string name="noFavorites">お気に入りはありません</string>
-    <string name="postEditWarning">※画像は変更できません。</string>
+    <string name="imageWarning">※画像の反映のためにはアプリの再起動が必要です。</string>
     <string name="complete">編集完了</string>
     <string name="newExplanation">新しい説明を入力</string>
+    <string name="noFollower">NO POST</string>
+    <string name="noDMRoom">DMはありません</string>
+    <string name="noFollowUser">現在フォロー中のユーザはいません</string>
 </resources>

@@ -21,7 +21,7 @@ fun ImageView.setUserIcon(userId: String?) {
 
 @BindingAdapter("postImage")
 fun ImageView.setPostImage(post: Post) {
-    if (post.userId.isNullOrBlank() || post.postId.isBlank()) {
+    if (post.userId.isBlank() || post.postId.isBlank()) {
         setImageBitmap(null)
     } else {
         GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${post.userId}/${post.postId}.jpg")).into(this)

@@ -144,6 +144,16 @@ class PostDetailActivity: BaseActivity() {
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_POST_EDIT) {
+            viewModel.getChoices(post.postId)
+            viewModel.getComments(post.postId)
+            viewModel.getPost(post.postId)
+            myUserCheck(post)
+        }
+    }
+
     companion object {
         private const val KEY = "KEY_POST"
         private const val REQUEST_CODE_PROFILE = 5000
