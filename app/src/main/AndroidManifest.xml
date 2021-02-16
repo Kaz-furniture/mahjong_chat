@@ -39,6 +39,7 @@
         <activity android:name=".activity.CreateAccountActivity" />
         <activity android:name=".activity.FavoritePostsActivity" />
         <activity android:name=".activity.PostEditActivity" />
+        <activity android:name=".activity.FollowDisplayActivity" />
     </application>
 
 </manifest>

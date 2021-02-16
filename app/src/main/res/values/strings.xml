@@ -83,4 +83,7 @@
     <string name="noFollower">NO POST</string>
     <string name="noDMRoom">DMはありません</string>
     <string name="noFollowUser">現在フォロー中のユーザはいません</string>
+    <string name="noPost">投稿がありません</string>
+    <string name="followJapanese">フォロー</string>
+    <string name="followerJapanese">フォロワー</string>
 </resources>

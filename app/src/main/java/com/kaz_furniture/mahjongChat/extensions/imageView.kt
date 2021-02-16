@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.Tile
@@ -15,7 +16,7 @@ fun ImageView.setUserIcon(userId: String?) {
     userId?.also {
         GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${it}/profileImage.jpg")).circleCrop().into(this)
     } ?: run {
-        setImageBitmap(null)
+        GlideApp.with(this).load(R.drawable.dog).circleCrop().into(this)
     }
 }
 

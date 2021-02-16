@@ -3,23 +3,26 @@ package com.kaz_furniture.mahjongChat.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
-import com.kaz_furniture.mahjongChat.activity.PostDetailActivity
+import com.kaz_furniture.mahjongChat.activity.FollowDisplayActivity
 import com.kaz_furniture.mahjongChat.data.Post
-import com.kaz_furniture.mahjongChat.databinding.ListEmptyFavoritesBinding
-import com.kaz_furniture.mahjongChat.databinding.ListEmptyInProfileBinding
-import com.kaz_furniture.mahjongChat.databinding.ListItemBinding
-import com.kaz_furniture.mahjongChat.databinding.ListItemProfileBinding
-import com.kaz_furniture.mahjongChat.viewModel.PostDetailViewModel
+import com.kaz_furniture.mahjongChat.data.User
+import com.kaz_furniture.mahjongChat.databinding.*
+import com.kaz_furniture.mahjongChat.viewModel.FollowDisplayViewModel
 import com.kaz_furniture.mahjongChat.viewModel.ProfileViewModel
 
-class PostView: RecyclerView {
+class FollowUsersView: RecyclerView {
 
     constructor(ctx: Context) : super(ctx)
     constructor(ctx: Context, attrs: AttributeSet?) : super(ctx, attrs)
@@ -35,10 +38,16 @@ class PostView: RecyclerView {
 
     class Adapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        private val viewModel: ProfileViewModel by(context as ComponentActivity).viewModels()
-        private val items = mutableListOf<Post>()
+        private val viewModel: FollowDisplayViewModel by(context as ComponentActivity).viewModels()
+        private val items = mutableListOf<String>()
 
-        fun refresh(list: List<Post>) {
+        init {
+            viewModel.myUserUpdated.observe(context as ComponentActivity, Observer {
+                notifyDataSetChanged()
+            })
+        }
+
+        fun refresh(list: List<String>) {
             items.apply {
                 clear()
                 addAll(list)
@@ -54,8 +63,8 @@ class PostView: RecyclerView {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
                 when (viewType) {
-                    VIEW_TYPE_EMPTY -> EmptyViewHolder(ListEmptyInProfileBinding.inflate(LayoutInflater.from(context), parent, false))
-                    else -> ItemViewHolder(ListItemProfileBinding.inflate(LayoutInflater.from(context), parent, false))
+                    VIEW_TYPE_EMPTY -> EmptyViewHolder(ListEmptyFavoritesBinding.inflate(LayoutInflater.from(context), parent, false))
+                    else -> ItemViewHolder(ListFollowUserBinding.inflate(LayoutInflater.from(context), parent, false))
                 }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -67,22 +76,30 @@ class PostView: RecyclerView {
 
         private fun onBindViewHolder(holder: EmptyViewHolder) {
             holder.binding.emptyText.apply {
-                text = applicationContext.getString(R.string.noPost)
+                text = MahjongChatApplication.applicationContext.getString(R.string.noFollowUser)
                 textSize = 16F
             }
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.post = data
-            holder.binding.userId = data.userId
-            holder.binding.postItemImage.setOnClickListener {
-                viewModel.postSelected.postValue(data)
+            holder.binding.userId = data
+            holder.binding.userName = allUserList.firstOrNull { it.userId == data } ?.name ?:""
+            holder.binding.userButton.apply {
+                if (data == myUser.userId) {
+                    this.visibility = View.GONE
+                } else {
+                    this.text = if (myUser.followingUserIds.contains(data)) applicationContext.getString(R.string.following)
+                            else applicationContext.getString(R.string.follow)
+                }
+                this.setOnClickListener {
+                    viewModel.buttonClick(data)
+                }
             }
         }
 
-        class ItemViewHolder(val binding: ListItemProfileBinding): RecyclerView.ViewHolder(binding.root)
-        class EmptyViewHolder(val binding: ListEmptyInProfileBinding): RecyclerView.ViewHolder(binding.root)
+        class ItemViewHolder(val binding: ListFollowUserBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
     }
 
     companion object {

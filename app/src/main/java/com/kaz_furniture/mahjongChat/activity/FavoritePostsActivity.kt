@@ -50,6 +50,11 @@ class FavoritePostsActivity: BaseActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
     private fun launchPostDetailActivity(post: Post) {
         val intent = PostDetailActivity.newIntent(this, post)
         startActivityForResult(intent, REQUEST_CODE_DETAIL)

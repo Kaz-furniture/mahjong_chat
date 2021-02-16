@@ -55,8 +55,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             headerView.findViewById<TextView>(R.id.headerUserName)?.apply {
                 text = myUser.name
                 setOnClickListener {
-                    val intent = ProfileActivity.newIntent(this@MainActivity, myUser.userId)
-                    startActivityForResult(intent, REQUEST_CODE_PROFILE)
+                    launchProfileActivity()
                 }
             }
             val userIconImage = headerView.findViewById<ImageView>(R.id.headerUserIconImage)
@@ -66,10 +65,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .skipMemoryCache(true)
                     .into(userIconImage)
             headerView.findViewById<ImageView>(R.id.headerUserIconImage)?.setOnClickListener {
-                val intent = ProfileActivity.newIntent(this, myUser.userId)
-                startActivityForResult(intent, REQUEST_CODE_PROFILE)
+                launchProfileActivity()
             }
         }
+    }
+
+    private fun launchProfileActivity() {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        val intent = ProfileActivity.newIntent(this, myUser.userId)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
 
     private fun launchFavoritePostsActivity() {

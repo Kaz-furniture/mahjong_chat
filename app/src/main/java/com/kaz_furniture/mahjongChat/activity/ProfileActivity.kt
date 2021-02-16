@@ -34,10 +34,22 @@ class ProfileActivity: BaseActivity() {
         binding.userButton.setOnClickListener {
             buttonClick()
         }
-        binding.followingNumber.text = myUser.followingUserIds.size.toString()
-        binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(myUser.userId) }.size.toString()
+        binding.followingNumber.text = allUserList.firstOrNull { it.userId == userId }?.followingUserIds?.size?.toString() ?:""
+        binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(userId) }.size.toString()
         viewModel.getUserInfo(userId)
         viewModel.getPostList(userId)
+        binding.followerNumber.setOnClickListener {
+            launchFollowDisplayActivity(FOLLOWER)
+        }
+        binding.followerText.setOnClickListener {
+            launchFollowDisplayActivity(FOLLOWER)
+        }
+        binding.followingNumber.setOnClickListener {
+            launchFollowDisplayActivity(FOLLOW)
+        }
+        binding.followingText.setOnClickListener {
+            launchFollowDisplayActivity(FOLLOW)
+        }
         viewModel.item.observe(this, Observer {
             binding.postView.customAdapter.refresh(it)
             binding.swipeRefresh.isRefreshing = false
@@ -71,6 +83,11 @@ class ProfileActivity: BaseActivity() {
         }
     }
 
+    private fun launchFollowDisplayActivity(number: Int) {
+        val intent = FollowDisplayActivity.newIntent(this, number, userId)
+        startActivityForResult(intent, REQUEST_CODE_FOLLOW_DISPLAY)
+    }
+
     private fun launchProfileEditActivity() {
         val intent = ProfileEditActivity.newIntent(this)
         startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
@@ -90,7 +107,10 @@ class ProfileActivity: BaseActivity() {
     companion object {
         private const val REQUEST_CODE_DETAIL = 3001
         private const val REQUEST_CODE_PROFILE_EDIT = 1050
+        private const val REQUEST_CODE_FOLLOW_DISPLAY = 1060
         private const val KEY = "KEY_ID"
+        private const val FOLLOWER = 0
+        private const val FOLLOW = 1
         fun newIntent(context: Context, id: String?): Intent {
             return Intent(context, ProfileActivity::class.java).apply {
                 putExtra(KEY, id)
