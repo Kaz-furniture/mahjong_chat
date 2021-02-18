@@ -60,17 +60,10 @@ class PostView: RecyclerView {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when(holder) {
-                is EmptyViewHolder -> onBindViewHolder(holder)
                 is ItemViewHolder -> onBindViewHolder(holder, position)
             }
         }
 
-        private fun onBindViewHolder(holder: EmptyViewHolder) {
-            holder.binding.emptyText.apply {
-                text = applicationContext.getString(R.string.noPost)
-                textSize = 16F
-            }
-        }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
@@ -82,7 +75,14 @@ class PostView: RecyclerView {
         }
 
         class ItemViewHolder(val binding: ListItemProfileBinding): RecyclerView.ViewHolder(binding.root)
-        class EmptyViewHolder(val binding: ListEmptyInProfileBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyInProfileBinding): RecyclerView.ViewHolder(binding.root) {
+            init {
+                binding.emptyText.apply {
+                    setText(R.string.noPost)
+                    textSize = 16F
+                }
+            }
+        }
     }
 
     companion object {

@@ -3,10 +3,12 @@ package com.kaz_furniture.mahjongChat.viewModel
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,14 +27,34 @@ import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 class PostViewModel: ViewModel() {
-    val explanationInput = MutableLiveData<String>()
+    val explanationInput = MutableLiveData<String>().apply {
+        value = ""
+    }
     val selectedTile = MutableLiveData<Tile>()
-    val selectedOK = MutableLiveData<Boolean>()
-
+    private val imageOK = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+    val postFinished = MutableLiveData<Boolean>()
     var selectedChoices = MutableLiveData<List<Choice>>()
     var tempChoice = Choice()
+    val canSubmit = MediatorLiveData<Boolean>().also { result ->
+        result.addSource(explanationInput) { result.value = submitValidation()}
+        result.addSource(selectedChoices) { result.value = submitValidation()}
+        result.addSource(imageOK) { result.value = submitValidation()}
+    }
 
-    fun post(activity: PostActivity, binding: ActivityPostBinding) {
+    private fun submitValidation(): Boolean {
+        val imageOKValue = imageOK.value ?:return false
+        val choicesValue = selectedChoices.value ?:return false
+        val explanationValue = explanationInput.value ?:return false
+        return choicesValue.isNotEmpty() && explanationValue.isNotBlank() && imageOKValue
+    }
+
+    fun imageAdded() {
+        imageOK.postValue(true)
+    }
+
+    fun post(data: ByteArray) {
         val post = Post().apply {
             this.explanation = explanationInput.value
             this.userId = myUser.userId
@@ -49,7 +71,7 @@ class PostViewModel: ViewModel() {
                         .document(value.choiceId)
                         .set(value)
                         .addOnCompleteListener {
-                            Toast.makeText(applicationContext, "CHOICE_UPLOAD_$index", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "CHOICE_UPLOAD_${index + 1}", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
@@ -57,21 +79,15 @@ class PostViewModel: ViewModel() {
             }
         } else return
 
-        val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/${post.postId}.jpg")
-        val imageView = binding.postImageView
-        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-        val bAOS = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bAOS)
-        val data = bAOS.toByteArray()
-        ref.putBytes(data)
-            .addOnFailureListener{
-                Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-                bitmap.recycle()
-            }
-            .addOnSuccessListener {
-                        Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
-                bitmap.recycle()
-            }
+        FirebaseStorage.getInstance().reference.child("${myUser.userId}/${post.postId}.jpg")
+                .putBytes(data)
+                .addOnFailureListener{
+                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                }
+                .addOnSuccessListener {
+                    postFinished.postValue(true)
+                    Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
+                }
 
         FirebaseFirestore.getInstance()
             .collection("posts")
@@ -80,16 +96,10 @@ class PostViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext, "POST_SUCCESS", Toast.LENGTH_SHORT).show()
-                    activity.setResult(Activity.RESULT_OK)
-                    activity.finish()
                 } else {
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
-
-        FirebaseFirestore.getInstance()
-                .collection("choices")
-                .document()
     }
 
     fun selectTile(tile: Tile) {

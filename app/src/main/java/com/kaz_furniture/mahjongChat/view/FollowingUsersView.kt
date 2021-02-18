@@ -64,14 +64,8 @@ class FollowingUsersView: RecyclerView {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when(holder) {
-                is EmptyViewHolder -> onBindViewHolder(holder)
                 is ItemViewHolder -> onBindViewHolder(holder, position)
             }
-        }
-
-        private fun onBindViewHolder(holder: EmptyViewHolder) {
-            holder.binding.emptyText.text = applicationContext.getString(R.string.noFollowUser)
-            holder.binding.emptyText.textSize = 14F
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -84,7 +78,14 @@ class FollowingUsersView: RecyclerView {
         }
 
         class ItemViewHolder(val binding: ListFollowingUsersBinding): RecyclerView.ViewHolder(binding.root)
-        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root) {
+            init {
+                binding.emptyText.apply {
+                    setText(R.string.noFollowUser)
+                    textSize = 14F
+                }
+            }
+        }
     }
 
     companion object {

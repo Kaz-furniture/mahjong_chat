@@ -80,15 +80,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), PostListAdapter.Callback 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_POST) {
-            viewModel.updateData.postValue(true)
+            viewModel.loadPostList()
             Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
         if (requestCode == REQUEST_CODE_PROFILE) {
-            viewModel.updateData.postValue(true)
+            viewModel.loadPostList()
             Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
         if (requestCode == REQUEST_CODE_DETAIL) {
-            viewModel.updateData.postValue(true)
+            viewModel.loadPostList()
             Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
     }

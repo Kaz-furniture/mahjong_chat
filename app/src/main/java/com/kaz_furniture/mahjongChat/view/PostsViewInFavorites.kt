@@ -56,13 +56,8 @@ class PostsViewInFavorites: RecyclerView {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when(holder) {
-                is EmptyViewHolder -> onBindViewHolder(holder)
                 is ItemViewHolder -> onBindViewHolder(holder, position)
             }
-        }
-
-        private fun onBindViewHolder(holder: EmptyViewHolder) {
-
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

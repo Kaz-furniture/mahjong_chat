@@ -7,6 +7,9 @@
         <variable
             name="explanation"
             type="androidx.lifecycle.MutableLiveData&lt;String>" />
+        <variable
+            name="canSubmit"
+            type="Boolean" />
 
     </data>
 <androidx.core.widget.NestedScrollView
@@ -72,6 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/explanationInput"
             android:id="@+id/postButton"
             android:text="@string/postCreate"
+            android:enabled="@{canSubmit}"
             android:layout_marginTop="42dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

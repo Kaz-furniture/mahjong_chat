@@ -47,6 +47,7 @@ class PostEditActivity: BaseActivity() {
         post = postGet.also {
             binding.post = it
             binding.exExplanation.text = it.explanation
+            viewModel.explanationInput.postValue(it.explanation)
         }
         val choicesGet = mutableListOf<Choice>().apply {
             addAll(intent.getSerializableExtra(KEY2) as? ArrayList<Choice> ?: listOf())
@@ -79,6 +80,7 @@ class PostEditActivity: BaseActivity() {
             val imageView = binding.postImageView
             val bitmap = (imageView.drawable as BitmapDrawable).bitmap
             viewModel.postImageUpload(post, bitmap)
+            setResult(RESULT_OK)
         } else return
     }
 

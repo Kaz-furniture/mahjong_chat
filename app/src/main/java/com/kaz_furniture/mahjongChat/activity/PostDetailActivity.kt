@@ -82,6 +82,7 @@ class PostDetailActivity: BaseActivity() {
         viewModel.updatedPost.observe(this, Observer {
             post = it
             myUserCheck(it)
+            binding.explanation.text = post.explanation
             viewModel.starNumber.postValue(it.favoriteUserIds.size.toString())
         })
         viewModel.starNumber.observe(this, Observer {
@@ -146,6 +147,9 @@ class PostDetailActivity: BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            Toast.makeText(this, "画像の更新にはアプリの再起動が必要です", Toast.LENGTH_LONG).show()
+        }
         if (requestCode == REQUEST_CODE_POST_EDIT) {
             viewModel.getChoices(post.postId)
             viewModel.getComments(post.postId)

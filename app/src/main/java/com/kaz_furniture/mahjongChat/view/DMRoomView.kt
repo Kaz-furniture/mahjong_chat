@@ -63,13 +63,8 @@ class DMRoomView: RecyclerView {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when(holder) {
-                is EmptyViewHolder -> onBindViewHolder(holder)
                 is ItemViewHolder -> onBindViewHolder(holder, position)
             }
-        }
-
-        private fun onBindViewHolder(holder: EmptyViewHolder) {
-            holder.binding.emptyText.text = applicationContext.getString(R.string.noDMRoom)
         }
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -94,7 +89,11 @@ class DMRoomView: RecyclerView {
         }
 
         class ItemViewHolder(val binding: ListDmRoomBinding): RecyclerView.ViewHolder(binding.root)
-        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root) {
+            init {
+                binding.emptyText.setText(R.string.noDMRoom)
+            }
+        }
     }
 
     companion object {

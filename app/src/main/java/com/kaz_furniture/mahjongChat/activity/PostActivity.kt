@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,6 +27,7 @@ import com.kaz_furniture.mahjongChat.databinding.*
 import com.kaz_furniture.mahjongChat.viewModel.PostViewModel
 import com.yalantis.ucrop.UCrop
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class PostActivity: BaseActivity() {
@@ -42,7 +44,7 @@ class PostActivity: BaseActivity() {
         layoutManager = GridLayoutManager(this, 4)
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
-            viewModel.post(this, binding)
+            postWithImage()
         }
         binding.selectImageButton.setOnClickListener {
             selectImage()
@@ -55,7 +57,24 @@ class PostActivity: BaseActivity() {
         viewModel.selectedChoices.observe(this, Observer {
             addAllChoiceLayout(it)
         })
+        viewModel.postFinished.observe(this, Observer {
+            finish()
+        })
+        viewModel.canSubmit.observe(this, Observer {
+            binding.canSubmit = it
+        })
     }
+
+    private fun postWithImage() {
+        val imageView = binding.postImageView
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        val bAOS = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bAOS)
+        val data = bAOS.toByteArray()
+        viewModel.post(data)
+        bitmap.recycle()
+    }
+
 
     private fun addAllChoiceLayout(list: List<Choice>) {
         Timber.d("addAllChoiceLayout listSize:${list.size}")
@@ -116,6 +135,7 @@ class PostActivity: BaseActivity() {
                     val image = BitmapFactory.decodeStream(inputStream)
                     val imageView = binding.postImageView
                     imageView.setImageBitmap(image)
+                    viewModel.imageAdded()
                     deleteNoImage()
                 }
 

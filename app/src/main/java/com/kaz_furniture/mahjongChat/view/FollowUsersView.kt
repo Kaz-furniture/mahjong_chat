@@ -69,15 +69,7 @@ class FollowUsersView: RecyclerView {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             when(holder) {
-                is EmptyViewHolder -> onBindViewHolder(holder)
                 is ItemViewHolder -> onBindViewHolder(holder, position)
-            }
-        }
-
-        private fun onBindViewHolder(holder: EmptyViewHolder) {
-            holder.binding.emptyText.apply {
-                text = MahjongChatApplication.applicationContext.getString(R.string.noFollowUser)
-                textSize = 16F
             }
         }
 
@@ -99,7 +91,14 @@ class FollowUsersView: RecyclerView {
         }
 
         class ItemViewHolder(val binding: ListFollowUserBinding): RecyclerView.ViewHolder(binding.root)
-        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)
+        class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root) {
+            init {
+                binding.emptyText.apply {
+                    setText(R.string.noFollowUser)
+                    textSize = 16F
+                }
+            }
+        }
     }
 
     companion object {
