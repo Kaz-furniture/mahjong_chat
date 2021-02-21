@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.Tile
@@ -24,10 +25,16 @@ class PostEditViewModel: ViewModel() {
     var selectedChoices = MutableLiveData<List<Choice>>()
     val explanationInput = MutableLiveData<String>()
     var savedChoices = listOf<Choice>()
+    private val timeForImageUrl = System.currentTimeMillis().toString()
+    var imageOK = false
+    val imageUploaded = MutableLiveData<Boolean>()
 
     fun postUpdate(post: Post) {
         val newPost = post.apply {
             updatedAt = Date()
+            if (imageOK) {
+                imageUrl = "${myUser.userId}/${timeForImageUrl}.jpg"
+            }
             if (!explanationInput.value.isNullOrBlank()) {
                 explanation = explanationInput.value
             }
@@ -41,8 +48,8 @@ class PostEditViewModel: ViewModel() {
                 }
     }
 
-    fun postImageUpload(post: Post, bitmap: Bitmap) {
-        val ref = FirebaseStorage.getInstance().reference.child("${MahjongChatApplication.myUser.userId}/${post.postId}.jpg")
+    fun postImageUpload(bitmap: Bitmap) {
+        val ref = FirebaseStorage.getInstance().reference.child("${MahjongChatApplication.myUser.userId}/${timeForImageUrl}.jpg")
         val bAOS = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bAOS)
         val data = bAOS.toByteArray()
@@ -53,6 +60,7 @@ class PostEditViewModel: ViewModel() {
                 }
                 .addOnSuccessListener {
                     Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
+                    imageUploaded.postValue(true)
                     bitmap.recycle()
                 }
     }

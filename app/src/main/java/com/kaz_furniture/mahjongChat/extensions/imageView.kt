@@ -43,10 +43,11 @@ fun ImageView.setUserIconWithNoCache(userId: String?) {
 
 @BindingAdapter("postImage")
 fun ImageView.setPostImage(post: Post) {
-    if (post.userId.isBlank() || post.postId.isBlank()) {
+    val imageUrl = post.imageUrl
+    if (imageUrl.isNullOrBlank() || post.postId.isBlank()) {
         setImageBitmap(null)
     } else {
-        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${post.userId}/${post.postId}.jpg"))
+        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(imageUrl))
                 .placeholder(R.drawable.loading_image)
                 .into(this)
     }

@@ -34,6 +34,10 @@ class PostEditActivity: BaseActivity() {
     private val viewModel: PostEditViewModel by viewModels()
     lateinit var post: Post
     private var uCropSrcUri: Uri? = null
+        set(value) {
+            viewModel.imageOK = true
+            field = value
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +66,7 @@ class PostEditActivity: BaseActivity() {
             showTileSelectDialog()
         }
         binding.postButton.setOnClickListener {
-            viewModel.choicesUpdate(post.postId)
-            viewModel.postUpdate(post)
-            newImageCheck()
-            finish()
+            buttonClick()
         }
         binding.explanation = viewModel.explanationInput
         title = getString(R.string.edit)
@@ -73,14 +74,25 @@ class PostEditActivity: BaseActivity() {
         viewModel.selectedChoices.observe(this, Observer {
             addAllChoiceLayout(it)
         })
+        viewModel.imageUploaded.observe(this, Observer {
+            finish()
+        })
+    }
+
+    private fun buttonClick() {
+        viewModel.choicesUpdate(post.postId)
+        viewModel.postUpdate(post)
+        newImageCheck()
+        if (uCropSrcUri == null) {
+            finish()
+        }
     }
 
     private fun newImageCheck() {
         if (uCropSrcUri != null) {
             val imageView = binding.postImageView
             val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-            viewModel.postImageUpload(post, bitmap)
-            setResult(RESULT_OK)
+            viewModel.postImageUpload(bitmap)
         } else return
     }
 

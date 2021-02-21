@@ -25,6 +25,7 @@ import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class PostViewModel: ViewModel() {
     val explanationInput = MutableLiveData<String>().apply {
@@ -34,6 +35,7 @@ class PostViewModel: ViewModel() {
     private val imageOK = MutableLiveData<Boolean>().apply {
         value = false
     }
+    private val timeForImageUrl = System.currentTimeMillis().toString()
     val postFinished = MutableLiveData<Boolean>()
     var selectedChoices = MutableLiveData<List<Choice>>()
     var tempChoice = Choice()
@@ -56,10 +58,10 @@ class PostViewModel: ViewModel() {
 
     fun post(data: ByteArray) {
         val post = Post().apply {
-            this.explanation = explanationInput.value
-            this.userId = myUser.userId
-            this.userName = myUser.name
-            this.imageUrl = "${myUser.userId}/${postId}.jpg"
+            explanation = explanationInput.value
+            userId = myUser.userId
+            userName = myUser.name
+            imageUrl = "${myUser.userId}/${timeForImageUrl}.jpg"
         }
         val choicesList = selectedChoices.value
 
@@ -79,7 +81,7 @@ class PostViewModel: ViewModel() {
             }
         } else return
 
-        FirebaseStorage.getInstance().reference.child("${myUser.userId}/${post.postId}.jpg")
+        FirebaseStorage.getInstance().reference.child("${myUser.userId}/${timeForImageUrl}.jpg")
                 .putBytes(data)
                 .addOnFailureListener{
                     Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()

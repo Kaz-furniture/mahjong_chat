@@ -155,7 +155,9 @@ class ChoicesCommentsView: RecyclerView {
                 }
             }
             val data = items[position].choice ?:return
-            val percent = data.userIds.size * 100 / viewModel.allUsersNumber
+            val percent = if (viewModel.allUsersNumber != 0) {
+                data.userIds.size * 100 / viewModel.allUsersNumber
+            } else 0
             barChartSetting(percent, holder)
             holder.binding.apply {
                 choice = data
