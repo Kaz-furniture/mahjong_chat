@@ -111,4 +111,6 @@ dependencies {
     implementation "com.airbnb.android:lottie:2.8.0"
     //Glide circleView
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //MPAndroid Chart グラフ
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

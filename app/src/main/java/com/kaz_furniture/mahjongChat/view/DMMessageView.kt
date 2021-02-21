@@ -31,7 +31,9 @@ class DMMessageView: RecyclerView {
     init {
         adapter = customAdapter
         setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(context)
+        layoutManager = LinearLayoutManager(context).apply {
+            stackFromEnd = true
+        }
     }
 
     class Adapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

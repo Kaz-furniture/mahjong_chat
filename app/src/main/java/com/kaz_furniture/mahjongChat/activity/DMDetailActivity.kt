@@ -55,7 +55,13 @@ class DMDetailActivity: BaseActivity() {
         viewModel.canSend.observe(this, Observer {
             binding.canSubmit = it
         })
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = allUserList.firstOrNull { it.userId == DMRoom.getOpponentUserId(roomGet) }?.name ?:"NO_USER_NAME"
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
 

@@ -23,6 +23,7 @@ import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
+import com.kaz_furniture.mahjongChat.extensions.setUserIconWithNoCache
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -59,11 +60,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
             }
             val userIconImage = headerView.findViewById<ImageView>(R.id.headerUserIconImage)
-            GlideApp.with(this)
-                    .load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")).circleCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(userIconImage)
+            userIconImage.setUserIconWithNoCache(myUser.userId)
             headerView.findViewById<ImageView>(R.id.headerUserIconImage)?.setOnClickListener {
                 launchProfileActivity()
             }

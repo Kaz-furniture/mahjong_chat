@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class SplashActivity: BaseActivity() {
 
-    private val splashTime = 6000L
+    private val splashTime = 5000L
     lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
 

@@ -22,6 +22,10 @@ class MainViewModel: ViewModel() {
     val userSelected = MutableLiveData<String>()
     val updatedList = MutableLiveData<List<Post>>()
 
+    fun selectRoomPostValue(room: DMRoom) {
+        selectedDMRoom.postValue(room)
+    }
+
     fun createDMRoom(userId: String) {
         val newRoom = DMRoom().apply {
             userIds = listOf(myUser.userId, userId)

@@ -86,4 +86,7 @@
     <string name="noPost">投稿がありません</string>
     <string name="followJapanese">フォロー</string>
     <string name="followerJapanese">フォロワー</string>
+    <string name="notification">プッシュ通知の実装まで\nしばらくお待ちください</string>
+    <string name="appName1">雀</string>
+    <string name="appName2">チャット</string>
 </resources>

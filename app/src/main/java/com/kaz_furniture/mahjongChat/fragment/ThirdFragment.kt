@@ -27,9 +27,6 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentThirdBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?:return
-        binding?.textNotifications?.text = myUser.name
-        viewModel.updateData.observe(viewLifecycleOwner, Observer {
-            binding?.textNotifications?.text = myUser.name
-        })
+        binding?.textNotifications?.text = getString(R.string.notification)
     }
 }

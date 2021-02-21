@@ -24,9 +24,11 @@ class PostDetailViewModel: ViewModel() {
     val isSelectedLiveData = MutableLiveData<Boolean>()
     val updatedPost = MutableLiveData<Post>()
     val starNumber = MutableLiveData<String>()
+    val profileOpen = MutableLiveData<String>()
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(contentInput) { result.value = submitValidation()}
     }
+    var allUsersNumber = 0
     private val isSelected: Boolean
         get() = choices.any { it.userIds.contains(myUser.userId) }
     var choices = listOf<Choice>()
@@ -43,6 +45,10 @@ class PostDetailViewModel: ViewModel() {
     private fun submitValidation(): Boolean {
         val messageValue = contentInput.value
         return !messageValue.isNullOrBlank()
+    }
+
+    fun openProfile(userId: String) {
+        profileOpen.postValue(userId)
     }
 
     fun starClick(post: Post) {
@@ -80,6 +86,9 @@ class PostDetailViewModel: ViewModel() {
             ChoicesCommentsView.Adapter.ChoiceCommentData().apply {
                 choice = it
             }
+        })
+        list.add(ChoicesCommentsView.Adapter.ChoiceCommentData().apply {
+            supplement = 0
         })
         list.addAll(comments.map {
             ChoicesCommentsView.Adapter.ChoiceCommentData().apply {
@@ -152,6 +161,9 @@ class PostDetailViewModel: ViewModel() {
                     }
                     if (task.isSuccessful) {
                         choices = result
+                        for (value in choices) {
+                            allUsersNumber += value.userIds.size
+                        }
                         Toast.makeText(applicationContext, "Choices Get Success", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
@@ -176,6 +188,7 @@ class PostDetailViewModel: ViewModel() {
                                 newChoice
                             } else it
                         }
+                        allUsersNumber  = ++ allUsersNumber
                         Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener {
@@ -197,6 +210,7 @@ class PostDetailViewModel: ViewModel() {
                                     newChoice
                                 } else it
                             }
+                            allUsersNumber = -- allUsersNumber
                             Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {

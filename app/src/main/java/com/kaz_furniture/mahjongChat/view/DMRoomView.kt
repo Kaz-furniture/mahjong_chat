@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,7 +73,7 @@ class DMRoomView: RecyclerView {
             holder.binding.userId = DMRoom.getOpponentUserId(data)
             holder.binding.userName = MahjongChatApplication.allUserList.filter { it.userId == DMRoom.getOpponentUserId(data) }[0].name
             holder.binding.roomView.setOnClickListener {
-                viewModel.selectedDMRoom.postValue(data)
+                viewModel.selectRoomPostValue(data)
             }
             holder.binding.updatedTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.updatedTime), data.updatedAt)
             holder.binding.more.setOnClickListener {

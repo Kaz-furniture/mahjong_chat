@@ -38,7 +38,28 @@
             android:text="@{choice.wayType.textId}"
             tools:text="切りリーチ"
             android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/barChart"
+            app:layout_constraintStart_toEndOf="@id/wayText"
+            app:layout_constraintEnd_toStartOf="@id/percentText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/percentText"
+            tools:text="24%"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@id/barChart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

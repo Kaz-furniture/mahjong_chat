@@ -53,10 +53,10 @@ class PostDetailActivity: BaseActivity() {
             binding.commentEditText.editableText.clear()
         }
         binding.userIcon.setOnClickListener {
-            launchProfileActivity()
+            launchProfileActivity(post.userId)
         }
         binding.userName.setOnClickListener {
-            launchProfileActivity()
+            launchProfileActivity(post.userId)
         }
         binding.more.setOnClickListener {
             showPopup(it)
@@ -87,6 +87,9 @@ class PostDetailActivity: BaseActivity() {
         })
         viewModel.starNumber.observe(this, Observer {
             binding.starNumber = it
+        })
+        viewModel.profileOpen.observe(this, Observer {
+            launchProfileActivity(it)
         })
     }
 
@@ -140,8 +143,8 @@ class PostDetailActivity: BaseActivity() {
         startActivityForResult(intent, REQUEST_CODE_POST_EDIT)
     }
 
-    private fun launchProfileActivity() {
-        val intent = ProfileActivity.newIntent(this, post.userId)
+    private fun launchProfileActivity(userId: String) {
+        val intent = ProfileActivity.newIntent(this, userId)
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
 

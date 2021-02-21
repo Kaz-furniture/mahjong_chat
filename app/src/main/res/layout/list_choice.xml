@@ -49,9 +49,6 @@
             android:src="@drawable/ic_baseline_delete_24"
             android:padding="12dp"/>
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
