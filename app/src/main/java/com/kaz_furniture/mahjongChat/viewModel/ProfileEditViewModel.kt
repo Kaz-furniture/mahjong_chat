@@ -106,8 +106,10 @@ class ProfileEditViewModel: ViewModel() {
                         updateOK.postValue(true)
                         Toast.makeText(applicationContext, "UPLOAD_ICON_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
-            FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnCompleteListener {
-                Toast.makeText(applicationContext, "IMAGE_DELETED", Toast.LENGTH_LONG).show()
+            if (exImageId.isNotBlank()) {
+                FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnCompleteListener {
+                    Toast.makeText(applicationContext, "IMAGE_DELETED", Toast.LENGTH_LONG).show()
+                }
             }
         }
 

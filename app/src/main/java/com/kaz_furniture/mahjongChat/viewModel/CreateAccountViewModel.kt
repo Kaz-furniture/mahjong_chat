@@ -16,6 +16,7 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.CreateAccountActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.activity.SplashActivity
 import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -102,7 +103,7 @@ class CreateAccountViewModel: ViewModel() {
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                         myUser = user
-                        MainActivity.start(activity)
+                        SplashActivity.start(activity)
                     } else {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }

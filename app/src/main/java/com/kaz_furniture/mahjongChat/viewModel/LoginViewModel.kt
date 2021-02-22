@@ -16,6 +16,7 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.activity.SplashActivity
 import com.kaz_furniture.mahjongChat.data.User
 import timber.log.Timber
 
@@ -53,7 +54,7 @@ class LoginViewModel: ViewModel() {
                     if (task.isSuccessful) {
                         getMyUser()
                         getToken()
-                        MainActivity.start(activity)
+                        SplashActivity.start(activity)
                     } else {
                         Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
                     }

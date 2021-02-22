@@ -1,5 +1,7 @@
 package com.kaz_furniture.mahjongChat.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -62,6 +64,14 @@ class SplashActivity: BaseActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.timeCount.postValue(true)
         }, splashTime)
+    }
+
+    companion object {
+        fun start(activity: Activity) =
+                activity.apply {
+                    finishAffinity()
+                    startActivity(Intent(activity, SplashActivity::class.java))
+                }
     }
 
 }
