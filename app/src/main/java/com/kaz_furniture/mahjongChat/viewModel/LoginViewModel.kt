@@ -31,10 +31,10 @@ class LoginViewModel: ViewModel() {
     val emailError = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
 
-    private var fetchedToken = ""
-    val tokenGetOK = MutableLiveData<Boolean>()
-    val myUserOK = MutableLiveData<Boolean>()
-    val userAndTokenOK = MutableLiveData<Boolean>()
+//    private var fetchedToken = ""
+//    val tokenGetOK = MutableLiveData<Boolean>()
+//    val myUserOK = MutableLiveData<Boolean>()
+//    val userAndTokenOK = MutableLiveData<Boolean>()
 
     private fun submitValidation(): Boolean {
         val email = email.value
@@ -52,8 +52,6 @@ class LoginViewModel: ViewModel() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value ?:"", password.value ?:"")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        getMyUser()
-                        getToken()
                         SplashActivity.start(activity)
                     } else {
                         Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
@@ -61,72 +59,72 @@ class LoginViewModel: ViewModel() {
                 }
     }
 
-    private fun getToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task->
-            if (!task.isSuccessful) {
-                Toast.makeText(MahjongChatApplication.applicationContext, "GET_TOKEN_FAILED", Toast.LENGTH_SHORT).show()
-                tokenGetOK.postValue(true)
-                return@OnCompleteListener
-            }
-            Toast.makeText(MahjongChatApplication.applicationContext, "GET_TOKEN_SUCCESS", Toast.LENGTH_SHORT).show()
-            tokenGetOK.postValue(true)
-            val fcmResult = task.result ?:return@OnCompleteListener
-            fetchedToken = fcmResult
-        })
-    }
+//    private fun getToken() {
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task->
+//            if (!task.isSuccessful) {
+//                Toast.makeText(MahjongChatApplication.applicationContext, "GET_TOKEN_FAILED", Toast.LENGTH_SHORT).show()
+//                tokenGetOK.postValue(true)
+//                return@OnCompleteListener
+//            }
+//            Toast.makeText(MahjongChatApplication.applicationContext, "GET_TOKEN_SUCCESS", Toast.LENGTH_SHORT).show()
+//            tokenGetOK.postValue(true)
+//            val fcmResult = task.result ?:return@OnCompleteListener
+//            fetchedToken = fcmResult
+//        })
+//    }
 
-    private fun getMyUser() {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?:return
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .whereEqualTo("userId", uid)
-                .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        val user = it.result?.toObjects(User::class.java)
-                        Timber.d("userList = $user")
-                        if (user != null && user.isNotEmpty()) {
-                            myUser = user[0]
-                            myUserOK.postValue(true)
-                        } else {
-                            Toast.makeText(applicationContext, "認証エラー", Toast.LENGTH_LONG).show()
-                            makeLogout.postValue(true)
-                            return@addOnCompleteListener
-                        }
-                    } else {
-                        Toast.makeText(applicationContext, "認証エラーです", Toast.LENGTH_LONG).show()
-                        makeLogout.postValue(true)
-                        return@addOnCompleteListener
-                    }
-                }
-    }
+//    private fun getMyUser() {
+//        val uid = FirebaseAuth.getInstance().currentUser?.uid ?:return
+//        FirebaseFirestore.getInstance()
+//                .collection("users")
+//                .whereEqualTo("userId", uid)
+//                .get()
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful){
+//                        val user = it.result?.toObjects(User::class.java)
+//                        Timber.d("userList = $user")
+//                        if (user != null && user.isNotEmpty()) {
+//                            myUser = user[0]
+//                            myUserOK.postValue(true)
+//                        } else {
+//                            Toast.makeText(applicationContext, "認証エラー", Toast.LENGTH_LONG).show()
+//                            makeLogout.postValue(true)
+//                            return@addOnCompleteListener
+//                        }
+//                    } else {
+//                        Toast.makeText(applicationContext, "認証エラーです", Toast.LENGTH_LONG).show()
+//                        makeLogout.postValue(true)
+//                        return@addOnCompleteListener
+//                    }
+//                }
+//    }
 
-    fun checkUserAndTokenGet() {
-        val myUserOKValue = myUserOK.value ?:false
-        val tokenGetOKValue = tokenGetOK.value ?:false
-        if (myUserOKValue && tokenGetOKValue) {
-            userAndTokenOK.postValue(true)
-        } else return
-    }
+//    fun checkUserAndTokenGet() {
+//        val myUserOKValue = myUserOK.value ?:false
+//        val tokenGetOKValue = tokenGetOK.value ?:false
+//        if (myUserOKValue && tokenGetOKValue) {
+//            userAndTokenOK.postValue(true)
+//        } else return
+//    }
 
-    fun fCMTokenCheck() {
-        val presentToken = myUser.fcmToken
-        if (fetchedToken != presentToken) {
-            val newUser = myUser
-            newUser.fcmToken = fetchedToken
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(myUser.userId)
-                    .set(newUser)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful){
-                            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_UPDATE", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_UPDATE_FAILED", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-        } else {
-            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_KEEP", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    fun fCMTokenCheck() {
+//        val presentToken = myUser.fcmToken
+//        if (fetchedToken != presentToken) {
+//            val newUser = myUser
+//            newUser.fcmToken = fetchedToken
+//            FirebaseFirestore.getInstance()
+//                    .collection("users")
+//                    .document(myUser.userId)
+//                    .set(newUser)
+//                    .addOnCompleteListener {
+//                        if (it.isSuccessful){
+//                            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_UPDATE", Toast.LENGTH_SHORT).show()
+//                        } else {
+//                            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_UPDATE_FAILED", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//        } else {
+//            Toast.makeText(MahjongChatApplication.applicationContext, "TOKEN_KEEP", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }

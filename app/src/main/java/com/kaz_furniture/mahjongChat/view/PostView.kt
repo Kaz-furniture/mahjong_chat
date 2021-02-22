@@ -74,6 +74,7 @@ class PostView: RecyclerView {
             holder.binding.postItemImage.setOnClickListener {
                 viewModel.postSelected.postValue(data)
             }
+            holder.binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), data.createdAt)
             holder.binding.postUserName.text = MahjongChatApplication.allUserList.firstOrNull { it.userId == data.userId }?.name ?:""
         }
 

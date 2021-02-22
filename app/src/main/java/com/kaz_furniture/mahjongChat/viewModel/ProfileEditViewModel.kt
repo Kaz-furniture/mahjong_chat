@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
@@ -71,7 +72,8 @@ class ProfileEditViewModel: ViewModel() {
     }
 
     fun editUpload() {
-        var exImageId = myUser.imageUrl
+        allUserList.removeAll { it.userId == myUser.userId }
+        val exImageId = myUser.imageUrl
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
         val user = myUser.apply {
@@ -89,6 +91,7 @@ class ProfileEditViewModel: ViewModel() {
                 this.introduction = myUser.introduction
             } else this.introduction = introductionValue
         }
+        allUserList.add(user)
 
         if (imageBoolean.value != null) {
             val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/${timeForImageUrl}.jpg")

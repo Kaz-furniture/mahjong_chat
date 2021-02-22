@@ -47,7 +47,7 @@ class ProfileViewModel: ViewModel() {
     }
     
     fun follow(userId: String) {
-        allUserList.remove(myUser)
+        allUserList.removeAll { it.userId == myUser.userId }
         val presentFollowList = ArrayList<String>()
         presentFollowList.apply {
             this.addAll(myUser.followingUserIds)
@@ -72,7 +72,7 @@ class ProfileViewModel: ViewModel() {
     }
 
     fun followCancel(userId: String) {
-        allUserList.remove(myUser)
+        allUserList.removeAll { it.userId == myUser.userId }
         val presentFollowList = ArrayList<String>()
         presentFollowList.apply {
             this.addAll(myUser.followingUserIds)

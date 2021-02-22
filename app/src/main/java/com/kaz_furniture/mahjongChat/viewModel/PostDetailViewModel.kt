@@ -160,6 +160,7 @@ class PostDetailViewModel: ViewModel() {
                         return@addOnCompleteListener
                     }
                     if (task.isSuccessful) {
+                        allUsersNumber = 0
                         choices = result
                         for (value in choices) {
                             allUsersNumber += value.userIds.size
