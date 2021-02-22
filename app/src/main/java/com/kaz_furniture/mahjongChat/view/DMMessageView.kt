@@ -32,7 +32,7 @@ class DMMessageView: RecyclerView {
         adapter = customAdapter
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context).apply {
-            stackFromEnd = true
+            stackFromEnd = false
         }
     }
 
