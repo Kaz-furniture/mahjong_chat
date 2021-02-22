@@ -66,6 +66,7 @@ class PostEditActivity: BaseActivity() {
             showTileSelectDialog()
         }
         binding.postButton.setOnClickListener {
+            binding.progressCircular.visibility = android.widget.ProgressBar.VISIBLE
             buttonClick()
         }
         binding.explanation = viewModel.explanationInput
@@ -75,6 +76,7 @@ class PostEditActivity: BaseActivity() {
             addAllChoiceLayout(it)
         })
         viewModel.imageUploaded.observe(this, Observer {
+            binding.progressCircular.visibility = android.widget.ProgressBar.GONE
             finish()
         })
     }

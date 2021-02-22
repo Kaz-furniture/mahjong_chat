@@ -34,8 +34,6 @@ class ProfileActivity: BaseActivity() {
         binding.userButton.setOnClickListener {
             buttonClick()
         }
-        binding.followingNumber.text = allUserList.firstOrNull { it.userId == userId }?.followingUserIds?.size?.toString() ?:""
-        binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(userId) }.size.toString()
         viewModel.getUserInfo(userId)
         viewModel.getPostList(userId)
         binding.followerNumber.setOnClickListener {
@@ -62,9 +60,17 @@ class ProfileActivity: BaseActivity() {
             openDetail(it)
         })
         viewModel.followChanged.observe(this, Observer {
+            binding.followingNumber.text = allUserList.firstOrNull { it.userId == userId }?.followingUserIds?.size?.toString() ?:""
+            binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(userId) }.size.toString()
             buttonTypeCheck()
         })
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.followingNumber.text = allUserList.firstOrNull { it.userId == userId }?.followingUserIds?.size?.toString() ?:""
+        binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(userId) }.size.toString()
     }
 
     private fun buttonTypeCheck() {

@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.data.Post
@@ -23,7 +24,7 @@ class ProfileViewModel: ViewModel() {
 
     fun getPostList(id: String) {
         val userPostList = ArrayList<Post>()
-        userPostList.addAll(allPostList.filter { it.userId == id })
+        userPostList.addAll(allPostList.filter { it.userId == id && it.deletedAt == null })
         item.postValue(userPostList)
     }
 
@@ -46,12 +47,16 @@ class ProfileViewModel: ViewModel() {
     }
     
     fun follow(userId: String) {
+        allUserList.remove(myUser)
         val presentFollowList = ArrayList<String>()
         presentFollowList.apply {
             this.addAll(myUser.followingUserIds)
             this.add(userId)
         }
-        myUser.followingUserIds = presentFollowList
+        myUser.apply {
+            followingUserIds = presentFollowList
+            allUserList.add(this)
+        }
 
         FirebaseFirestore.getInstance()
                 .collection("users")
@@ -67,12 +72,16 @@ class ProfileViewModel: ViewModel() {
     }
 
     fun followCancel(userId: String) {
+        allUserList.remove(myUser)
         val presentFollowList = ArrayList<String>()
         presentFollowList.apply {
             this.addAll(myUser.followingUserIds)
             this.remove(userId)
         }
-        myUser.followingUserIds = presentFollowList
+        myUser.apply {
+            followingUserIds = presentFollowList
+            allUserList.add(this)
+        }
 
         FirebaseFirestore.getInstance()
                 .collection("users")

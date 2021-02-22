@@ -47,6 +47,7 @@ class ProfileEditActivity: BaseActivity() {
             binding.noImageTextView.isVisible = false
         })
         binding.saveButton.setOnClickListener {
+            binding.progressCircular.visibility = android.widget.ProgressBar.VISIBLE
             viewModel.editUpload()
         }
         binding.profileImageSelect.setOnClickListener {
@@ -59,6 +60,7 @@ class ProfileEditActivity: BaseActivity() {
         viewModel.showProfileImage(binding)
         viewModel.updateOK.observe(this, Observer {
             setResult(Activity.RESULT_OK)
+            binding.progressCircular.visibility = android.widget.ProgressBar.GONE
 //            Glide.get(applicationContext).clearMemory()
 //            CoroutineScope(Dispatchers.IO).launch {
 //                Glide.get(applicationContext).clearDiskCache()
