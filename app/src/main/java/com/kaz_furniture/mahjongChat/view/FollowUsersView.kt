@@ -75,8 +75,8 @@ class FollowUsersView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.userId = data
-            holder.binding.userName = allUserList.firstOrNull { it.userId == data } ?.name ?:""
+            holder.binding.imageId = allUserList.firstOrNull { it.userId == data }?.imageUrl ?:""
+            holder.binding.userName = allUserList.firstOrNull { it.userId == data }?.name ?:""
             holder.binding.userButton.apply {
                 if (data == myUser.userId) {
                     this.visibility = View.GONE

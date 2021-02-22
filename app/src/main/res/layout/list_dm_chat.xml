@@ -3,7 +3,7 @@
 
     <data>
         <variable
-            name="userId"
+            name="imageId"
             type="String" />
 
     </data>
@@ -23,7 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/userIcon"
-            app:userIcon="@{userId}"
+            app:iconOnImageId="@{imageId}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/messageTextView"/>

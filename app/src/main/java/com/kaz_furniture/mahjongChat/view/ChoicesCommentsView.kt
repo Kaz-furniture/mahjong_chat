@@ -132,9 +132,9 @@ class ChoicesCommentsView: RecyclerView {
         private fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
             val data = items[position].comment ?:return
             holder.binding.apply {
-                userId = data.userId
+                imageId = MahjongChatApplication.allUserList.firstOrNull { it.userId == data.userId }?.imageUrl ?:""
                 content = data.content
-                userName = MahjongChatApplication.allUserList.filter { it.userId == data.userId }[0].name
+                userName = MahjongChatApplication.allUserList.firstOrNull { it.userId == data.userId }?.name ?:""
                 commentTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.createdAt)
                 userIcon.setOnClickListener {
                     viewModel.openProfile(data.userId)

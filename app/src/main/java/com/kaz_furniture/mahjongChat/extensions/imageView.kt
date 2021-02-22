@@ -8,38 +8,54 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.Tile
 
-@BindingAdapter("userIcon")
-fun ImageView.setUserIcon(userId: String?) {
-    userId?.also {
-        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${it}/profileImage.jpg"))
-                .circleCrop()
-                .placeholder(R.drawable.loading_image)
-                .error(R.drawable.dog)
-                .into(this)
-    } ?: run {
+//@BindingAdapter("userIcon")
+//fun ImageView.setUserIcon(userId: String?) {
+//    userId?.also {
+//        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${it}/profileImage.jpg"))
+//                .circleCrop()
+//                .placeholder(R.drawable.loading_image)
+//                .error(R.drawable.dog)
+//                .into(this)
+//    } ?: run {
+//        GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
+//    }
+//}
+
+@BindingAdapter("iconOnImageId")
+fun ImageView.setIconOnImageId(imageId: String?) {
+    if (imageId.isNullOrBlank()) {
         GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
+    } else {
+            GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child(imageId))
+                    .circleCrop()
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
+                    .placeholder(R.drawable.loading_image)
+                    .error(R.drawable.dog)
+                    .into(this)
     }
 }
 
-@BindingAdapter("userIconNoCache")
-fun ImageView.setUserIconWithNoCache(userId: String?) {
-    userId?.also {
-        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${MahjongChatApplication.myUser.userId}/profileImage.jpg"))
-                .circleCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .placeholder(R.drawable.loading_image)
-                .error(R.drawable.dog)
-                .into(this)
-    } ?: run {
-        GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
-    }
-}
+//@BindingAdapter("userIconNoCache")
+//fun ImageView.setUserIconWithNoCache(userId: String?) {
+//    userId?.also {
+//        GlideApp.with(this).load(FirebaseStorage.getInstance().reference.child("${MahjongChatApplication.myUser.userId}/profileImage.jpg"))
+//                .circleCrop()
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .placeholder(R.drawable.loading_image)
+//                .error(R.drawable.dog)
+//                .into(this)
+//    } ?: run {
+//        GlideApp.with(this).load(R.drawable.dog).circleCrop().placeholder(R.drawable.loading_image).into(this)
+//    }
+//}
 
 @BindingAdapter("postImage")
 fun ImageView.setPostImage(post: Post) {

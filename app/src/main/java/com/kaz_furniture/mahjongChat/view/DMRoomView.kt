@@ -70,8 +70,8 @@ class DMRoomView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.userId = DMRoom.getOpponentUserId(data)
-            holder.binding.userName = MahjongChatApplication.allUserList.filter { it.userId == DMRoom.getOpponentUserId(data) }[0].name
+            holder.binding.imageId = MahjongChatApplication.allUserList.firstOrNull { it.userId == DMRoom.getOpponentUserId(data) }?.imageUrl ?:""
+            holder.binding.userName = MahjongChatApplication.allUserList.firstOrNull { it.userId == DMRoom.getOpponentUserId(data) }?.name ?:""
             holder.binding.roomView.setOnClickListener {
                 viewModel.selectRoomPostValue(data)
             }

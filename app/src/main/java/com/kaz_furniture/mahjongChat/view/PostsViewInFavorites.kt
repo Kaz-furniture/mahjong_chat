@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.databinding.ListEmptyFavoritesBinding
 import com.kaz_furniture.mahjongChat.databinding.ListItemProfileBinding
@@ -63,10 +64,11 @@ class PostsViewInFavorites: RecyclerView {
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
             holder.binding.post = data
-            holder.binding.userId = data.userId
+            holder.binding.imageId = allUserList.firstOrNull { it.userId == data.userId }?.imageUrl ?:""
             holder.binding.postItemImage.setOnClickListener {
                 viewModel.postSelected.postValue(data)
             }
+            holder.binding.postUserName.text = allUserList.firstOrNull { it.userId == data.userId }?.name ?:""
         }
 
         class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)

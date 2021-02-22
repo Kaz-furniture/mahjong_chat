@@ -21,6 +21,7 @@ import com.kaz_furniture.mahjongChat.activity.ProfileEditActivity
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
+import com.kaz_furniture.mahjongChat.extensions.setIconOnImageId
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,11 +34,11 @@ import kotlin.collections.ArrayList
 class ProfileEditViewModel: ViewModel() {
     val editedName = MutableLiveData<String>()
     val editedIntroduction = MutableLiveData<String>()
-    private val myPostList = ArrayList<Post>()
     var image: Bitmap? = null
     private val imageBoolean = MutableLiveData<Boolean>()
     var uCropSrcUriLive = MutableLiveData<Uri>()
     val updateOK = MutableLiveData<Boolean>()
+    private val timeForImageUrl = System.currentTimeMillis().toString()
 
     val canSubmit = MediatorLiveData<Boolean>().also { result ->
         result.addSource(editedName) { result.value = submitValidation()}
@@ -47,20 +48,14 @@ class ProfileEditViewModel: ViewModel() {
 
     fun showProfileImage(binding: ActivityProfileEditBinding) {
         uCropSrcUriLive.postValue(myUser.imageUrl.toUri())
-        GlideApp.with(applicationContext).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg"))
-            .circleCrop().into(binding.roundedImageView)
+//        GlideApp.with(applicationContext).load(FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg"))
+//            .circleCrop().into(binding.roundedImageView)
+        binding.roundedImageView.setIconOnImageId(myUser.imageUrl)
     }
 
     fun uCropStart(data: Intent, binding: ActivityProfileEditBinding) {
         val resultUri = UCrop.getOutput(data)
         uCropSrcUriLive.postValue(resultUri)
-//        val cropSrc = uCropSrcUriLive.value ?:return
-//        val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
-//        image = BitmapFactory.decodeStream(inputStream)
-////        val bitmapImage = image ?:return
-////        image = Bitmap.createScaledBitmap(bitmapImage, 200, 200, true)
-//        val imageView = binding.roundedImageView
-//        imageView.setImageBitmap(image)
         GlideApp.with(applicationContext).load(resultUri).circleCrop().into(binding.roundedImageView)
         imageBoolean.postValue(true)
     }
@@ -76,18 +71,18 @@ class ProfileEditViewModel: ViewModel() {
     }
 
     fun editUpload() {
+        var exImageId = myUser.imageUrl
         val nameValue = editedName.value
         val introductionValue = editedIntroduction.value
-        val user = User().apply {
-            this.createdAt = myUser.createdAt
-            this.followingUserIds = myUser.followingUserIds
-            this.imageUrl = myUser.imageUrl
-            this.userId = myUser.userId
+        val user = myUser.apply {
+            if (imageBoolean.value != null) {
+                imageUrl = "${myUser.userId}/${timeForImageUrl}.jpg"
+            }
             if (nameValue.isNullOrBlank() && introductionValue.isNullOrBlank() && imageBoolean.value == null) {
                 return
             }
             if (nameValue.isNullOrBlank()) {
-                this.name = myUser.name
+                name = myUser.name
             } else this.name = nameValue
 
             if (introductionValue.isNullOrBlank()) {
@@ -96,7 +91,7 @@ class ProfileEditViewModel: ViewModel() {
         }
 
         if (imageBoolean.value != null) {
-            val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/profileImage.jpg")
+            val ref = FirebaseStorage.getInstance().reference.child("${myUser.userId}/${timeForImageUrl}.jpg")
             val bAOS = ByteArrayOutputStream()
             val cropSrc = uCropSrcUriLive.value ?:return
             val inputStream = applicationContext.contentResolver.openInputStream(cropSrc)
@@ -108,12 +103,11 @@ class ProfileEditViewModel: ViewModel() {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
                     .addOnSuccessListener {
+                        updateOK.postValue(true)
                         Toast.makeText(applicationContext, "UPLOAD_ICON_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
-
-            Glide.get(applicationContext).clearMemory()
-            CoroutineScope(Dispatchers.IO).launch {
-                Glide.get(applicationContext).clearDiskCache()
+            FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnCompleteListener {
+                Toast.makeText(applicationContext, "IMAGE_DELETED", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -125,7 +119,7 @@ class ProfileEditViewModel: ViewModel() {
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext, "SUCCESS", Toast.LENGTH_SHORT).show()
                         myUser = user
-                        postFetch()
+//                        postFetch()
                     } else {
                         Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                     }
@@ -133,27 +127,27 @@ class ProfileEditViewModel: ViewModel() {
                 }
     }
 
-    private fun postFetch() {
-        val filteredList = allPostList.filter { it.userId == myUser.userId }
-        myPostList.addAll(filteredList)
-        postUpdate()
-    }
+//    private fun postFetch() {
+//        val filteredList = allPostList.filter { it.userId == myUser.userId }
+//        myPostList.addAll(filteredList)
+//        postUpdate()
+//    }
 
-    private fun postUpdate() {
-
-        for (value in myPostList) {
-            val nameValue = editedName.value
-
-            if (nameValue.isNullOrBlank()) {
-                value.userName = myUser.name
-            } else value.userName = nameValue
-
-            FirebaseFirestore.getInstance()
-                    .collection("posts")
-                    .document(value.postId)
-                    .set(value)
-        }
-        updateOK.postValue(true)
-    }
+//    private fun postUpdate() {
+//
+//        for (value in myPostList) {
+//            val nameValue = editedName.value
+//
+//            if (nameValue.isNullOrBlank()) {
+//                value.userName = myUser.name
+//            } else value.userName = nameValue
+//
+//            FirebaseFirestore.getInstance()
+//                    .collection("posts")
+//                    .document(value.postId)
+//                    .set(value)
+//        }
+//        updateOK.postValue(true)
+//    }
 
 }

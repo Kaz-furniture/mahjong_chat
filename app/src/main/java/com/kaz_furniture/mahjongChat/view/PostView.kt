@@ -8,6 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.PostDetailActivity
@@ -68,10 +70,11 @@ class PostView: RecyclerView {
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
             holder.binding.post = data
-            holder.binding.userId = data.userId
+            holder.binding.imageId = allUserList.firstOrNull { it.userId == data.userId }?.imageUrl ?:""
             holder.binding.postItemImage.setOnClickListener {
                 viewModel.postSelected.postValue(data)
             }
+            holder.binding.postUserName.text = MahjongChatApplication.allUserList.firstOrNull { it.userId == data.userId }?.name ?:""
         }
 
         class ItemViewHolder(val binding: ListItemProfileBinding): RecyclerView.ViewHolder(binding.root)

@@ -15,12 +15,16 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bumptech.glide.Glide
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityProfileEditBinding
 import com.kaz_furniture.mahjongChat.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.mahjongChat.viewModel.ProfileEditViewModel
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class ProfileEditActivity: BaseActivity() {
@@ -55,6 +59,10 @@ class ProfileEditActivity: BaseActivity() {
         viewModel.showProfileImage(binding)
         viewModel.updateOK.observe(this, Observer {
             setResult(Activity.RESULT_OK)
+//            Glide.get(applicationContext).clearMemory()
+//            CoroutineScope(Dispatchers.IO).launch {
+//                Glide.get(applicationContext).clearDiskCache()
+//            }
             finish()
         })
     }

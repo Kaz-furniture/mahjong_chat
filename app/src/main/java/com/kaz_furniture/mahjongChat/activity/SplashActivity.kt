@@ -56,10 +56,6 @@ class SplashActivity: BaseActivity() {
         viewModel.allOK.observe(this, Observer {
             MainActivity.start(this)
         })
-        Glide.get(applicationContext).clearMemory()
-        CoroutineScope(Dispatchers.IO).launch {
-            Glide.get(applicationContext).clearDiskCache()
-        }
     }
 
     private fun timeCount() {

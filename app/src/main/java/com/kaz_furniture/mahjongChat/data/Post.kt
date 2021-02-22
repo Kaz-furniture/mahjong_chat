@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 class Post: Serializable {
     var postId = "${System.currentTimeMillis()}"
     var userId: String = ""
-    var userName: String = ""
+//    var userName: String = ""
     var createdAt: Date = Date()
     var deletedAt: Date? = null
     var updatedAt: Date = Date()

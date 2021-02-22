@@ -9,7 +9,7 @@
             type="com.kaz_furniture.mahjongChat.data.Post" />
 
         <variable
-            name="userId"
+            name="imageId"
             type="String" />
 
         <variable
@@ -52,7 +52,7 @@
                     android:layout_height="44dp"
                     tools:src="@drawable/m1"
                     android:layout_marginTop="4dp"
-                    app:userIcon="@{userId}"
+                    app:iconOnImageId="@{imageId}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/userIcon"/>

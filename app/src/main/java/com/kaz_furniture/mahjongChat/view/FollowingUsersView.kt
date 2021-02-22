@@ -70,8 +70,8 @@ class FollowingUsersView: RecyclerView {
 
         private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
             val data = items[position]
-            holder.binding.userId = data
-            holder.binding.userName = allUserList.filter { it.userId == data }[0].name
+            holder.binding.imageId = allUserList.firstOrNull { it.userId == data }?.imageUrl ?:""
+            holder.binding.userName = allUserList.firstOrNull { it.userId == data }?.name ?:""
             holder.binding.roomView.setOnClickListener {
                 viewModel.userSelected.postValue(data)
             }

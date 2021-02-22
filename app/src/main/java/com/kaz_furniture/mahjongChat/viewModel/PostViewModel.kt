@@ -22,7 +22,6 @@ import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.TextImageData
 import com.kaz_furniture.mahjongChat.data.Tile
-import com.kaz_furniture.mahjongChat.databinding.ActivityPostBinding
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -60,7 +59,6 @@ class PostViewModel: ViewModel() {
         val post = Post().apply {
             explanation = explanationInput.value
             userId = myUser.userId
-            userName = myUser.name
             imageUrl = "${myUser.userId}/${timeForImageUrl}.jpg"
         }
         val choicesList = selectedChoices.value

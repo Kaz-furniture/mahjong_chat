@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
@@ -41,8 +42,8 @@ class PostDetailActivity: BaseActivity() {
             viewModel.getPost(it.postId)
             myUserCheck(it)
         }
-        binding.userName.text = post.userName
-        binding.userId = post.userId
+        binding.userName.text = allUserList.firstOrNull { it.userId == post.userId }?.name ?:""
+        binding.imageId = allUserList.firstOrNull { it.userId == post.userId }?.imageUrl ?:""
         binding.post = post
         binding.explanation.text = post.explanation
         binding.createdTime.text = android.text.format.DateFormat.format(getString(R.string.time1), post.createdAt)

@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Post
@@ -68,7 +69,7 @@ class PostListAdapter (
                 private val callback: Callback?
         ): RecyclerView.ViewHolder(binding.root){
                 fun bind(post: Post) {
-                        binding.postUserName.text = post.userName
+                        binding.postUserName.text = allUserList.firstOrNull { it.userId == post.userId }?.name ?:""
                         binding.explanation.text = post.explanation
                         binding.postItemImage.setOnClickListener {
                                 callback?.openDetail(post)
@@ -82,7 +83,7 @@ class PostListAdapter (
                         binding.starNumberNumber.text = post.favoriteUserIds.size.toString()
                         binding.createdTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time1), post.createdAt)
                         binding.post = post
-                        binding.userId = post.userId
+                        binding.imageId = allUserList.firstOrNull { it.userId == post.userId }?.imageUrl ?:""
                 }
         }
         class EmptyViewHolder(val binding: ListEmptyFavoritesBinding): RecyclerView.ViewHolder(binding.root)

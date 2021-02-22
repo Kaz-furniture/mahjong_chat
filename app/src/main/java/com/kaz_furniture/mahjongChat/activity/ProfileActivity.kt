@@ -30,7 +30,7 @@ class ProfileActivity: BaseActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.getPostList(userId)
         }
-        binding.userId = userId
+        binding.imageId = allUserList.firstOrNull { it.userId == userId }?.imageUrl ?:""
         binding.userButton.setOnClickListener {
             buttonClick()
         }

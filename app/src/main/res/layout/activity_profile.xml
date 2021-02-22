@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="userId"
+            name="imageId"
             type="String" />
 
         <variable
@@ -35,7 +35,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:id="@+id/userIcon"
-                    app:userIcon="@{userId}"
+                    app:iconOnImageId="@{imageId}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="2dp"
