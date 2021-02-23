@@ -33,8 +33,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ProfileEditViewModel: ViewModel() {
-    val editedName = MutableLiveData<String>()
-    val editedIntroduction = MutableLiveData<String>()
+    val editedName = MutableLiveData<String>().apply {
+        value = myUser.name
+    }
+    val editedIntroduction = MutableLiveData<String>().apply {
+        value = myUser.introduction
+    }
     var image: Bitmap? = null
     private val imageBoolean = MutableLiveData<Boolean>()
     var uCropSrcUriLive = MutableLiveData<Uri>()
@@ -46,6 +50,7 @@ class ProfileEditViewModel: ViewModel() {
         result.addSource(editedIntroduction) { result.value = submitValidation()}
         result.addSource(imageBoolean) { result.value = submitValidation()}
     }
+
 
     fun showProfileImage(binding: ActivityProfileEditBinding) {
         uCropSrcUriLive.postValue(myUser.imageUrl.toUri())
@@ -107,11 +112,10 @@ class ProfileEditViewModel: ViewModel() {
                     }
                     .addOnSuccessListener {
                         updateOK.postValue(true)
-                        Toast.makeText(applicationContext, "UPLOAD_ICON_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
             if (exImageId.isNotBlank()) {
-                FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnCompleteListener {
-                    Toast.makeText(applicationContext, "IMAGE_DELETED", Toast.LENGTH_LONG).show()
+                FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnFailureListener {
+                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -122,7 +126,6 @@ class ProfileEditViewModel: ViewModel() {
                 .set(user)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(applicationContext, "SUCCESS", Toast.LENGTH_SHORT).show()
                         myUser = user
 //                        postFetch()
                     } else {

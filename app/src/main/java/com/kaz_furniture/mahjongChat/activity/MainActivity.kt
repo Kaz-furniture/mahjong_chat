@@ -90,7 +90,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_PROFILE_EDIT) {
-            Toast.makeText(this, "UPDATE!!!!", Toast.LENGTH_SHORT).show()
             viewModel.updateData.postValue(true)
         }
     }

@@ -39,7 +39,7 @@ class ProfileViewModel: ViewModel() {
                         return@addOnCompleteListener
                     }
                     if (task.isSuccessful) {
-                        user.postValue(result[0])
+                        user.postValue(result.firstOrNull() ?:User())
                     } else {
                         Toast.makeText(applicationContext, "NO_USER_INFO", Toast.LENGTH_SHORT).show()
                     }
@@ -62,9 +62,6 @@ class ProfileViewModel: ViewModel() {
                 .collection("users")
                 .document(myUser.userId)
                 .set(myUser)
-                .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "FOLLOW_SUCCESS", Toast.LENGTH_SHORT).show()
-                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "FOLLOW_FAILED", Toast.LENGTH_SHORT).show()
                 }

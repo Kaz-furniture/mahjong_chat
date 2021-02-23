@@ -41,7 +41,6 @@ class SplashViewModel: ViewModel() {
                 Toast.makeText(applicationContext, "GET_TOKEN_FAILED", Toast.LENGTH_SHORT).show()
                 return@OnCompleteListener
             }
-            Toast.makeText(applicationContext, "GET_TOKEN_SUCCESS", Toast.LENGTH_SHORT).show()
             tokenGetOK.postValue(true)
             val fcmResult = task.result ?:return@OnCompleteListener
             fetchedToken = fcmResult
@@ -78,7 +77,6 @@ class SplashViewModel: ViewModel() {
                     .addOnCompleteListener {
                         if (it.isSuccessful){
                             tokenCheckOK.postValue(true)
-                            Toast.makeText(applicationContext, "TOKEN_UPDATE", Toast.LENGTH_SHORT).show()
                         } else {
                             tokenCheckOK.postValue(true)
                             Toast.makeText(applicationContext, "TOKEN_UPDATE_FAILED", Toast.LENGTH_SHORT).show()
@@ -86,7 +84,6 @@ class SplashViewModel: ViewModel() {
                     }
         } else {
             tokenCheckOK.postValue(true)
-            Toast.makeText(applicationContext, "TOKEN_KEEP", Toast.LENGTH_SHORT).show()
             Timber.d("TokenKeep")
         }
     }
@@ -134,7 +131,6 @@ class SplashViewModel: ViewModel() {
                         usersOK.postValue(true)
                         val result = it.result?.toObjects(User::class.java) ?: listOf()
                         allUserList.addAll(result)
-                        Toast.makeText(applicationContext, "ALL_USER_SUCCESS", Toast.LENGTH_SHORT).show()
                     } else {
                         usersOK.postValue(true)
                         Toast.makeText(applicationContext, "ALL_USER_FAILED", Toast.LENGTH_SHORT).show()
@@ -152,7 +148,6 @@ class SplashViewModel: ViewModel() {
                         postsOK.postValue(true)
                         val result = it.result?.toObjects(Post::class.java) ?: listOf()
                         allPostList.addAll(result)
-                        Toast.makeText(applicationContext, "ALL_POST_SUCCESS", Toast.LENGTH_SHORT).show()
                     } else {
                         postsOK.postValue(true)
                         Toast.makeText(applicationContext, "ALL_POST_FAILED", Toast.LENGTH_SHORT).show()

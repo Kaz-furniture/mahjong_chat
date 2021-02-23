@@ -45,12 +45,11 @@ class PostEditActivity: BaseActivity() {
         binding.lifecycleOwner = this
         val postGet = (intent.getSerializableExtra(KEY1) as? Post) ?: kotlin.run {
             finish()
-            Toast.makeText(this, "情報取得が失敗しました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
             return@run Post()
         }
         post = postGet.also {
             binding.post = it
-            binding.exExplanation.text = it.explanation
             viewModel.explanationInput.postValue(it.explanation)
         }
         val choicesGet = mutableListOf<Choice>().apply {
@@ -99,7 +98,6 @@ class PostEditActivity: BaseActivity() {
     }
 
     private fun addAllChoiceLayout(list: List<Choice>) {
-        Timber.d("addAllChoiceLayout listSize:${list.size}")
         binding.choicesParentView.apply {
             removeAllViews()
             visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
@@ -182,7 +180,7 @@ class PostEditActivity: BaseActivity() {
 
                 UCrop.RESULT_ERROR -> {
                     uCropSrcUri = null
-                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
                 }
             }
 

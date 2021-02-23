@@ -25,7 +25,7 @@ class DMDetailActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dm_detail)
         binding.lifecycleOwner = this
         val roomGet = (intent.getSerializableExtra(KEY_ROOM) as? DMRoom) ?: kotlin.run {
-            Toast.makeText(this, "NO_DM_INFO", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
             finish()
             DMRoom()
         }

@@ -37,10 +37,9 @@ class MainViewModel: ViewModel() {
                 .document(newRoom.roomId)
                 .set(newRoom)
                 .addOnFailureListener {
-                    Toast.makeText(applicationContext, "ROOM_FAILED", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
                 }
                 .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "ROOM_CREATED", Toast.LENGTH_SHORT).show()
                     val newRoomList = ArrayList<DMRoom>().apply {
                         this.add(newRoom)
                         this.addAll(dMRoomList.value ?: listOf())
@@ -80,7 +79,6 @@ class MainViewModel: ViewModel() {
                         val myDMList = ArrayList<DMRoom>()
                         myDMList.addAll(result.filter { it.userIds.contains(myUser.userId) && it.deletedAt == null})
                         dMRoomList.postValue(myDMList)
-                        Toast.makeText(applicationContext, "DM_SUCCESS", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener {
@@ -97,7 +95,6 @@ class MainViewModel: ViewModel() {
                 .document(newRoom.roomId)
                 .set(newRoom)
                 .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "DELETE_SUCCESS", Toast.LENGTH_SHORT).show()
                     val newRoomList = ArrayList<DMRoom>().apply {
                         this.addAll(dMRoomList.value ?: listOf())
                         this.remove(room)

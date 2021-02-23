@@ -40,7 +40,6 @@ class DMDetailViewModel: ViewModel() {
     }
 
     fun initData(room: DMRoom) {
-        Timber.d("dmroom = ${room.roomId}")
         FirebaseFirestore.getInstance()
                 .collection("DMMessage")
                 .whereEqualTo("roomId", room.roomId)

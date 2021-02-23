@@ -64,15 +64,12 @@ class PostViewModel: ViewModel() {
         val choicesList = selectedChoices.value
 
         if (choicesList != null && choicesList.isNotEmpty()) {
-            for ((index, value) in choicesList.withIndex()) {
+            for (value in choicesList) {
                 value.postId = post.postId
                 FirebaseFirestore.getInstance()
                         .collection("choices")
                         .document(value.choiceId)
                         .set(value)
-                        .addOnCompleteListener {
-                            Toast.makeText(applicationContext, "CHOICE_UPLOAD_${index + 1}", Toast.LENGTH_SHORT).show()
-                        }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
                         }
@@ -86,19 +83,14 @@ class PostViewModel: ViewModel() {
                 }
                 .addOnSuccessListener {
                     postFinished.postValue(true)
-                    Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
                 }
 
         FirebaseFirestore.getInstance()
             .collection("posts")
             .document(post.postId)
             .set(post)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(applicationContext, "POST_SUCCESS", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
-                }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
             }
     }
 

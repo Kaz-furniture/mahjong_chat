@@ -92,15 +92,12 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_POST) {
             viewModel.loadPostList()
-            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
         if (requestCode == REQUEST_CODE_PROFILE) {
             viewModel.loadPostList()
-            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
         if (requestCode == REQUEST_CODE_DETAIL) {
             viewModel.loadPostList()
-            Toast.makeText(requireContext(), "UPDATE!!!!", Toast.LENGTH_SHORT).show()
         }
     }
 

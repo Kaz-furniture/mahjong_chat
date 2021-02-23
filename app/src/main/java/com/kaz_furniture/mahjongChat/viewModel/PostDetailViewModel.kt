@@ -69,9 +69,8 @@ class PostDetailViewModel: ViewModel() {
                 .document(newPost.postId)
                 .set(newPost)
                 .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "STAR!", Toast.LENGTH_SHORT).show()
                     allPostList.apply {
-                        this.remove(post)
+                        this.removeAll { it.postId == post.postId }
                         this.add(newPost)
                         this.sortBy { value -> value.createdAt }
                     }
@@ -109,9 +108,6 @@ class PostDetailViewModel: ViewModel() {
                 .collection("comment")
                 .document(newComment.commentId)
                 .set(newComment)
-                .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "COMMENT_SUCCESS", Toast.LENGTH_SHORT).show()
-                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "COMMENT_FAILED", Toast.LENGTH_SHORT).show()
                 }
@@ -165,7 +161,6 @@ class PostDetailViewModel: ViewModel() {
                         for (value in choices) {
                             allUsersNumber += value.userIds.size
                         }
-                        Toast.makeText(applicationContext, "Choices Get Success", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
                     }
@@ -190,7 +185,6 @@ class PostDetailViewModel: ViewModel() {
                             } else it
                         }
                         allUsersNumber  = ++ allUsersNumber
-                        Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener {
                         Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
@@ -212,7 +206,6 @@ class PostDetailViewModel: ViewModel() {
                                 } else it
                             }
                             allUsersNumber = -- allUsersNumber
-                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
@@ -234,7 +227,6 @@ class PostDetailViewModel: ViewModel() {
                                     oldChoice
                                 } else it
                             }
-                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
@@ -255,7 +247,6 @@ class PostDetailViewModel: ViewModel() {
                                     newChoice
                                 } else it
                             }
-                            Toast.makeText(applicationContext, "CHOICE_SELECTED", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()

@@ -44,6 +44,7 @@ class PostActivity: BaseActivity() {
         layoutManager = GridLayoutManager(this, 4)
         binding.explanation = viewModel.explanationInput
         binding.postButton.setOnClickListener {
+            binding.progressCircular.visibility = android.widget.ProgressBar.VISIBLE
             postWithImage()
         }
         binding.selectImageButton.setOnClickListener {
@@ -58,6 +59,7 @@ class PostActivity: BaseActivity() {
             addAllChoiceLayout(it)
         })
         viewModel.postFinished.observe(this, Observer {
+            binding.progressCircular.visibility = android.widget.ProgressBar.GONE
             finish()
         })
         viewModel.canSubmit.observe(this, Observer {
@@ -77,7 +79,6 @@ class PostActivity: BaseActivity() {
 
 
     private fun addAllChoiceLayout(list: List<Choice>) {
-        Timber.d("addAllChoiceLayout listSize:${list.size}")
         binding.choicesParentView.apply {
             removeAllViews()
             visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
@@ -98,7 +99,6 @@ class PostActivity: BaseActivity() {
     }
 
     private fun deleteNoImage() {
-        Timber.d("uCropSrcUri = $uCropSrcUri")
         if (uCropSrcUri != null) {
             val textNoImage = binding.noImage
             textNoImage.isVisible = false
@@ -141,7 +141,7 @@ class PostActivity: BaseActivity() {
 
                 UCrop.RESULT_ERROR -> {
                     uCropSrcUri = null
-                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
                 }
             }
 

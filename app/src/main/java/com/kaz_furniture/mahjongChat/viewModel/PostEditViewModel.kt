@@ -43,9 +43,6 @@ class PostEditViewModel: ViewModel() {
                 .collection("posts")
                 .document(post.postId)
                 .set(newPost)
-                .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "POST_UPDATED", Toast.LENGTH_SHORT).show()
-                }
     }
 
     fun postImageUpload(bitmap: Bitmap) {
@@ -59,7 +56,6 @@ class PostEditViewModel: ViewModel() {
                     bitmap.recycle()
                 }
                 .addOnSuccessListener {
-                    Toast.makeText(applicationContext, "UPLOAD_IMAGE_SUCCESS", Toast.LENGTH_SHORT).show()
                     imageUploaded.postValue(true)
                     bitmap.recycle()
                 }
@@ -83,15 +79,12 @@ class PostEditViewModel: ViewModel() {
             }
         }
         if (selectedChoicesValue.isNotEmpty()) {
-            for ((index, value) in selectedChoicesValue.withIndex()) {
+            for (value in selectedChoicesValue) {
                 value.postId = postId
                 FirebaseFirestore.getInstance()
                         .collection("choices")
                         .document(value.choiceId)
                         .set(value)
-                        .addOnCompleteListener {
-                            Toast.makeText(applicationContext, "CHOICE_UPLOAD_$index", Toast.LENGTH_SHORT).show()
-                        }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICES_FAILED", Toast.LENGTH_SHORT).show()
                         }

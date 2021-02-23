@@ -33,7 +33,7 @@ class PostDetailActivity: BaseActivity() {
         binding.lifecycleOwner = this
         val postGet = (intent.getSerializableExtra(KEY) as? Post) ?: kotlin.run {
             finish()
-            Toast.makeText(this, "情報取得できませんでした", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
             return@run Post()
         }
         post = postGet.also {

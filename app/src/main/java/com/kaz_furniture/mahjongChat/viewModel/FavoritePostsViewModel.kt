@@ -24,7 +24,7 @@ class FavoritePostsViewModel: ViewModel() {
                         allPostList.apply {
                             this.clear()
                             this.addAll(fetchedList ?: listOf())
-                            favoritesList.postValue(this.filter { it.favoriteUserIds.contains(myUser.userId) })
+                            favoritesList.postValue(this.filter { value -> value.favoriteUserIds.contains(myUser.userId) })
                         }
                     }
                 }

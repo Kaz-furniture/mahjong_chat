@@ -44,7 +44,6 @@ class CreateAccountViewModel: ViewModel() {
     private fun validateName(): Boolean {
         val nameValue = nameInput.value
         return if (nameValue == null || nameValue.isBlank()) {
-            Timber.d("nameInput = $nameValue")
             nameError.postValue(applicationContext.getString(R.string.inputCorrectly))
             false
         } else {
@@ -66,8 +65,6 @@ class CreateAccountViewModel: ViewModel() {
         val passwordValue = password.value
         return if (passwordValue == null || passwordValue.isBlank() || passwordValue != passwordValidate.value || passwordValue.length < 8) {
             passwordError.postValue(applicationContext.getString(R.string.inputCorrectly))
-            Timber.d("password = $passwordValue")
-            Timber.d("passwordValidate = ${passwordValidate.value}")
             false
         } else {
             true
@@ -101,7 +98,6 @@ class CreateAccountViewModel: ViewModel() {
                 .set(user)
                 .addOnCompleteListener { task->
                     if (task.isSuccessful) {
-                        Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                         myUser = user
                         SplashActivity.start(activity)
                     } else {

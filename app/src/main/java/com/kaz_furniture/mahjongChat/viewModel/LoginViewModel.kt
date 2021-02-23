@@ -31,10 +31,6 @@ class LoginViewModel: ViewModel() {
     val emailError = MutableLiveData<String>()
     val passwordError = MutableLiveData<String>()
 
-//    private var fetchedToken = ""
-//    val tokenGetOK = MutableLiveData<Boolean>()
-//    val myUserOK = MutableLiveData<Boolean>()
-//    val userAndTokenOK = MutableLiveData<Boolean>()
 
     private fun submitValidation(): Boolean {
         val email = email.value

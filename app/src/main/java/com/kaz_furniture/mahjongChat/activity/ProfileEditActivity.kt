@@ -53,8 +53,6 @@ class ProfileEditActivity: BaseActivity() {
         binding.profileImageSelect.setOnClickListener {
             selectImage()
         }
-        binding.presentName.text = myUser.name
-        binding.presentIntroduction.text = myUser.introduction
         title = getString(R.string.profileEdit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel.showProfileImage(binding)
@@ -92,7 +90,7 @@ class ProfileEditActivity: BaseActivity() {
 
                 UCrop.RESULT_ERROR -> {
                     viewModel.showProfileImage(binding)
-                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
                 }
             }
         }
