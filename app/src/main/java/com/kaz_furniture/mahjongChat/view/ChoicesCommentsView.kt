@@ -102,7 +102,7 @@ class ChoicesCommentsView: RecyclerView {
         }
 
         private fun onBindViewHolder(holder: SupplementViewHolder) {
-            holder.binding.allNumberText.text = "全${viewModel.allUsersNumber}票"
+            holder.binding.allNumberText.text = context.getString(R.string.allNumber, viewModel.allUsersNumber)
         }
 
         private fun onBindViewHolder(holder: SelectedViewHolder, position: Int) {
@@ -125,7 +125,7 @@ class ChoicesCommentsView: RecyclerView {
                 childView.setOnClickListener {
                     viewModel.choiceSelect(data)
                 }
-                percentText.text = "${percent}%"
+                percentText.text = context.getString(R.string.percent, percent)
             }
         }
 
@@ -164,7 +164,7 @@ class ChoicesCommentsView: RecyclerView {
                 childView.setOnClickListener {
                     viewModel.choiceSelect(data)
                 }
-                percentText.text = "${percent}%"
+                percentText.text = context.getString(R.string.percent, percent)
             }
         }
 

@@ -89,4 +89,6 @@
     <string name="notification">プッシュ通知の実装まで\nしばらくお待ちください</string>
     <string name="appName1">雀</string>
     <string name="appName2">チャット</string>
+    <string name="percent">%1$d%%</string>
+    <string name="allNumber">全%1$d票</string>
 </resources>
