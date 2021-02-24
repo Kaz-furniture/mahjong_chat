@@ -171,6 +171,7 @@ class PostActivity: BaseActivity() {
             cancelable(false)
             title(R.string.selectTile)
             val binding = DialogSelectTileBinding.inflate(LayoutInflater.from(this@PostActivity), null, false)
+            viewModel.selectTile(viewModel.selectedTile.value ?:Tile.M1)
             binding.apply {
                 tilesView.customAdapter.refresh(tileList)
                 closeButton.setOnClickListener {

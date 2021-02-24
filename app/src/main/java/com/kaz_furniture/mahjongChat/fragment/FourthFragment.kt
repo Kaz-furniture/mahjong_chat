@@ -46,7 +46,10 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
             binding?.dMRoomView?.customAdapter?.refresh(it)
         })
         viewModel.selectedDMRoom.observe(viewLifecycleOwner, Observer {
-            launchDMDetailActivity(it)
+            it?.also {
+                launchDMDetailActivity(it)
+                viewModel.clearSelect()
+            } ?:return@Observer
         })
         viewModel.userSelected.observe(viewLifecycleOwner, Observer {
             viewModel.createDMRoom(it)

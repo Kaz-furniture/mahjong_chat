@@ -12,6 +12,7 @@ import androidx.constraintlayout.motion.utils.Easing
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -119,7 +120,7 @@ class ChoicesCommentsView: RecyclerView {
             }
             val data = items[position].choice ?:return
             val percent = data.userIds.size * 100 / viewModel.allUsersNumber
-            barChartSettingOnSelected(percent, holder)
+            barChartSetting(percent, holder.binding.barChart, true)
             holder.binding.apply {
                 choice = data
                 childView.setOnClickListener {
@@ -158,7 +159,7 @@ class ChoicesCommentsView: RecyclerView {
             val percent = if (viewModel.allUsersNumber != 0) {
                 data.userIds.size * 100 / viewModel.allUsersNumber
             } else 0
-            barChartSetting(percent, holder)
+            barChartSetting(percent, holder.binding.barChart, false)
             holder.binding.apply {
                 choice = data
                 childView.setOnClickListener {
@@ -168,46 +169,17 @@ class ChoicesCommentsView: RecyclerView {
             }
         }
 
-        private fun barChartSetting(percent: Int, holder: ChoiceViewHolder) {
+        private fun barChartSetting(percent: Int, barChart: BarChart, selected: Boolean) {
             var entryList = ArrayList<BarEntry>().apply {
                 add(BarEntry(1F, percent.toFloat()))
             }
             val barDataSetsList = ArrayList<IBarDataSet>().apply {
                 val barDataSet = BarDataSet(entryList, "")
-                barDataSet.color = Color.WHITE
+                barDataSet.color = if (selected) Color.BLACK else Color.WHITE
                 barDataSet.setDrawValues(false)
                 add(barDataSet)
             }
-            val barChart = holder.binding.barChart
-            barChart.apply {
-                data = BarData(barDataSetsList)
-                xAxis.isEnabled = false
-                description.isEnabled = false
-                legend.isEnabled = false
-                axisLeft.isEnabled = false
-                axisLeft.axisMinimum = 0F
-                axisLeft.axisMaximum = 100F
-                axisRight.isEnabled = false
-                isScaleXEnabled = false
-                isScaleYEnabled = false
-                animateY(200)
-                setTouchEnabled(false)
-                setDrawValueAboveBar(false)
-            }
-            barChart.invalidate()
-        }
-
-        private fun barChartSettingOnSelected(percent: Int, holder: SelectedViewHolder) {
-            var entryList = ArrayList<BarEntry>().apply {
-                add(BarEntry(1F, percent.toFloat()))
-            }
-            val barDataSetsList = ArrayList<IBarDataSet>().apply {
-                val barDataSet = BarDataSet(entryList, "")
-                barDataSet.color = Color.BLACK
-                barDataSet.setDrawValues(false)
-                add(barDataSet)
-            }
-            val barChart = holder.binding.barChart
+//            val barChart = holder.binding.barChart
             barChart.apply {
                 data = BarData(barDataSetsList)
                 xAxis.isEnabled = false

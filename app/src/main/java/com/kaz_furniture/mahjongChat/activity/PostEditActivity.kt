@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.list.listItems
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.data.Tile
 import com.kaz_furniture.mahjongChat.databinding.ActivityPostEditBinding
 import com.kaz_furniture.mahjongChat.databinding.DialogSelectTilePostEditBinding
 import com.kaz_furniture.mahjongChat.databinding.ListChoiceBinding
@@ -128,6 +129,7 @@ class PostEditActivity: BaseActivity() {
             cancelable(false)
             title(R.string.selectTile)
             val binding = DialogSelectTilePostEditBinding.inflate(LayoutInflater.from(this@PostEditActivity), null, false)
+            viewModel.selectTile(viewModel.selectedTile.value ?:Tile.M1)
             binding.apply {
                 tilesView.customAdapter.refresh(PostActivity.tileList)
                 closeButton.setOnClickListener {

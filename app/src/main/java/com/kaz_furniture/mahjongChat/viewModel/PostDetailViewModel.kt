@@ -221,18 +221,16 @@ class PostDetailViewModel: ViewModel() {
                         .collection("choices")
                         .document(oldChoice.choiceId)
                         .set(oldChoice)
-                        .addOnCompleteListener {
-                            choices = choices.map {
-                                if (oldChoice.choiceId == it.choiceId) {
-                                    oldChoice
-                                } else it
-                            }
-                        }
+//                        .addOnCompleteListener {
+//                            choices = choices.map {
+//                                if (oldChoice.choiceId == it.choiceId) {
+//                                    oldChoice
+//                                } else it
+//                            }
+//                        }
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "CHOICE_FAILED", Toast.LENGTH_SHORT).show()
                         }
-
-
 
                 val newChoice = choice.apply {
                     this.userIds.add(myUser.userId)
@@ -243,9 +241,11 @@ class PostDetailViewModel: ViewModel() {
                         .set(newChoice)
                         .addOnCompleteListener {
                             choices = choices.map {
-                                if (choice.choiceId == it.choiceId) {
-                                    newChoice
-                                } else it
+                                when {
+                                    choice.choiceId == it.choiceId -> newChoice
+                                    oldChoice.choiceId == it.choiceId -> oldChoice
+                                    else -> it
+                                }
                             }
                         }
                         .addOnFailureListener {

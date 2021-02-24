@@ -20,12 +20,16 @@ import kotlin.collections.ArrayList
 class MainViewModel: ViewModel() {
     val updateData = MutableLiveData<Boolean>()
     val dMRoomList = MutableLiveData<List<DMRoom>>()
-    val selectedDMRoom = MutableLiveData<DMRoom>()
+    val selectedDMRoom = MutableLiveData<DMRoom?>()
     val userSelected = MutableLiveData<String>()
     val updatedList = MutableLiveData<List<Post>>()
 
     fun selectRoomPostValue(room: DMRoom) {
         selectedDMRoom.postValue(room)
+    }
+
+    fun clearSelect() {
+        selectedDMRoom.postValue(null)
     }
 
     fun createDMRoom(userId: String) {
