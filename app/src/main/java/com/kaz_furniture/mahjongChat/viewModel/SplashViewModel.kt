@@ -66,40 +66,53 @@ class SplashViewModel: ViewModel() {
     }
 
     fun fCMTokenCheck() {
+        Timber.d("makeLogout: 7")
         val presentToken = myUser.fcmToken
+        Timber.d("makeLogout: 8")
         if (fetchedToken != presentToken) {
-            val newUser = myUser
-            newUser.fcmToken = fetchedToken
+            Timber.d("makeLogout: 10")
+            val newUser = myUser.apply {
+                fcmToken = fetchedToken
+            }
+            myUser = newUser
+            Timber.d("makeLogout: 11")
             FirebaseFirestore.getInstance()
                     .collection("users")
                     .document(myUser.userId)
                     .set(newUser)
                     .addOnCompleteListener {
+                        Timber.d("makeLogout: 12")
                         if (it.isSuccessful){
                             tokenCheckOK.postValue(true)
+                            Timber.d("makeLogout: 5")
                         } else {
+                            Timber.d("makeLogout: 6")
                             tokenCheckOK.postValue(true)
                             Toast.makeText(applicationContext, "TOKEN_UPDATE_FAILED", Toast.LENGTH_SHORT).show()
                         }
                     }
         } else {
+            Timber.d("makeLogout: 9")
             tokenCheckOK.postValue(true)
-            Timber.d("TokenKeep")
         }
     }
 
     fun checkAccount() {
+        Timber.d("makeLogout: 4")
         FirebaseAuth.getInstance().currentUser?.also {
+            Timber.d("makeLogout: 3")
             getAllPosts()
             getAllUsers()
             getMyUser(it.uid)
             getFCMToken()
         } ?:run {
+            Timber.d("makeLogout: 2")
             makeLogout.postValue(true)
         }
     }
 
     private fun getMyUser(uid: String) {
+        Timber.d("makeLogout: 20")
         FirebaseFirestore.getInstance()
                 .collection("users")
                 .whereEqualTo("userId", uid)
@@ -107,15 +120,18 @@ class SplashViewModel: ViewModel() {
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
+                        Timber.d("makeLogout: 21")
                         val user = it.result?.toObjects(User::class.java)
                         if (user != null && user.isNotEmpty()) {
                             myUser = user[0]
                             myUserOK.postValue(true)
                         } else {
+                            Timber.d("makeLogout: 23")
                             makeLogout.postValue(true)
                             return@addOnCompleteListener
                         }
                     } else {
+                        Timber.d("makeLogout: 22")
                         makeLogout.postValue(true)
                         return@addOnCompleteListener
                     }
@@ -128,6 +144,7 @@ class SplashViewModel: ViewModel() {
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        Timber.d("makeLogout: 30")
                         usersOK.postValue(true)
                         val result = it.result?.toObjects(User::class.java) ?: listOf()
                         allUserList.addAll(result)
@@ -145,6 +162,7 @@ class SplashViewModel: ViewModel() {
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+                        Timber.d("makeLogout: 40")
                         postsOK.postValue(true)
                         val result = it.result?.toObjects(Post::class.java) ?: listOf()
                         allPostList.addAll(result)

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "747220551076",
+    "project_id": "mahjong-chat---pro",
+    "storage_bucket": "mahjong-chat---pro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747220551076:android:c45da72f971325b9062d31",
+        "android_client_info": {
+          "package_name": "com.kaz_furniture.mahjongChat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747220551076-h28if1jijk25j5nf9mu32ptu865fdsrk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaz_furniture.mahjongChat",
+            "certificate_hash": "953079a5422add5c2fcf463eca77a0bbb498d5b6"
+          }
+        },
+        {
+          "client_id": "747220551076-2p2j0736tcm8k2shlsttue4enp0as5jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJihQlLh94QeRoEGagbfq3meXqnRwXVsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747220551076-2p2j0736tcm8k2shlsttue4enp0as5jf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

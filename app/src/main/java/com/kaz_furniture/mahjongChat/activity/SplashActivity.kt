@@ -15,6 +15,7 @@ import com.kaz_furniture.mahjongChat.viewModel.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SplashActivity: BaseActivity() {
 
@@ -30,6 +31,7 @@ class SplashActivity: BaseActivity() {
         setContentView(R.layout.activity_splash)
         viewModel.checkAccount()
         viewModel.makeLogout.observe(this, Observer {
+            Timber.d("makeLogout: 1")
             Handler(Looper.getMainLooper()).postDelayed({
                 launchLoginActivity()
             }, splashTime)
