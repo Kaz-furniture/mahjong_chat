@@ -84,9 +84,6 @@ class ProfileViewModel: ViewModel() {
                 .collection("users")
                 .document(myUser.userId)
                 .set(myUser)
-                .addOnCompleteListener {
-                    Toast.makeText(applicationContext, "FOLLOW_SUCCESS", Toast.LENGTH_SHORT).show()
-                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "FOLLOW_FAILED", Toast.LENGTH_SHORT).show()
                 }

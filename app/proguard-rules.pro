@@ -35,3 +35,5 @@
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
+#Model
+-keep class com.kaz_furniture.mahjongChat.data** { *; }
