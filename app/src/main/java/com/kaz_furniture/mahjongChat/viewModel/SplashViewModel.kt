@@ -147,7 +147,10 @@ class SplashViewModel: ViewModel() {
                         Timber.d("makeLogout: 30")
                         usersOK.postValue(true)
                         val result = it.result?.toObjects(User::class.java) ?: listOf()
-                        allUserList.addAll(result)
+                        allUserList.apply {
+                            clear()
+                            addAll(result)
+                        }
                     } else {
                         usersOK.postValue(true)
                         Toast.makeText(applicationContext, "ALL_USER_FAILED", Toast.LENGTH_SHORT).show()
@@ -165,7 +168,10 @@ class SplashViewModel: ViewModel() {
                         Timber.d("makeLogout: 40")
                         postsOK.postValue(true)
                         val result = it.result?.toObjects(Post::class.java) ?: listOf()
-                        allPostList.addAll(result)
+                        allPostList.apply {
+                            clear()
+                            addAll(result)
+                        }
                     } else {
                         postsOK.postValue(true)
                         Toast.makeText(applicationContext, "ALL_POST_FAILED", Toast.LENGTH_SHORT).show()

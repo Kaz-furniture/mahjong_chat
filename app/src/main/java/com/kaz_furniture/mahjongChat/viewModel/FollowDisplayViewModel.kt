@@ -13,6 +13,7 @@ import com.kaz_furniture.mahjongChat.data.User
 class FollowDisplayViewModel: ViewModel() {
     val updatedUsers = MutableLiveData<List<User>>()
     val myUserUpdated = MutableLiveData<Boolean>()
+    val profileOpenLiveData = MutableLiveData<String>()
 
     fun updateAllUsers() {
         FirebaseFirestore.getInstance()
@@ -54,6 +55,10 @@ class FollowDisplayViewModel: ViewModel() {
                 .addOnCompleteListener {
                     myUserUpdated.postValue(true)
                 }
+    }
+
+    fun profileOpen(userId: String) {
+        profileOpenLiveData.postValue(userId)
     }
 
 }

@@ -38,6 +38,9 @@ class FollowDisplayActivity: BaseActivity() {
         viewModel.updatedUsers.observe(this, Observer {
             binding.followUsersView.customAdapter.refresh(checkAndConvert(it))
         })
+        viewModel.profileOpenLiveData.observe(this, Observer {
+            launchProfileActivity(it)
+        })
         title = if (followOrFollower == FOLLOWER) getString(R.string.followerJapanese)
             else getString(R.string.followJapanese)
     }
@@ -50,8 +53,14 @@ class FollowDisplayActivity: BaseActivity() {
         }
     }
 
+    private fun launchProfileActivity(userId: String) {
+        val intent = ProfileActivity.newIntent(this, userId)
+        startActivityForResult(intent, REQUEST_CODE_PROFILE)
+    }
+
 
     companion object {
+        private const val REQUEST_CODE_PROFILE = 9500
         private const val keyInt = "KEY_INT"
         private const val keyUserId = "KEY_USER_ID"
         private const val FOLLOWER = 0

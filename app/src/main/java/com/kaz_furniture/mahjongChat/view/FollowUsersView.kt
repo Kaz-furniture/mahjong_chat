@@ -88,6 +88,12 @@ class FollowUsersView: RecyclerView {
                     viewModel.buttonClick(data)
                 }
             }
+            holder.binding.userNameView.setOnClickListener {
+                viewModel.profileOpen(data)
+            }
+            holder.binding.userIcon.setOnClickListener {
+                viewModel.profileOpen(data)
+            }
         }
 
         class ItemViewHolder(val binding: ListFollowUserBinding): RecyclerView.ViewHolder(binding.root)
