@@ -91,4 +91,5 @@
     <string name="appName2">チャット</string>
     <string name="percent">%1$d%%</string>
     <string name="allNumber">全%1$d票</string>
+    <string name="fcmTokenServerKey">AAAA_NErUg4:APA91bEVobHnmo-TEVzTDQH5m5Zk5YXqeF_95yuEKGnSxOsfBGHghlybqOo1JyYmdNv5XIjhWd3_Ztu3Lwg_iNwRlYqfQWzwVZqKsN_nxe1NcjL1Xrsa15YiNC2pN4izFlFr7VzIiTZ_</string>
 </resources>
