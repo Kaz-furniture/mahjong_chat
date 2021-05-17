@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.DMMessage
 import com.kaz_furniture.mahjongChat.data.DMRoom
+import com.kaz_furniture.mahjongChat.extensions.sendFcm
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,9 +37,16 @@ class DMDetailViewModel: ViewModel() {
             this.fromUserId = myUser.userId
             this.roomId = roomNow.roomId
         }
+        Timber.d("messageInput2 = ${messageInput.value}")
         FirebaseFirestore.getInstance()
                 .collection("DMMessage")
                 .add(newMessage)
+                .addOnCompleteListener {
+                    allUserList.firstOrNull { value -> value.userId == DMRoom.getOpponentUserId(roomNow) }?.apply {
+                        Timber.d("messageInput = ${newMessage.content}")
+                        sendFcm(this, TYPE_DM_MESSAGE, applicationContext.getString(R.string.dMNotifyTitle, myUser.name), newMessage.content)
+                    }
+                }
         updateRoom()
     }
 
@@ -53,7 +64,6 @@ class DMDetailViewModel: ViewModel() {
                     }
                     initSubscribe(date)
                 }
-
     }
 
     private fun initSubscribe(lastCreatedAt: Date) {
@@ -92,5 +102,9 @@ class DMDetailViewModel: ViewModel() {
     override fun onCleared() {
         super.onCleared()
         messageListener?.remove()
+    }
+
+    companion object {
+        private const val TYPE_DM_MESSAGE = 0
     }
 }

@@ -2,6 +2,7 @@ package com.kaz_furniture.mahjongChat.extensions
 
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.FcmRequest
@@ -31,7 +32,7 @@ fun ViewModel.sendFcm(sendToUser: User, type: Int, key1: String, key2: String, o
     val json = Gson().toJson(fcmRequestBody)
     val request = Request.Builder()
         .url("https://fcm.googleapis.com/fcm/send")
-        .addHeader("Authorization", "key=${R.string.fcmTokenServerKey}")
+        .addHeader("Authorization", applicationContext.getString(R.string.fcmTokenServerKey))
         .addHeader("Content-Type", "application/json")
         .post(RequestBody.create(MediaType.parse("application/json"), json))
         .build()

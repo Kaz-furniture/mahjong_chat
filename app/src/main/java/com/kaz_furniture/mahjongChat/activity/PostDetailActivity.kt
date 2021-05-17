@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -65,12 +66,20 @@ class PostDetailActivity: BaseActivity() {
         binding.starNumberNumber.text = post.favoriteUserIds.size.toString()
         binding.starNumber = viewModel.starNumber.value
         binding.lightStar.setOnClickListener {
-            viewModel.starClick(post)
+            if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+                Toast.makeText(this, "ログインしてください", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.starClick(post)
+            }
             binding.lightStar.visibility = View.GONE
             binding.darkStar.visibility = View.VISIBLE
         }
         binding.darkStar.setOnClickListener {
-            viewModel.starClick(post)
+            if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+                Toast.makeText(this, "ログインしてください", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.starClick(post)
+            }
             binding.darkStar.visibility = View.GONE
             binding.lightStar.visibility = View.VISIBLE
         }

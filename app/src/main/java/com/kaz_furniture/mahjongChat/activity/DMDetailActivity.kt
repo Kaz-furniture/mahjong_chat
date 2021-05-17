@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.DMRoom
@@ -24,6 +25,7 @@ class DMDetailActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dm_detail)
         binding.lifecycleOwner = this
+        if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrBlank()) launchLoginActivity()
         val roomGet = (intent.getSerializableExtra(KEY_ROOM) as? DMRoom) ?: kotlin.run {
             Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
             finish()

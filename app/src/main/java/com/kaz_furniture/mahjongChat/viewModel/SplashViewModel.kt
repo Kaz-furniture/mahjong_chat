@@ -60,7 +60,7 @@ class SplashViewModel: ViewModel() {
         val usersOKValue = usersOK.value ?:false
         val tokenCheckOKValue = tokenCheckOK.value ?:false
         val timeCountValue = timeCount.value ?:false
-        if (postsOKValue && usersOKValue && tokenCheckOKValue &&timeCountValue) {
+        if (postsOKValue && usersOKValue && tokenCheckOKValue && timeCountValue) {
             allOK.postValue(true)
         } else return
     }
@@ -106,8 +106,11 @@ class SplashViewModel: ViewModel() {
             getMyUser(it.uid)
             getFCMToken()
         } ?:run {
-            Timber.d("makeLogout: 2")
-            makeLogout.postValue(true)
+            getAllPosts()
+            getAllUsers()
+            tokenCheckOK.postValue(true)
+//            Timber.d("makeLogout: 2")
+//            makeLogout.postValue(true)
         }
     }
 

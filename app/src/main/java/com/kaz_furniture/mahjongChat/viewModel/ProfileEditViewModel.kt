@@ -113,9 +113,10 @@ class ProfileEditViewModel: ViewModel() {
                     .addOnSuccessListener {
                         updateOK.postValue(true)
                     }
+            Timber.d("exImageId = $exImageId")
             if (exImageId.isNotBlank()) {
                 FirebaseStorage.getInstance().reference.child(exImageId).delete().addOnFailureListener {
-                    Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "FAILED_IN_DELETE", Toast.LENGTH_SHORT).show()
                 }
             }
         }

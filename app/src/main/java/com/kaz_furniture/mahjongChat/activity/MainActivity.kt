@@ -73,6 +73,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun launchProfileActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+            launchLoginActivity()
+            return
+        }
         val intent = ProfileActivity.newIntent(this, myUser.userId)
         startActivityForResult(intent, REQUEST_CODE_PROFILE)
     }
@@ -83,6 +87,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun launchProfileEditActivity() {
+        if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+            launchLoginActivity()
+            return
+        }
         val intent = ProfileEditActivity.newIntent(this)
         startActivityForResult(intent, REQUEST_CODE_PROFILE_EDIT)
     }

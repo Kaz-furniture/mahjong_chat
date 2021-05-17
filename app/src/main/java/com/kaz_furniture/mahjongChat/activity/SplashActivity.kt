@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class SplashActivity: BaseActivity() {
 
-    private val splashTime = 5000L
+    private val splashTime = 4000L
     lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
 
@@ -28,7 +28,6 @@ class SplashActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         binding.lifecycleOwner = this
         timeCount()
-        setContentView(R.layout.activity_splash)
         viewModel.checkAccount()
         viewModel.makeLogout.observe(this, Observer {
             Timber.d("makeLogout: 1")

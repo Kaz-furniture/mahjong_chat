@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -168,7 +169,6 @@ class PostDetailViewModel: ViewModel() {
     }
 
     fun choiceSelect(choice: Choice) {
-
         if (!isSelected) {
             val newChoice = choice.apply {
                 this.userIds.add(myUser.userId)

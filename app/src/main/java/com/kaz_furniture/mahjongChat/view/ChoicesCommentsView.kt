@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.constraintlayout.motion.utils.Easing
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
@@ -124,6 +126,10 @@ class ChoicesCommentsView: RecyclerView {
             holder.binding.apply {
                 choice = data
                 childView.setOnClickListener {
+                    if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+                        Toast.makeText(context, "ログインしてください", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     viewModel.choiceSelect(data)
                 }
                 percentText.text = context.getString(R.string.percent, percent)
@@ -163,6 +169,10 @@ class ChoicesCommentsView: RecyclerView {
             holder.binding.apply {
                 choice = data
                 childView.setOnClickListener {
+                    if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+                        Toast.makeText(context, "ログインしてください", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     viewModel.choiceSelect(data)
                 }
                 percentText.text = context.getString(R.string.percent, percent)
