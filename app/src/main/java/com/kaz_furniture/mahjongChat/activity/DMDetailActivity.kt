@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.utils.MDUtil.getStringArray
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.R
@@ -26,21 +27,27 @@ class DMDetailActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dm_detail)
         binding.lifecycleOwner = this
         if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrBlank()) launchLoginActivity()
-        val roomGet = (intent.getSerializableExtra(KEY_ROOM) as? DMRoom) ?: kotlin.run {
-            Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
-            finish()
-            DMRoom()
+        if (intent.getStringExtra(KEY_ID).isNullOrEmpty()) {
+            val roomGet = (intent.getSerializableExtra(KEY_ROOM) as? DMRoom) ?: kotlin.run {
+                Toast.makeText(this, "取得失敗", Toast.LENGTH_SHORT).show()
+                finish()
+                DMRoom()
+            }
+            viewModel.roomNow = roomGet.also { room ->
+                viewModel.initData(room)
+                title = allUserList.firstOrNull { it.userId == DMRoom.getOpponentUserId(room) }?.name ?:"NO_USER_NAME"
+            }
+        } else {
+            viewModel.getRoom(intent.getStringExtra(KEY_ID) ?:return)
         }
-        viewModel.roomNow = roomGet.also {
-            viewModel.initData(it)
-        }
+
         binding.message = viewModel.messageInput
         binding.submitButton.setOnClickListener {
             viewModel.sendMessage()
             binding.messageEditText.editableText.clear()
         }
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.initData(roomGet)
+            viewModel.initData(viewModel.roomNow)
         }
         binding.messageEditText.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
@@ -57,8 +64,11 @@ class DMDetailActivity: BaseActivity() {
         viewModel.canSend.observe(this, Observer {
             binding.canSubmit = it
         })
+        viewModel.idOK.observe(this, Observer {
+            viewModel.initData(it)
+            title = allUserList.firstOrNull { value -> value.userId == DMRoom.getOpponentUserId(it) }?.name ?:"NO_USER_NAME"
+        })
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = allUserList.firstOrNull { it.userId == DMRoom.getOpponentUserId(roomGet) }?.name ?:"NO_USER_NAME"
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -69,7 +79,8 @@ class DMDetailActivity: BaseActivity() {
 
     companion object {
         private const val KEY_ROOM = "KEY_ROOM"
-        fun newIntent(context: Context, room: DMRoom): Intent {
+        private const val KEY_ID = "KEY_ID"
+        fun newIntent(context: Context, room: DMRoom, id: String = ""): Intent {
             return Intent(context, DMDetailActivity::class.java).apply {
                 putExtra(KEY_ROOM, room)
             }

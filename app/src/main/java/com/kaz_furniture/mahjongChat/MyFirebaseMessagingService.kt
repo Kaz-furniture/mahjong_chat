@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.kaz_furniture.mahjongChat.activity.DMDetailActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
 import timber.log.Timber
 
@@ -20,7 +21,9 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         Timber.d("remoteData = $data")
         when (data["type"]) {
             TYPE_DM_MESSAGE -> {
-                val resultIntent = Intent(this, MainActivity::class.java)
+                val resultIntent = Intent(this, DMDetailActivity::class.java).apply {
+                    putExtra(KEY_ID, data["id"])
+                }
                 val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
                     addNextIntentWithParentStack(resultIntent)
                     getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -54,6 +57,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     }
 
     companion object {
+        private const val KEY_ID = "KEY_ID"
         private const val TYPE_DM_MESSAGE = "0"
         private const val CHANNEL_ID_0 = "channel_id_0"
     }

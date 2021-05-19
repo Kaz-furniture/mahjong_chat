@@ -3,10 +3,12 @@ package com.kaz_furniture.mahjongChat.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -82,16 +84,24 @@ class ProfileActivity: BaseActivity() {
     }
 
     private fun buttonClick() {
-        when {
-            userId == myUser.userId -> launchProfileEditActivity()
-            myUser.followingUserIds.contains(userId) -> viewModel.followCancel(userId)
-            else -> viewModel.follow(userId)
+        if (!FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()){
+            when {
+                userId == myUser.userId -> launchProfileEditActivity()
+                myUser.followingUserIds.contains(userId) -> viewModel.followCancel(userId)
+                else -> viewModel.follow(userId)
+            }
+        } else {
+            Toast.makeText(this, "ログインしてください", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun launchFollowDisplayActivity(number: Int) {
-        val intent = FollowDisplayActivity.newIntent(this, number, userId)
-        startActivityForResult(intent, REQUEST_CODE_FOLLOW_DISPLAY)
+        if (!FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+            val intent = FollowDisplayActivity.newIntent(this, number, userId)
+            startActivityForResult(intent, REQUEST_CODE_FOLLOW_DISPLAY)
+        } else {
+            Toast.makeText(this, "ログインしてください", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun launchProfileEditActivity() {

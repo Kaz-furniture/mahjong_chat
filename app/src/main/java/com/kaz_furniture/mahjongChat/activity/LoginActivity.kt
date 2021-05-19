@@ -1,11 +1,14 @@
 package com.kaz_furniture.mahjongChat.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.viewModel.LoginViewModel
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.databinding.ActivityLoginBinding
@@ -29,7 +32,7 @@ class LoginActivity: BaseActivity() {
         binding.email = viewModel.email
         binding.password = viewModel.password
         binding.login.setOnClickListener {
-            viewModel.login(this,this@LoginActivity)
+            login()
         }
         viewModel.canSubmit.observe(this, Observer {
             binding.canSubmit = it
@@ -59,10 +62,21 @@ class LoginActivity: BaseActivity() {
         }
     }
 
+    private fun login() {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(viewModel.email.value ?:"", viewModel.password.value ?:"")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    finishAffinity()
+                    SplashActivity.start(this)
+                } else {
+                    Toast.makeText(this, "FAILED", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     companion object {
         fun start(activity: Activity) =
             activity.apply {
-                finishAffinity()
                 startActivity(Intent(activity, LoginActivity::class.java))
             }
     }

@@ -12,7 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import java.io.IOException
 
-fun ViewModel.sendFcm(sendToUser: User, type: Int, key1: String, key2: String, onFailure: () -> Unit = {}, onComplete: () -> Unit = {}) {
+fun ViewModel.sendFcm(sendToUser: User, type: Int, key1: String, key2: String, id: String = "", onFailure: () -> Unit = {}, onComplete: () -> Unit = {}) {
     Timber.d("sendToUser = ${sendToUser.name}")
     if (sendToUser.userId == myUser.userId) return
     Timber.d("sendToUser = ${sendToUser.name}")
@@ -25,6 +25,7 @@ fun ViewModel.sendFcm(sendToUser: User, type: Int, key1: String, key2: String, o
         to = sendToUser.fcmToken
         data.apply {
             this.type = type
+            this.id = id
             this.key1 = key1
             this.key2 = key2
         }

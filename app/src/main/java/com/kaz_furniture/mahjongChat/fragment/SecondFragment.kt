@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
@@ -74,6 +75,10 @@ class SecondFragment : Fragment(R.layout.fragment_second), PostListAdapter.Callb
     }
 
     private fun launchPostActivity() {
+        if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "ログインしてください", Toast.LENGTH_SHORT).show()
+            return
+        }
         val intent = PostActivity.newIntent(requireContext())
         startActivityForResult(intent, REQUEST_CODE_POST)
     }

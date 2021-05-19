@@ -25,10 +25,24 @@ class DMDetailViewModel: ViewModel() {
     val canSend = MediatorLiveData<Boolean>().also { result ->
         result.addSource(messageInput) { result.value = submitValidation()}
     }
+    val idOK = MutableLiveData<DMRoom>()
 
     private fun submitValidation(): Boolean {
         val messageValue = messageInput.value
         return !messageValue.isNullOrBlank()
+    }
+
+    fun getRoom(id: String) {
+        FirebaseFirestore.getInstance().collection("DMRoom")
+            .document(id)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObject(DMRoom::class.java) ?:return@addOnCompleteListener
+                    roomNow = result
+                    idOK.postValue(result)
+                }
+            }
     }
 
     fun sendMessage() {
@@ -44,7 +58,7 @@ class DMDetailViewModel: ViewModel() {
                 .addOnCompleteListener {
                     allUserList.firstOrNull { value -> value.userId == DMRoom.getOpponentUserId(roomNow) }?.apply {
                         Timber.d("messageInput = ${newMessage.content}")
-                        sendFcm(this, TYPE_DM_MESSAGE, applicationContext.getString(R.string.dMNotifyTitle, myUser.name), newMessage.content)
+                        sendFcm(this, TYPE_DM_MESSAGE, applicationContext.getString(R.string.dMNotifyTitle, myUser.name), newMessage.content, newMessage.roomId)
                     }
                 }
         updateRoom()

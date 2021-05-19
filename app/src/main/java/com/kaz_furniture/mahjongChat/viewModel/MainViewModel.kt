@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
@@ -12,6 +13,7 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicatio
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.adapter.PostListAdapter
 import com.kaz_furniture.mahjongChat.data.DMRoom
+import com.kaz_furniture.mahjongChat.data.Notification
 import com.kaz_furniture.mahjongChat.data.Post
 import timber.log.Timber
 import java.util.*
@@ -23,6 +25,7 @@ class MainViewModel: ViewModel() {
     val selectedDMRoom = MutableLiveData<DMRoom?>()
     val userSelected = MutableLiveData<String>()
     val updatedList = MutableLiveData<List<Post>>()
+    val notificationsLiveData = MutableLiveData<List<Notification>>()
 
     fun selectRoomPostValue(room: DMRoom) {
         selectedDMRoom.postValue(room)
@@ -105,5 +108,17 @@ class MainViewModel: ViewModel() {
                     }
                     dMRoomList.postValue(newRoomList)
                 }
+    }
+
+    fun fetchNotifications() {
+        FirebaseFirestore.getInstance().collection("notifications")
+            .whereEqualTo("toUserId", myUser.userId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObjects(Notification::class.java) ?: listOf()
+                    notificationsLiveData.postValue(result)
+                }
+            }
     }
 }

@@ -44,17 +44,6 @@ class LoginViewModel: ViewModel() {
         } else true
     }
 
-    fun login(context: Context, activity: LoginActivity) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value ?:"", password.value ?:"")
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        SplashActivity.start(activity)
-                    } else {
-                        Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show()
-                    }
-                }
-    }
-
 //    private fun getToken() {
 //        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task->
 //            if (!task.isSuccessful) {

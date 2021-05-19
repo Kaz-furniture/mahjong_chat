@@ -3,6 +3,7 @@ package com.kaz_furniture.mahjongChat.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.navigation.NavigationView
@@ -23,7 +25,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.GlideApp
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.databinding.ActivityMainBinding
+import com.kaz_furniture.mahjongChat.databinding.DialogDeleteConfirmBinding
 import com.kaz_furniture.mahjongChat.extensions.setIconOnImageId
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -110,11 +114,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_logout -> {
-                FirebaseAuth.getInstance().signOut()
-                finishAffinity()
-                LoginActivity.start(this)
-                Toast.makeText(this, "ログアウトしました", Toast.LENGTH_LONG).show()
+            R.id.menu_login -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+                    LoginActivity.start(this)
+                } else {
+                    confirmDialog()
+                }
             }
 
             R.id.menu_favorite -> {
@@ -128,6 +134,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         return true
+    }
+
+    private fun confirmDialog() {
+        MaterialDialog(this).show {
+            title = getString(R.string.deleteConfirm)
+            val binding = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(this@MainActivity), null, false)
+            binding.apply {
+                titleTextView.text = getString(R.string.logoutConfirm)
+                yesButton.setOnClickListener {
+                    dismiss()
+                    FirebaseAuth.getInstance().signOut()
+                    myUser = User()
+                    Toast.makeText(this@MainActivity, "ログアウトしました", Toast.LENGTH_LONG).show()
+                    LoginActivity.start(this@MainActivity)
+                }
+                cancelButton.setOnClickListener {
+                    dismiss()
+                }
+            }
+            setContentView(binding.root)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

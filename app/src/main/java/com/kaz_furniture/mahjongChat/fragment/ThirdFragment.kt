@@ -27,6 +27,18 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         super.onViewCreated(view, savedInstanceState)
         val bindingData: FragmentThirdBinding? = DataBindingUtil.bind(view)
         binding = bindingData ?:return
-        binding?.textNotifications?.text = getString(R.string.notification)
+        binding?.lifecycleOwner = this
+        binding?.swipeRefresh?.setOnRefreshListener {
+            viewModel.fetchNotifications()
+            binding?.swipeRefresh?.isRefreshing = false
+        }
+        viewModel.notificationsLiveData.observe(viewLifecycleOwner, Observer {
+            binding?.notificationsView?.customAdapter?.refresh(it)
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchNotifications()
     }
 }

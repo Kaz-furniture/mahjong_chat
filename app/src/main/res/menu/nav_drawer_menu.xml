@@ -7,6 +7,6 @@
         android:id="@+id/menu_favorite"
         android:title="@string/favoriteList"/>
     <item
-        android:id="@+id/menu_logout"
-        android:title="@string/logout"/>
+        android:id="@+id/menu_login"
+        android:title="@string/login"/>
 </menu>

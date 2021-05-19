@@ -6,6 +6,7 @@ class FcmRequest {
 
     class Data {
         var type = 0
+        var id = ""
         var key1 = ""
         var key2 = ""
     }

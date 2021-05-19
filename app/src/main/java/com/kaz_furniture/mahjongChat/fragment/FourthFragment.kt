@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.DMDetailActivity
@@ -57,6 +58,10 @@ class FourthFragment : Fragment(R.layout.fragment_fourth) {
     }
 
     private fun showCreateRoomDialog() {
+        if (FirebaseAuth.getInstance().currentUser?.uid.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "ログインしてください", Toast.LENGTH_SHORT).show()
+            return
+        }
         MaterialDialog(requireContext()).show {
             cancelable(false)
             val binding = DialogRoomCreateBinding.inflate(LayoutInflater.from(requireContext()), null, false)

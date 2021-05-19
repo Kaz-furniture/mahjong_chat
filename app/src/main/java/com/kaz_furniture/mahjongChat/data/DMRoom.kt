@@ -19,7 +19,7 @@ class DMRoom: Serializable {
                 this.addAll(dmRoom.userIds)
                 this.remove(myUser.userId)
             }
-            return usersList[0]
+            return usersList.firstOrNull() ?:""
         }
     }
 }

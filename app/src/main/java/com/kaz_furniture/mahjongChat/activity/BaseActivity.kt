@@ -19,7 +19,6 @@ open class BaseActivity: AppCompatActivity() {
 
     fun launchLoginActivity() {
         FirebaseAuth.getInstance().signOut()
-        finishAffinity()
         LoginActivity.start(this)
     }
 }
