@@ -74,8 +74,17 @@ class NotificationsView: RecyclerView {
             holder.binding.apply {
                 imageId = allUserList.firstOrNull { it.userId == data.fromUserId }?.imageUrl ?:""
                 content = data.content
-                userName = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
+                userName = makeTitle(data)
                 commentTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.submitTime)
+            }
+        }
+
+        private fun makeTitle(data: Notification): String {
+            return if (data.type == TYPE_DM_MESSAGE) {
+                val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
+                "$fromUser   からDMです"
+            } else {
+                ""
             }
         }
 
@@ -91,6 +100,7 @@ class NotificationsView: RecyclerView {
     }
 
     companion object {
+        private const val TYPE_DM_MESSAGE = 0
         private const val VIEW_TYPE_EMPTY = 0
         private const val VIEW_TYPE_ITEM = 1
     }
