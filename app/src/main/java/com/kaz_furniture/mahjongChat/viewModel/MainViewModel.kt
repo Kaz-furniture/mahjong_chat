@@ -117,7 +117,8 @@ class MainViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val result = task.result?.toObjects(Notification::class.java) ?: listOf()
-                    notificationsLiveData.postValue(result)
+                    val orderList = result.sortedByDescending { it.submitTime }
+                    notificationsLiveData.postValue(orderList)
                 }
             }
     }

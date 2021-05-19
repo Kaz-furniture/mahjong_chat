@@ -12,6 +12,8 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.DMMessage
 import com.kaz_furniture.mahjongChat.data.DMRoom
+import com.kaz_furniture.mahjongChat.data.Notification
+import com.kaz_furniture.mahjongChat.data.User
 import com.kaz_furniture.mahjongChat.extensions.sendFcm
 import timber.log.Timber
 import java.util.*
@@ -58,10 +60,29 @@ class DMDetailViewModel: ViewModel() {
                 .addOnCompleteListener {
                     allUserList.firstOrNull { value -> value.userId == DMRoom.getOpponentUserId(roomNow) }?.apply {
                         Timber.d("messageInput = ${newMessage.content}")
-                        sendFcm(this, TYPE_DM_MESSAGE, applicationContext.getString(R.string.dMNotifyTitle, myUser.name), newMessage.content, newMessage.roomId)
+                        sendFcm(this,
+                            TYPE_DM_MESSAGE,
+                            applicationContext.getString(R.string.dMNotifyTitle, myUser.name),
+                            newMessage.content,
+                            newMessage.roomId
+                        )
+                        createNotification(this, newMessage.content)
                     }
                 }
         updateRoom()
+    }
+
+    private fun createNotification(user: User, content: String) {
+        val newNotification = Notification().apply {
+            this.content = content
+            this.fromUserId = myUser.userId
+            this.toUserId = user.userId
+            this.type = TYPE_DM_MESSAGE
+        }
+
+        FirebaseFirestore.getInstance().collection("notifications")
+            .document(newNotification.notificationId)
+            .set(newNotification)
     }
 
     fun initData(room: DMRoom) {
