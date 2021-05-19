@@ -20,6 +20,7 @@ import com.kaz_furniture.mahjongChat.databinding.ListFollowUserBinding
 import com.kaz_furniture.mahjongChat.databinding.ListNotificationsBinding
 import com.kaz_furniture.mahjongChat.viewModel.FollowDisplayViewModel
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
+import timber.log.Timber
 
 class NotificationsView: RecyclerView {
 
@@ -76,6 +77,10 @@ class NotificationsView: RecyclerView {
                 content = data.content
                 userName = makeTitle(data)
                 commentTime.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.submitTime)
+                childView.setOnClickListener {
+                    Timber.d("notificationClicked2")
+                    viewModel.notificationClicked(data.type, data.contentId)
+                }
             }
         }
 

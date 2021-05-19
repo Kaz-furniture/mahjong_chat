@@ -11,4 +11,5 @@ class Notification {
     var type: Int = 0
     var submitTime = Date()
     var content = ""
+    var contentId = ""
 }

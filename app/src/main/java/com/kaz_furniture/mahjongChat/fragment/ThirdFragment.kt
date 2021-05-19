@@ -13,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.activity.DMDetailActivity
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.databinding.FragmentThirdBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel
 
@@ -35,10 +37,25 @@ class ThirdFragment : Fragment(R.layout.fragment_third) {
         viewModel.notificationsLiveData.observe(viewLifecycleOwner, Observer {
             binding?.notificationsView?.customAdapter?.refresh(it)
         })
+        viewModel.selectedDMRoom.observe(viewLifecycleOwner, Observer {
+            it?.also {
+                launchDMDetailActivity(it)
+                viewModel.clearSelect()
+            } ?:return@Observer
+        })
+    }
+
+    private fun launchDMDetailActivity(data: DMRoom) {
+        val intent = DMDetailActivity.newIntent(requireContext(), data)
+        startActivityForResult(intent, REQUEST_CODE_DM_DETAIL)
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.fetchNotifications()
+    }
+
+    companion object {
+        private const val REQUEST_CODE_DM_DETAIL = 4000
     }
 }

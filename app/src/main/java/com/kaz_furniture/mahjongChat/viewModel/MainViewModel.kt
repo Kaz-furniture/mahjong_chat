@@ -122,4 +122,34 @@ class MainViewModel: ViewModel() {
                 }
             }
     }
+
+    fun notificationClicked(type: Int, id: String = "") {
+        when (type) {
+            TYPE_DM_MESSAGE -> {
+                Timber.d("notificationClicked1 $id")
+                getAndPostRoom(id)
+            }
+
+            else -> {
+                return
+            }
+        }
+    }
+
+    private fun getAndPostRoom(id: String) {
+        FirebaseFirestore.getInstance().collection("DMRoom")
+            .document(id)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.toObject(DMRoom::class.java) ?:return@addOnCompleteListener
+                    selectedDMRoom.postValue(result)
+                    Timber.d("notificationClicked3")
+                }
+            }
+    }
+
+    companion object {
+        private const val TYPE_DM_MESSAGE = 0
+    }
 }

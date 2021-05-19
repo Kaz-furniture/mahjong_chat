@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="12dp"
+        android:id="@+id/child_view"
         tools:context=".activity.MainActivity">
 
         <View

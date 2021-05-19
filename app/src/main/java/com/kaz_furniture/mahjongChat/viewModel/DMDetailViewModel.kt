@@ -66,18 +66,19 @@ class DMDetailViewModel: ViewModel() {
                             newMessage.content,
                             newMessage.roomId
                         )
-                        createNotification(this, newMessage.content)
+                        createNotification(this, newMessage.content, newMessage.roomId)
                     }
                 }
         updateRoom()
     }
 
-    private fun createNotification(user: User, content: String) {
+    private fun createNotification(user: User, content: String, roomId: String) {
         val newNotification = Notification().apply {
             this.content = content
             this.fromUserId = myUser.userId
             this.toUserId = user.userId
             this.type = TYPE_DM_MESSAGE
+            this.contentId = roomId
         }
 
         FirebaseFirestore.getInstance().collection("notifications")
