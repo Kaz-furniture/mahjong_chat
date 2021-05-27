@@ -117,7 +117,8 @@ class MainViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val result = task.result?.toObjects(Notification::class.java) ?: listOf()
-                    val orderList = result.sortedByDescending { it.submitTime }
+                    val type0List = result.filter { it.type == TYPE_DM_MESSAGE }
+                    val orderList = type0List.sortedByDescending { it.submitTime }
                     notificationsLiveData.postValue(orderList)
                 }
             }
