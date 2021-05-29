@@ -1,5 +1,6 @@
 package com.kaz_furniture.mahjongChat.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +29,6 @@ class ProfileActivity: BaseActivity() {
         binding.lifecycleOwner = this
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         userId = intent.getStringExtra(KEY) ?:""
-        buttonTypeCheck()
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.getPostList(userId)
         }
@@ -36,8 +36,6 @@ class ProfileActivity: BaseActivity() {
         binding.userButton.setOnClickListener {
             buttonClick()
         }
-        viewModel.getUserInfo(userId)
-        viewModel.getPostList(userId)
         binding.followerNumber.setOnClickListener {
             launchFollowDisplayActivity(FOLLOWER)
         }
@@ -71,6 +69,9 @@ class ProfileActivity: BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.getUserInfo(userId)
+        viewModel.getPostList(userId)
+        buttonTypeCheck()
         binding.followingNumber.text = allUserList.firstOrNull { it.userId == userId }?.followingUserIds?.size?.toString() ?:""
         binding.followerNumber.text = allUserList.filter { it.followingUserIds.contains(userId) }.size.toString()
     }
@@ -131,6 +132,11 @@ class ProfileActivity: BaseActivity() {
             return Intent(context, ProfileActivity::class.java).apply {
                 putExtra(KEY, id)
             }
+        }
+        fun start(activity: Activity, id: String) {
+            activity.startActivity(Intent(activity, ProfileActivity::class.java).apply {
+                putExtra(KEY, id)
+            })
         }
     }
 }

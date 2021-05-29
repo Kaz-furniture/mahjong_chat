@@ -28,6 +28,7 @@ class DMDetailViewModel: ViewModel() {
         result.addSource(messageInput) { result.value = submitValidation()}
     }
     val idOK = MutableLiveData<DMRoom>()
+    val opponentUserIdLiveData = MutableLiveData<String>()
 
     private fun submitValidation(): Boolean {
         val messageValue = messageInput.value
@@ -138,6 +139,10 @@ class DMDetailViewModel: ViewModel() {
     override fun onCleared() {
         super.onCleared()
         messageListener?.remove()
+    }
+
+    fun iconClicked(userId: String) {
+        opponentUserIdLiveData.postValue(userId)
     }
 
     companion object {

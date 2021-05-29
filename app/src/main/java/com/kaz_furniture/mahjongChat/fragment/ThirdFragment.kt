@@ -16,6 +16,7 @@ import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.activity.DMDetailActivity
 import com.kaz_furniture.mahjongChat.activity.LoginActivity
 import com.kaz_furniture.mahjongChat.activity.MainActivity
+import com.kaz_furniture.mahjongChat.activity.ProfileActivity
 import com.kaz_furniture.mahjongChat.data.DMRoom
 import com.kaz_furniture.mahjongChat.databinding.FragmentThirdBinding
 import com.kaz_furniture.mahjongChat.viewModel.MainViewModel

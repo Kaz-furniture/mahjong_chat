@@ -68,6 +68,9 @@ class DMDetailActivity: BaseActivity() {
             viewModel.initData(it)
             title = allUserList.firstOrNull { value -> value.userId == DMRoom.getOpponentUserId(it) }?.name ?:"NO_USER_NAME"
         })
+        viewModel.opponentUserIdLiveData.observe(this, Observer {
+            ProfileActivity.start(this, it)
+        })
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

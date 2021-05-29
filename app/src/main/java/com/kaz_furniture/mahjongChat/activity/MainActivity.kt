@@ -56,6 +56,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setNavigationItemSelectedListener(this)
+
+        viewModel.profileOpenLiveData.observe(this, Observer {
+            ProfileActivity.start(this, it)
+        })
     }
 
     override fun onResume() {

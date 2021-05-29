@@ -97,4 +97,7 @@
     <string name="channel_description_0">自分宛てにDMが送信された時に通知します</string>
     <string name="logoutConfirm">ログアウトしますか？</string>
     <string name="noNotification">通知はありません</string>
+    <string name="followedTitle">%1$sにフォローされました</string>
+    <string name="channel_name_1">フォロー通知</string>
+    <string name="channel_description_1">自分がフォローされた時に通知します</string>
 </resources>

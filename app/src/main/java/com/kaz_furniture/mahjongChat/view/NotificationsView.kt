@@ -1,6 +1,7 @@
 package com.kaz_furniture.mahjongChat.view
 
 import android.content.Context
+import android.opengl.Visibility
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -81,15 +82,25 @@ class NotificationsView: RecyclerView {
                     Timber.d("notificationClicked2")
                     viewModel.notificationClicked(data.type, data.contentId)
                 }
+                if (data.type == TYPE_FOLLOWED) {
+                    contentTextView.visibility = View.GONE
+                }
             }
         }
 
         private fun makeTitle(data: Notification): String {
-            return if (data.type == TYPE_DM_MESSAGE) {
-                val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
-                "$fromUser   からDMです"
-            } else {
-                ""
+            return when (data.type) {
+                TYPE_DM_MESSAGE -> {
+                    val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
+                    "$fromUser   からDMです"
+                }
+                TYPE_FOLLOWED -> {
+                    val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
+                    "$fromUser   がフォローしました"
+                }
+                else -> {
+                    ""
+                }
             }
         }
 
@@ -106,6 +117,7 @@ class NotificationsView: RecyclerView {
 
     companion object {
         private const val TYPE_DM_MESSAGE = 0
+        private const val TYPE_FOLLOWED = 1
         private const val VIEW_TYPE_EMPTY = 0
         private const val VIEW_TYPE_ITEM = 1
     }

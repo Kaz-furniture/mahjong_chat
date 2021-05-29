@@ -10,8 +10,11 @@ import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostLis
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
+import com.kaz_furniture.mahjongChat.data.Notification
 import com.kaz_furniture.mahjongChat.data.Post
 import com.kaz_furniture.mahjongChat.data.User
+import com.kaz_furniture.mahjongChat.extensions.sendFcm
 import com.kaz_furniture.mahjongChat.view.PostView
 import timber.log.Timber
 
@@ -62,10 +65,34 @@ class ProfileViewModel: ViewModel() {
                 .collection("users")
                 .document(myUser.userId)
                 .set(myUser)
+                .addOnCompleteListener {
+                    sendFcm(
+                        allUserList.firstOrNull { it.userId == userId } ?:return@addOnCompleteListener,
+                        TYPE_FOLLOWED,
+                        applicationContext.getString(R.string.followedTitle, myUser.name),
+                        "",
+                        myUser.userId,
+                    )
+                    createNotification(userId)
+                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "FOLLOW_FAILED", Toast.LENGTH_SHORT).show()
                 }
         followChanged.postValue(true)
+    }
+
+    private fun createNotification(userId: String) {
+        val newNotification = Notification().apply {
+            this.content = ""
+            this.fromUserId = myUser.userId
+            this.toUserId = userId
+            this.type = TYPE_FOLLOWED
+            this.contentId = myUser.userId
+        }
+
+        FirebaseFirestore.getInstance().collection("notifications")
+            .document(newNotification.notificationId)
+            .set(newNotification)
     }
 
     fun followCancel(userId: String) {
@@ -88,5 +115,9 @@ class ProfileViewModel: ViewModel() {
                     Toast.makeText(applicationContext, "FOLLOW_FAILED", Toast.LENGTH_SHORT).show()
                 }
         followChanged.postValue(true)
+    }
+
+    companion object {
+        private const val TYPE_FOLLOWED = 1
     }
 }

@@ -26,6 +26,8 @@ class MainViewModel: ViewModel() {
     val userSelected = MutableLiveData<String>()
     val updatedList = MutableLiveData<List<Post>>()
     val notificationsLiveData = MutableLiveData<List<Notification>>()
+    val profileOpenLiveData = MutableLiveData<String>()
+
 
     fun selectRoomPostValue(room: DMRoom) {
         selectedDMRoom.postValue(room)
@@ -120,9 +122,14 @@ class MainViewModel: ViewModel() {
 //                    val type0List = result.filter { it.type == TYPE_DM_MESSAGE }
                     val output0List = arrayListOf<Notification>()
                     result.filter { it.type == TYPE_DM_MESSAGE }.sortedByDescending { it.submitTime }.map { it.fromUserId }.toSet().forEach { value ->
-                        output0List.add(result.sortedByDescending { it.submitTime }.firstOrNull { it.fromUserId == value } ?:return@forEach)
+                        output0List.add(result.filter { it.type == TYPE_DM_MESSAGE }.sortedByDescending { it.submitTime }.firstOrNull { it.fromUserId == value } ?:return@forEach)
                     }
-                    notificationsLiveData.postValue(output0List)
+                    val output1List = result.filter { it.type == TYPE_FOLLOWED }
+                    val finalList = arrayListOf<Notification>().apply {
+                        addAll(output0List)
+                        addAll(output1List)
+                    }
+                    notificationsLiveData.postValue(finalList.sortedByDescending { it.submitTime })
                 }
             }
     }
@@ -132,6 +139,10 @@ class MainViewModel: ViewModel() {
             TYPE_DM_MESSAGE -> {
                 Timber.d("notificationClicked1 $id")
                 getAndPostRoom(id)
+            }
+
+            TYPE_FOLLOWED -> {
+                profileOpenLiveData.postValue(id)
             }
 
             else -> {

@@ -79,6 +79,9 @@ class DMMessageView: RecyclerView {
                 this.dateTextView.text = android.text.format.DateFormat.format(applicationContext.getString(R.string.time2), data.createdAt)
                 this.messageTextView.text = data.content
                 this.imageId = MahjongChatApplication.allUserList.firstOrNull { it.userId == data.fromUserId }?.imageUrl ?:""
+                this.userIcon.setOnClickListener {
+                    viewModel.iconClicked(data.fromUserId)
+                }
             }
         }
 

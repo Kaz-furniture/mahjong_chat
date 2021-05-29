@@ -46,7 +46,7 @@
         <activity android:name=".activity.PostEditActivity"
             android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.FollowDisplayActivity"
-            android:parentActivityName=".activity.MainActivity"/>
+            android:parentActivityName=".activity.ProfileActivity"/>
         <service android:name=".MyFirebaseMessagingService"
             android:exported="false"
             android:enabled="true">
