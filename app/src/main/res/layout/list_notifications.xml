@@ -45,10 +45,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{userName}"
-            android:textSize="18sp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/userIcon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/userName2"/>
 
@@ -59,7 +61,7 @@
             android:layout_marginEnd="16dp"
             tools:text="@string/profileEdit"
             android:text="@{content}"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:background="#333333"
             app:layout_constraintTop_toBottomOf="@id/commentTime"
             app:layout_constraintStart_toStartOf="@id/userNameView"

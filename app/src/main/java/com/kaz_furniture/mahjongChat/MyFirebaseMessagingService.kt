@@ -59,6 +59,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     companion object {
         private const val KEY_ID = "KEY_ID"
         private const val TYPE_DM_MESSAGE = "0"
+        private const val TYPE_FOLLOWED = "1"
         private const val CHANNEL_ID_0 = "channel_id_0"
     }
 }

@@ -101,7 +101,7 @@ class CreateAccountViewModel: ViewModel() {
                         myUser = user
                         SplashActivity.start(activity)
                     } else {
-                        Toast.makeText(applicationContext, "FAILED", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "FAILED2", Toast.LENGTH_SHORT).show()
                     }
                 }
     }

@@ -117,9 +117,12 @@ class MainViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val result = task.result?.toObjects(Notification::class.java) ?: listOf()
-                    val type0List = result.filter { it.type == TYPE_DM_MESSAGE }
-                    val orderList = type0List.sortedByDescending { it.submitTime }
-                    notificationsLiveData.postValue(orderList)
+//                    val type0List = result.filter { it.type == TYPE_DM_MESSAGE }
+                    val output0List = arrayListOf<Notification>()
+                    result.filter { it.type == TYPE_DM_MESSAGE }.sortedByDescending { it.submitTime }.map { it.fromUserId }.toSet().forEach { value ->
+                        output0List.add(result.sortedByDescending { it.submitTime }.firstOrNull { it.fromUserId == value } ?:return@forEach)
+                    }
+                    notificationsLiveData.postValue(output0List)
                 }
             }
     }
@@ -152,5 +155,6 @@ class MainViewModel: ViewModel() {
 
     companion object {
         private const val TYPE_DM_MESSAGE = 0
+        private const val TYPE_FOLLOWED = 1
     }
 }
