@@ -103,4 +103,7 @@
     <string name="favoriteTitle">%1$sがお気に入り登録しました</string>
     <string name="channel_name_2">お気に入り登録通知</string>
     <string name="channel_description_2">自分の投稿がお気に入り登録された時に通知します</string>
+    <string name="commentTitle">%1$sがあなたの投稿にコメントしました</string>
+    <string name="channel_name_3">コメント通知</string>
+    <string name="channel_description_3">自分の投稿にコメントがされた時に通知します</string>
 </resources>

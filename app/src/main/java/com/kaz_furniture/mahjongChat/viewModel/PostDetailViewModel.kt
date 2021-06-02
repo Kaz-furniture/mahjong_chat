@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
+import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allUserList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
@@ -82,7 +83,7 @@ class PostDetailViewModel: ViewModel() {
                         this.sortBy { value -> value.createdAt }
                     }
                     if (post.userId != myUser.userId && starOrNot) {
-                        createNotification(post.userId, post.explanation ?:"", post.postId)
+                        createNotification(post.userId, post.explanation ?:"", post.postId, TYPE_FAVORITE)
                         sendFcm(
                             MahjongChatApplication.allUserList.firstOrNull { it.userId == post.userId } ?:return@addOnCompleteListener,
                             TYPE_FAVORITE,
@@ -96,12 +97,12 @@ class PostDetailViewModel: ViewModel() {
 
     }
 
-    private fun createNotification(userId: String, explanation: String, postId: String) {
+    private fun createNotification(userId: String, explanation: String, postId: String, type: Int) {
         val newNotification = Notification().apply {
             this.content = explanation
             this.fromUserId = myUser.userId
             this.toUserId = userId
-            this.type = TYPE_FAVORITE
+            this.type = type
             this.contentId = postId
         }
 
@@ -135,13 +136,25 @@ class PostDetailViewModel: ViewModel() {
             this.postId = postId
             this.userId = myUser.userId
         }
+        val sendToUser = allPostList.firstOrNull { it.postId == postId }?.userId
         FirebaseFirestore.getInstance()
                 .collection("comment")
                 .document(newComment.commentId)
                 .set(newComment)
+                .addOnCompleteListener {
+                    sendFcm(
+                        allUserList.firstOrNull { value -> value.userId == sendToUser } ?: return@addOnCompleteListener,
+                        TYPE_COMMENT,
+                        applicationContext.getString(R.string.commentTitle, myUser.name),
+                        newComment.content,
+                        postId
+                    )
+                    createNotification(sendToUser ?: return@addOnCompleteListener, newComment.content, postId, TYPE_COMMENT)
+                }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "COMMENT_FAILED", Toast.LENGTH_SHORT).show()
                 }
+
         val newCommentsList = ArrayList<Comment>().apply {
             this.addAll(comments)
             this.add(newComment)
@@ -308,5 +321,6 @@ class PostDetailViewModel: ViewModel() {
 
     companion object {
         private const val TYPE_FAVORITE = 2
+        private const val TYPE_COMMENT = 3
     }
 }

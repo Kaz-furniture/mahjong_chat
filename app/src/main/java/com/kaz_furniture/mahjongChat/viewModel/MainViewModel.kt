@@ -127,10 +127,12 @@ class MainViewModel: ViewModel() {
                     }
                     val output1List = result.filter { it.type == TYPE_FOLLOWED }
                     val output2List = result.filter { it.type == TYPE_FAVORITE }
+                    val output3List = result.filter { it.type == TYPE_COMMENT }
                     val finalList = arrayListOf<Notification>().apply {
                         addAll(output0List)
                         addAll(output1List)
                         addAll(output2List)
+                        addAll(output3List)
                     }
                     notificationsLiveData.postValue(finalList.sortedByDescending { it.submitTime })
                 }
@@ -148,11 +150,10 @@ class MainViewModel: ViewModel() {
                 profileOpenLiveData.postValue(id)
             }
 
-            TYPE_FAVORITE -> {
+            TYPE_FAVORITE or TYPE_COMMENT-> {
                 val post = allPostList.firstOrNull { it.postId == id } ?:return
                 postDetailOpenLiveData.postValue(post)
             }
-
             else -> {
                 return
             }
@@ -176,5 +177,6 @@ class MainViewModel: ViewModel() {
         private const val TYPE_DM_MESSAGE = 0
         private const val TYPE_FOLLOWED = 1
         private const val TYPE_FAVORITE = 2
+        private const val TYPE_COMMENT = 3
     }
 }

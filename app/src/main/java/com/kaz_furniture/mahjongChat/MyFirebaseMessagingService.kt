@@ -105,7 +105,36 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                     notificationManager.createNotificationChannel(mChannel)
                 }
                 val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.notify(1, notification)
+                notificationManager.notify(2, notification)
+            }
+            TYPE_COMMENT -> {
+                val resultIntent = Intent(this, SplashActivity::class.java)
+                val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+                    addNextIntentWithParentStack(resultIntent)
+                    getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                val notification = NotificationCompat.Builder(this, CHANNEL_ID_3)
+                    .setSmallIcon(R.drawable.ic_baseline_comment_24)
+                    .setContentIntent(resultPendingIntent)
+                    .setAutoCancel(true)
+                    .setContentTitle(data["key1"])
+                    .setContentText(data["key2"])
+                    .build()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Create the NotificationChannel
+                    val name = getString(R.string.channel_name_3)
+                    val descriptionText = getString(R.string.channel_description_3)
+                    val importance = NotificationManager.IMPORTANCE_DEFAULT
+                    val mChannel = NotificationChannel(CHANNEL_ID_3, name, importance)
+                    mChannel.description = descriptionText
+                    // Register the channel with the system; you can't change the importance
+                    // or other notification behaviors after this
+                    val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.createNotificationChannel(mChannel)
+                }
+                val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.notify(3, notification)
+
             }
         }
     }
@@ -115,12 +144,13 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     companion object {
         private const val KEY_ID = "KEY_ID"
-        private const val KEY_POST_ID = "KEY_POST_ID"
         private const val TYPE_DM_MESSAGE = "0"
         private const val TYPE_FOLLOWED = "1"
         private const val TYPE_FAVORITE = "2"
+        private const val TYPE_COMMENT = "3"
         private const val CHANNEL_ID_0 = "channel_id_0"
         private const val CHANNEL_ID_1 = "channel_id_1"
         private const val CHANNEL_ID_2 = "channel_id_2"
+        private const val CHANNEL_ID_3 = "channel_id_3"
     }
 }
