@@ -8,12 +8,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.kaz_furniture.mahjongChat.MahjongChatApplication
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.allPostList
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
+import com.kaz_furniture.mahjongChat.R
 import com.kaz_furniture.mahjongChat.data.Choice
 import com.kaz_furniture.mahjongChat.data.Comment
+import com.kaz_furniture.mahjongChat.data.Notification
 import com.kaz_furniture.mahjongChat.data.Post
+import com.kaz_furniture.mahjongChat.extensions.sendFcm
 import com.kaz_furniture.mahjongChat.view.ChoicesCommentsView
 import timber.log.Timber
 import java.util.*
@@ -53,11 +57,13 @@ class PostDetailViewModel: ViewModel() {
     }
 
     fun starClick(post: Post) {
+        var starOrNot = true
         val newUsers = ArrayList<String>().apply {
             this.addAll(post.favoriteUserIds)
         }
         if (post.favoriteUserIds.contains(myUser.userId)) {
             newUsers.remove(myUser.userId)
+            starOrNot = false
         } else {
             newUsers.add(myUser.userId)
         }
@@ -75,9 +81,33 @@ class PostDetailViewModel: ViewModel() {
                         this.add(newPost)
                         this.sortBy { value -> value.createdAt }
                     }
+                    if (post.userId != myUser.userId && starOrNot) {
+                        createNotification(post.userId, post.explanation ?:"", post.postId)
+                        sendFcm(
+                            MahjongChatApplication.allUserList.firstOrNull { it.userId == post.userId } ?:return@addOnCompleteListener,
+                            TYPE_FAVORITE,
+                            applicationContext.getString(R.string.favoriteTitle, myUser.name),
+                            post.explanation ?:"",
+                            post.postId
+                        )
+                    }
                     starNumber.postValue(newPost.favoriteUserIds.size.toString())
                 }
 
+    }
+
+    private fun createNotification(userId: String, explanation: String, postId: String) {
+        val newNotification = Notification().apply {
+            this.content = explanation
+            this.fromUserId = myUser.userId
+            this.toUserId = userId
+            this.type = TYPE_FAVORITE
+            this.contentId = postId
+        }
+
+        FirebaseFirestore.getInstance().collection("notifications")
+            .document(newNotification.notificationId)
+            .set(newNotification)
     }
 
     private fun updateItems() {
@@ -274,5 +304,9 @@ class PostDetailViewModel: ViewModel() {
                         }
                     }
                 }
+    }
+
+    companion object {
+        private const val TYPE_FAVORITE = 2
     }
 }

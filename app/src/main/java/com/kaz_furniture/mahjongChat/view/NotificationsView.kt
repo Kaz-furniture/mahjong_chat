@@ -98,6 +98,10 @@ class NotificationsView: RecyclerView {
                     val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
                     "$fromUser   がフォローしました"
                 }
+                TYPE_FAVORITE -> {
+                    val fromUser = allUserList.firstOrNull { it.userId == data.fromUserId }?.name ?:""
+                    "$fromUser  がお気に入り登録しました"
+                }
                 else -> {
                     ""
                 }
@@ -118,6 +122,7 @@ class NotificationsView: RecyclerView {
     companion object {
         private const val TYPE_DM_MESSAGE = 0
         private const val TYPE_FOLLOWED = 1
+        private const val TYPE_FAVORITE = 2
         private const val VIEW_TYPE_EMPTY = 0
         private const val VIEW_TYPE_ITEM = 1
     }

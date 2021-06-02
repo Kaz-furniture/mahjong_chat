@@ -27,6 +27,7 @@ class MainViewModel: ViewModel() {
     val updatedList = MutableLiveData<List<Post>>()
     val notificationsLiveData = MutableLiveData<List<Notification>>()
     val profileOpenLiveData = MutableLiveData<String>()
+    val postDetailOpenLiveData = MutableLiveData<Post>()
 
 
     fun selectRoomPostValue(room: DMRoom) {
@@ -125,9 +126,11 @@ class MainViewModel: ViewModel() {
                         output0List.add(result.filter { it.type == TYPE_DM_MESSAGE }.sortedByDescending { it.submitTime }.firstOrNull { it.fromUserId == value } ?:return@forEach)
                     }
                     val output1List = result.filter { it.type == TYPE_FOLLOWED }
+                    val output2List = result.filter { it.type == TYPE_FAVORITE }
                     val finalList = arrayListOf<Notification>().apply {
                         addAll(output0List)
                         addAll(output1List)
+                        addAll(output2List)
                     }
                     notificationsLiveData.postValue(finalList.sortedByDescending { it.submitTime })
                 }
@@ -143,6 +146,11 @@ class MainViewModel: ViewModel() {
 
             TYPE_FOLLOWED -> {
                 profileOpenLiveData.postValue(id)
+            }
+
+            TYPE_FAVORITE -> {
+                val post = allPostList.firstOrNull { it.postId == id } ?:return
+                postDetailOpenLiveData.postValue(post)
             }
 
             else -> {
@@ -167,5 +175,6 @@ class MainViewModel: ViewModel() {
     companion object {
         private const val TYPE_DM_MESSAGE = 0
         private const val TYPE_FOLLOWED = 1
+        private const val TYPE_FAVORITE = 2
     }
 }

@@ -44,7 +44,7 @@
         <activity android:name=".activity.CreateAccountActivity" />
         <activity android:name=".activity.FavoritePostsActivity" />
         <activity android:name=".activity.PostEditActivity"
-            android:parentActivityName=".activity.MainActivity"/>
+            android:parentActivityName=".activity.PostDetailActivity"/>
         <activity android:name=".activity.FollowDisplayActivity"
             android:parentActivityName=".activity.ProfileActivity"/>
         <service android:name=".MyFirebaseMessagingService"

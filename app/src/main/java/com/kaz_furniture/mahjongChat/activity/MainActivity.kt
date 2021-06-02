@@ -60,6 +60,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         viewModel.profileOpenLiveData.observe(this, Observer {
             ProfileActivity.start(this, it)
         })
+        viewModel.postDetailOpenLiveData.observe(this, Observer {
+            val intent = PostDetailActivity.newIntent(this, it)
+            startActivity(intent)
+        })
     }
 
     override fun onResume() {
