@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">雀チャット</string>
+    <string name="fcmTokenServerKey">key=AAAArfnQxaQ:APA91bG1IZk0mpUK1H-NxPCuIpmyjDoOcHlQ3g5dnhdTQL41g4fvr2NFhApQ5DLaRaH6e9oasvmtH0HAzUG5lutD0hMDspfMy7oPynNfcVCTLyKxYqIwpcDbuexC-EU4CxpqZLFvKkR8</string>
 </resources>

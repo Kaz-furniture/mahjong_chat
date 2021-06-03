@@ -2,6 +2,7 @@ package com.kaz_furniture.mahjongChat.extensions
 
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
+import com.google.gson.annotations.Expose
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.applicationContext
 import com.kaz_furniture.mahjongChat.MahjongChatApplication.Companion.myUser
 import com.kaz_furniture.mahjongChat.R
