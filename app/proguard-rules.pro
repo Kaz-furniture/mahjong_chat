@@ -37,3 +37,8 @@
 
 #Model
 -keep class com.kaz_furniture.mahjongChat.data** { *; }
+
+#okhttp
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.* { *;}
+-dontwarn okio.

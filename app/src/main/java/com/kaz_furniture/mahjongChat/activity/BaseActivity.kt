@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
+import kotlin.math.sqrt
 
 open class BaseActivity: AppCompatActivity() {
     protected fun hideKeyboard(view: View) {
